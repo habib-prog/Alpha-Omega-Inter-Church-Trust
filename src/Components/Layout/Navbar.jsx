@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { HiBarsArrowDown } from "react-icons/hi2";
+import { NavHashLink } from "react-router-hash-link";
 
 const Navbar = () => {
   const linkStyle =
@@ -24,18 +25,26 @@ const Navbar = () => {
 
         {/* Navigation Options start */}
         <div className="hidden sm:flex items-center">
-          <ul className="flex gap-4 ml-auto mr-8 ">
+          <ul className="flex gap-4 ml-auto mr-8">
             <li>
-              <Link className={linkStyle}>Home</Link>
+              <NavHashLink smooth to="/#home" className={linkStyle}>
+                Home
+              </NavHashLink>
             </li>
             <li>
-              <Link className={linkStyle}>About us</Link>
+              <NavHashLink smooth to="/#about" className={linkStyle}>
+                About us
+              </NavHashLink>
             </li>
             <li>
-              <Link className={linkStyle}>Charitable Work</Link>
+              <NavHashLink smooth to="/#work" className={linkStyle}>
+                Charitable Work
+              </NavHashLink>
             </li>
             <li>
-              <Link className={linkStyle}>Login</Link>
+              <NavHashLink smooth to="/#work" className={linkStyle}>
+                Login
+              </NavHashLink>
             </li>
           </ul>
           <div className="px-4 ">
