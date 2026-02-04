@@ -1,8 +1,44 @@
 @import "tailwindcss";
 @plugin "daisyui";
+<<<<<<< HEAD
+=======
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+@theme {
+  --color-unique: #4a3f35;
+  --color-brand: #e87461;
+  --font-raleway: "Raleway", sans-serif;
+}
+>>>>>>> dece56b (hero section and about section)
 
 @layer utilities {
   .container-custom {
     @apply max-w-full mx-auto px-4;
   }
 }
+<<<<<<< HEAD
+=======
+
+@utility container {
+  margin: auto;
+  padding: 0 16px;
+}
+
+@layer utilities {
+  @keyframes custom-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.02);
+      opacity: 1;
+    }
+  }
+
+  .pulse-btn {
+    animation: custom-pulse 1.2s ease-in-out infinite;
+  }
+}
+>>>>>>> dece56b (hero section and about section)
