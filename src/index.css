@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
-<<<<<<< HEAD
-=======
+
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
 
 @theme {
@@ -9,19 +8,11 @@
   --color-brand: #e87461;
   --font-raleway: "Raleway", sans-serif;
 }
->>>>>>> dece56b (hero section and about section)
 
 @layer utilities {
   .container-custom {
     @apply max-w-full mx-auto px-4;
   }
-}
-<<<<<<< HEAD
-=======
-
-@utility container {
-  margin: auto;
-  padding: 0 16px;
 }
 
 @layer utilities {
@@ -41,4 +32,3 @@
     animation: custom-pulse 1.2s ease-in-out infinite;
   }
 }
->>>>>>> dece56b (hero section and about section)

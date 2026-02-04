@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import { HiBarsArrowDown } from "react-icons/hi2";
 
 const Navbar = () => {
-<<<<<<< HEAD
   const linkStyle =
     "relative pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-[#E87461] after:transition-all after:duration-300 hover:after:w-full";
   return (
@@ -82,12 +81,6 @@ const Navbar = () => {
           <HiBarsArrowDown className="text-3xl" />
         </button>
         {/* Hamburger ended */}
-=======
-  return (
-    <div className='container'>
-      <div className='p-4 mt-2 fixed z-50 text-white bg-blue-100 w-full'>
-        <h1>Navbar</h1>
->>>>>>> dece56b (hero section and about section)
       </div>
     </div>
   );
