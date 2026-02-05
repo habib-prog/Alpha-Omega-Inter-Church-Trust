@@ -1,11 +1,11 @@
 import { Link } from "react-router";
-import React from "react";
 import { FiTwitter } from "react-icons/fi";
 import { GrInstagram } from "react-icons/gr";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaSquareFacebook } from "react-icons/fa6";
 
 const Footer = () => {
+
   return (
     <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center">
       <div className="container-custom flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
