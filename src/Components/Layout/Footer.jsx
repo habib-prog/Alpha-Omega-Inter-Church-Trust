@@ -91,7 +91,7 @@ const Footer = () => {
         </p>
         <div className="flex items-center justify-center px-6 py-2">
           <p className="flex items-center sm:gap-2">
-            Developed by:
+            Developed by
             <Link to="https://www.bytnext.com/" target="_blank">
               <img
                 className=" rounded-2xl w-17.5 hover:opacity-80 transition-opacity"
