@@ -284,6 +284,30 @@ const Navbar = () => {
                 Past Campaigns
               </NavHashLink>
             </li>
+            <li className="pl-2 mt-2">
+              <NavHashLink
+                onClick={() => setIsOpen(false)}
+                to="/past-campaigns"
+              >
+                Goal Amount
+              </NavHashLink>
+            </li>
+            <li className="pl-2 mt-2">
+              <NavHashLink
+                onClick={() => setIsOpen(false)}
+                to="/past-campaigns"
+              >
+                Raised Amount
+              </NavHashLink>
+            </li>
+            <li className="pl-2 mt-2">
+              <NavHashLink
+                onClick={() => setIsOpen(false)}
+                to="/past-campaigns"
+              >
+                Progress Bar
+              </NavHashLink>
+            </li>
           </div>
 
           <li>
