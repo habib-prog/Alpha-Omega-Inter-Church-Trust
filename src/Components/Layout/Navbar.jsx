@@ -215,6 +215,9 @@ const Navbar = () => {
                 <a>Settings</a>
               </li>
               <li>
+                <a>Admin Panel</a>
+              </li>
+              <li>
                 <a>Logout</a>
               </li>
             </ul>
