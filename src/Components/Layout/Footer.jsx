@@ -9,15 +9,11 @@ const Footer = () => {
     <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center">
       <div className="container-custom flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
         <nav>
-          <Link className="text-[#FAF8F3 ] flex items-center gap-2">
-            <img
-              src="/alphaomega.jpeg"
-              alt="alphaomega"
-              className=" rounded-full max-w-[40px]"
-            />
-            <span className="font-bold text-xl">ALPHA</span>OMEGA
+          <Link className="text-[#FAF8F3 ] flex items-center gap-1">
+            <img src="/Logo-2.png" alt="alphaomega" className="  max-w-8" />
+            <span className="font-bold text-xl">Inter Church</span>Trust
           </Link>
-          <p className="text-[#FAF8F3]/60 max-w-[300px] mt-2">
+          <p className="text-[#FAF8F3]/60 max-w-75 mt-2">
             Building a world where compassion knows no borders. Join us in
             creating sustainable change for communities worldwide.
           </p>
@@ -90,14 +86,15 @@ const Footer = () => {
         <p className="flex justify-center ">
           © {new Date().getDate()}{" "}
           {new Date().toLocaleString("en-US", { month: "long" })}{" "}
-          {new Date().getFullYear()} ALPHA OMEGA. All rights reserved.
+          {new Date().getFullYear()} Apha Omega Inter Church Trust. All rights
+          reserved.
         </p>
         <div className="flex items-center justify-center px-6 py-2">
           <p className="flex items-center sm:gap-2">
             Developed by:
-            <Link to="https://bytnext.com" target="_blank">
+            <Link to="https://www.bytnext.com/" target="_blank">
               <img
-                className=" rounded-2xl w-[70px] hover:opacity-80 transition-opacity"
+                className=" rounded-2xl w-17.5 hover:opacity-80 transition-opacity"
                 src="/bytnextlogo.jpeg"
                 alt="Logo"
               />
