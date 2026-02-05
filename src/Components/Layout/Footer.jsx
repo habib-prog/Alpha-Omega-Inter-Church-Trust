@@ -5,7 +5,6 @@ import { FaLinkedinIn } from "react-icons/fa";
 import { FaSquareFacebook } from "react-icons/fa6";
 
 const Footer = () => {
-
   return (
     <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center">
       <div className="container-custom flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
@@ -58,18 +57,24 @@ const Footer = () => {
           </Link>
           <Link className="flex items-center gap-1.5 text-[#FAF8F3]/60 hover:text-[#E87461]">
             <svg width="22" height="22" viewBox="0 0 24 24">
-  <defs>
-    <linearGradient id="igGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stopColor="#F58529" />
-      <stop offset="50%" stopColor="#DD2A7B" />
-      <stop offset="100%" stopColor="#8134AF" />
-    </linearGradient>
-  </defs>
-  <path
-    fill="url(#igGradient)"
-    d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-  />
-</svg>
+              <defs>
+                <linearGradient
+                  id="igGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="0%" stopColor="#F58529" />
+                  <stop offset="50%" stopColor="#DD2A7B" />
+                  <stop offset="100%" stopColor="#8134AF" />
+                </linearGradient>
+              </defs>
+              <path
+                fill="url(#igGradient)"
+                d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+              />
+            </svg>
             Instagram
           </Link>
           <Link className="flex items-center gap-1.5 text-[#FAF8F3]/60 hover:text-[#E87461]">
@@ -81,9 +86,11 @@ const Footer = () => {
         </nav>
         {/*Copyright Section*/}
       </div>
-      <div className="container-custom w-full pt-8 border-t border-[#FAF8F3]/5 sm:flex sm:gap-10 text-sm text-[#FAF8F3]/60 items-center sm:m-auto sm:justify-center">
+      <div className="container-custom w-full pt-8 border-t border-[#FAF8F3]/5 sm:flex sm:gap-10 text-sm text-white items-center sm:m-auto sm:justify-center">
         <p className="flex justify-center ">
-          ©️ {new Date().getFullYear()} ALPHA OMEGA. All rights reserved.{" "}
+          © {new Date().getDate()}{" "}
+          {new Date().toLocaleString("en-US", { month: "long" })}{" "}
+          {new Date().getFullYear()} ALPHA OMEGA. All rights reserved.
         </p>
         <div className="flex items-center justify-center px-6 py-2">
           <p className="flex items-center sm:gap-2">
