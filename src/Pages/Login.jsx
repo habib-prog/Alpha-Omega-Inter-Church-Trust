@@ -16,7 +16,7 @@ const Login = () => {
 
         {/* Right Side: Form Container */}
 
-        <div className="relative flex justify-center items-center p-4 sm:pt-22 bg-orange-300 md:bg-orange-300 bg-[url('/slum.jpg')] md:bg-none bg-cover bg-center">
+        <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-orange-300 md:bg-orange-300 bg-[url('/slum.jpg')] md:bg-none bg-cover bg-center">
           {/* Mobile-e image-er upore ekta halka overlay jate form-ta spoushto thake */}
           <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
 
