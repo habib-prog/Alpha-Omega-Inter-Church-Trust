@@ -176,7 +176,7 @@ const Navbar = () => {
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/#login">
+                  <NavHashLink smooth to="/login">
                     Login
                   </NavHashLink>
                 </li>
