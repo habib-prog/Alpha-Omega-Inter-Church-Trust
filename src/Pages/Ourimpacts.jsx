@@ -1,7 +1,7 @@
 import Card from "../Components/Card"
 import React from "react";
 
-const Ourimpact = () => {
+const Ourimpacts = () => {
   return (
     <section className="py-10">
       <div className="container-custom">
@@ -48,4 +48,4 @@ const Ourimpact = () => {
   );
 };
 
-export default Ourimpact;
+export default Ourimpacts;
