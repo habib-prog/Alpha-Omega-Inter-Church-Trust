@@ -47,44 +47,45 @@ const Ourimpacts = () => {
         {/*team member*/}
         <div className="py-24">
           <div className="text-center m-auto">
-          <h2 className="text-4xl font-bold text-[#4A3F35] mb-4">Voices of Hope</h2>
-          <p className="text-[#4A3F35]/70">Hear from the incredible people who make our mission possible.</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-          <TestimonialCard
-          image="/admin.jfif"
-          name="David Chen"
-          role="Monthly Donor"
-          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
-          impact="Impact: Supported 3 Families"
-        />
-        <TestimonialCard
-          image="/admin.jfif"
-          name="David Chen"
-          role="Monthly Donor"
-          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
-          impact="Impact: Supported 3 Families"
-        />
-        <TestimonialCard
-          image="/admin.jfif"
-          name="David Chen"
-          role="Monthly Donor"
-          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
-          impact="Impact: Supported 3 Families"
-        />
-        <TestimonialCard
-          image="/admin.jfif"
-          name="David Chen"
-          role="Monthly Donor"
-          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
-          impact="Impact: Supported 3 Families"
-        />
-        </div>
-        
+            <h2 className="text-4xl font-bold text-[#4A3F35] mb-4">
+              Voices of Hope
+            </h2>
+            <p className="text-[#4A3F35]/70">
+              Hear from the incredible people who make our mission possible.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+            <TestimonialCard
+              image="/russel.png"
+              name="Russel Abraham"
+              role="Founder"
+              quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+              impact="Impact: Supported 3 Families"
+            />
+            <TestimonialCard
+              image="/parvez.png"
+              name="Parvez Youhonna"
+              role="Secretary"
+              quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+              impact="Impact: Supported 3 Families"
+            />
+            <TestimonialCard
+              image="/subir.png"
+              name="Dr. Subir Khiyang"
+              role="Accounts"
+              quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+              impact="Impact: Supported 3 Families"
+            />
+            <TestimonialCard
+              image="/admin.jfif"
+              name="David Chen"
+              role="Monthly Donor"
+              quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+              impact="Impact: Supported 3 Families"
+            />
+          </div>
         </div>
       </div>
-      
-      
     </section>
   );
 };

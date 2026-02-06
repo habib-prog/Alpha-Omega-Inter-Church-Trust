@@ -199,7 +199,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
             >
               <div className="w-10 rounded-full">
-                <img alt="User" src="/user.jpeg" />
+                <img alt="User" src="/russel.png" />
               </div>
             </div>
             <ul
