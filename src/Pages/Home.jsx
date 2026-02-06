@@ -1,7 +1,7 @@
 import React from "react";
 import Hero from "./Hero";
 import About from "./About";
-import Ourimpact from "./Ourimpacts";
+import Ourimpacts from "./Ourimpacts";
 
 
 const Home = () => {
@@ -9,7 +9,7 @@ const Home = () => {
     <section id="home">
       <Hero />
       <About />
-      <Ourimpact/>
+      <Ourimpacts/>
     </section>
   );
 };

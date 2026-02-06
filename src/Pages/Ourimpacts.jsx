@@ -1,5 +1,6 @@
-import Card from "../Components/Card"
+import Card from "../Components/Card";
 import React from "react";
+import TestimonialCard from "../Components/TestimonialCard";
 
 const Ourimpacts = () => {
   return (
@@ -11,8 +12,8 @@ const Ourimpacts = () => {
             Projects We're Proud Of
           </h2>
           <p className="text-[#4A3F35]/70 max-w-2xl mx-auto">
-            See how your donations are being put to work across the globe, creating
-            sustainable change where it's needed most.
+            See how your donations are being put to work across the globe,
+            creating sustainable change where it's needed most.
           </p>
         </div>
 
@@ -43,7 +44,47 @@ const Ourimpacts = () => {
             image="/healtcare.jpg"
           />
         </div>
+        {/*team member*/}
+        <div className="py-24">
+          <div className="text-center m-auto">
+          <h2 className="text-4xl font-bold text-[#4A3F35] mb-4">Voices of Hope</h2>
+          <p className="text-[#4A3F35]/70">Hear from the incredible people who make our mission possible.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+          <TestimonialCard
+          image="/admin.jfif"
+          name="David Chen"
+          role="Monthly Donor"
+          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+          impact="Impact: Supported 3 Families"
+        />
+        <TestimonialCard
+          image="/admin.jfif"
+          name="David Chen"
+          role="Monthly Donor"
+          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+          impact="Impact: Supported 3 Families"
+        />
+        <TestimonialCard
+          image="/admin.jfif"
+          name="David Chen"
+          role="Monthly Donor"
+          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+          impact="Impact: Supported 3 Families"
+        />
+        <TestimonialCard
+          image="/admin.jfif"
+          name="David Chen"
+          role="Monthly Donor"
+          quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving. KindredHearts makes giving personal."
+          impact="Impact: Supported 3 Families"
+        />
+        </div>
+        
+        </div>
       </div>
+      
+      
     </section>
   );
 };
