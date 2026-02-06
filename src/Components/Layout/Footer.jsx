@@ -6,7 +6,7 @@ import { FaSquareFacebook } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center">
+    <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center  lg:pt-24">
       <div className="container-custom flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
         <nav>
           <Link className="text-[#FAF8F3 ] flex items-center gap-1">
