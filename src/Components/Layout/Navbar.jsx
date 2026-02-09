@@ -63,7 +63,7 @@ const Navbar = () => {
               </NavHashLink>
             </li>
             <li>
-              <NavHashLink smooth to="/#about" className={linkStyle}>
+              <NavHashLink smooth to="/about" className={linkStyle}>
                 About us
               </NavHashLink>
             </li>
@@ -278,7 +278,7 @@ const Navbar = () => {
             <NavHashLink
               onClick={() => setIsOpen(false)}
               smooth
-              to="/#about"
+              to="/about"
               className="text-lg font-medium"
             >
               About us
