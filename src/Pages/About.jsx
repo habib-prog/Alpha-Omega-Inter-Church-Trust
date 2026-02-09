@@ -3,6 +3,12 @@ import { BsPeople } from "react-icons/bs";
 import { CiGlobe } from "react-icons/ci";
 import { FaRegHeart } from "react-icons/fa";
 import { LuSparkles } from "react-icons/lu";
+import Poverty from "../Components/UI/Charts/Poverty";
+import Radarp from "../Components/UI/Charts/Radarp";
+import FemaleEducationChart from "../Components/UI/Charts/FemaleEducationChart";
+import ChildStatistics from "../Components/UI/Charts/ChildStatistics";
+import StreetChildReason from "../Components/UI/Charts/StreetChildReason";
+import HolisticCareChart from "../Components/UI/Charts/HolisticCareChart";
 
 const About = () => {
   return (
@@ -68,6 +74,34 @@ const About = () => {
               />
             </div>
           </div>
+        </div>
+        <div className="info sm:py-4 mt-12 text-center ">
+          <div className="info-text flex flex-col gap-2">
+            <h2 className="sm:text-3xl text-xl font-bold text-[#E87461]">
+              Understanding the Challenges in Bangladesh
+            </h2>
+            <p className="text-unique text-sm">
+              Bangladesh faces complex challenges in education, nutrition, and
+              women’s empowerment, affecting millions of children and families.
+              From high school dropout rates and child stunting to widespread
+              poverty and anemia among women, the statistics reveal the urgent
+              need for sustainable solutions. The charts and infographics below
+              provide a clear snapshot of these challenges, helping us and our
+              supporters visualize the areas where focused action can make the
+              greatest impact.
+            </p>
+          </div>
+
+          {/* Infograph Card Section started */}
+          <div className="info-graph-card01  grid grid-col-1 sm:grid-cols-3">
+            <Poverty />
+            <Radarp />
+            <FemaleEducationChart />
+            <ChildStatistics />
+            <StreetChildReason />
+            <HolisticCareChart />
+          </div>
+          {/* Infograph Card Section ended */}
         </div>
       </div>
     </section>
