@@ -3,11 +3,12 @@ import { FiTwitter } from "react-icons/fi";
 import { GrInstagram } from "react-icons/gr";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaSquareFacebook } from "react-icons/fa6";
+import { NavHashLink } from "react-router-hash-link";
 
 const Footer = () => {
   return (
     <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center  lg:pt-24">
-      <div className="container-custom flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
+      <div className="container flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
         <nav>
           <Link className="text-[#FAF8F3 ] flex items-center gap-1">
             <img src="/Logo-2.png" alt="alphaomega" className="  max-w-8" />
@@ -23,9 +24,13 @@ const Footer = () => {
           <h6 className="font-bold text-xl mb-2 text-[#FAF8F3] flex">
             Quick Links
           </h6>
-          <Link to="/" className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]">
+          <NavHashLink
+            to="/#"
+            smooth
+            className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
+          >
             Home
-          </Link>
+          </NavHashLink>
           <Link
             to="/about"
             className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
@@ -82,7 +87,7 @@ const Footer = () => {
         </nav>
         {/*Copyright Section*/}
       </div>
-      <div className="container-custom w-full pt-8 border-t border-[#FAF8F3]/5 sm:flex sm:gap-10 text-sm text-white items-center sm:m-auto sm:justify-center">
+      <div className="container w-full pt-8 border-t border-[#FAF8F3]/5 sm:flex sm:gap-10 text-sm text-white items-center sm:m-auto sm:justify-center">
         <p className="flex justify-center ">
           © {new Date().getDate()}{" "}
           {new Date().toLocaleString("en-US", { month: "long" })}{" "}

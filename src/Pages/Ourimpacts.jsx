@@ -5,7 +5,7 @@ import TestimonialCard from "../Components/TestimonialCard";
 const Ourimpacts = () => {
   return (
     <section className="py-10">
-      <div className="container-custom">
+      <div className="container">
         <div className="text-center m-auto">
           <h3 className="text-[#E87461] text-sm font-medium">Our Impact</h3>
           <h2 className="text-4xl text-[#4A3F35] font-bold mb-4 mt-2">

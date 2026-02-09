@@ -7,7 +7,7 @@ import { LuSparkles } from "react-icons/lu";
 const About = () => {
   return (
     <section id="about" className="sm:py-24 py-10 bg-[#FAF8F3]">
-      <div className="container-custom">
+      <div className="container">
         <div>
           <div className="grid lg:grid-cols-2 gap-7 items-center">
             <div>
@@ -71,8 +71,6 @@ const About = () => {
         </div>
       </div>
     </section>
-
-    
   );
 };
 

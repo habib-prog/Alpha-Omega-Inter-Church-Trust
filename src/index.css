@@ -9,14 +9,11 @@
   --font-raleway: "Raleway", sans-serif;
 }
 
-
 @layer utilities {
-  .container-custom {
-    @apply max-w-full mx-auto px-4;
+  .container {
+    @apply mx-auto px-4;
   }
-
 }
-
 
 @layer utilities {
   @keyframes custom-pulse {

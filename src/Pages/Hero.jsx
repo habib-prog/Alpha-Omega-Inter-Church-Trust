@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <section>
       <div className="w-full h-full pb-130 pt-25 max-h-72 sm:pt-35 sm:pb-135 bg-cover bg-center bg-no-repeat  bg-[url('/slum.jpg')] ">
-        <div className="container-custom">
+        <div className="container">
           <div className="max-w-210 m-auto">
             <div className="flex flex-col ">
               <p className=" m-auto inline-block py-1 px-3 rounded-full bg-white/20 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/30  ">
