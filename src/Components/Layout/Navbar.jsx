@@ -33,10 +33,10 @@ const Navbar = () => {
             : "bg-transparent py-5 shadow-none"
         }`}
       >
-        <div className="flex-1 flex items-center gap-2 px-4 sm:px-8">
+        <div className="flex-1 flex items-center gap-2 px-4  sm:px-8">
           <Link to="/" className="p-1">
             <img
-              className="w-12 hover:scale-110 transition-transform duration-300 ease-in-out"
+              className="w-10  hover:scale-110 transition-transform duration-300 ease-in-out"
               src="/Logo-2.png"
               alt="Logo"
             />
@@ -46,8 +46,11 @@ const Navbar = () => {
               isScrolled ? "text-gray-800" : "text-white"
             }`}
           >
-            <span className="font-bold sm:text-xl text-xl">Inter Church</span>
-            Trust
+            <p className="font-bold  text-sm  uppercase">
+              <span className="  text-orange-400">A</span>lpha
+              <span className=" ml-1 text-orange-400">O</span>mega
+              <span className=" ml-1 text-orange-400">C</span>harity
+            </p>
           </span>
         </div>
 
