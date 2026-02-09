@@ -87,7 +87,7 @@ const Footer = () => {
         </nav>
         {/*Copyright Section*/}
       </div>
-      <div className="container w-full pt-8 border-t border-[#FAF8F3]/5 sm:flex sm:gap-10 text-sm text-white items-center sm:m-auto sm:justify-center">
+      <div className="container text-center w-full pt-8 border-t border-[#FAF8F3]/5 sm:flex sm:gap-10 text-sm text-white items-center sm:m-auto sm:justify-center">
         <p className="flex justify-center ">
           © {new Date().getDate()}{" "}
           {new Date().toLocaleString("en-US", { month: "long" })}{" "}
@@ -95,11 +95,11 @@ const Footer = () => {
           reserved.
         </p>
         <div className="flex items-center justify-center px-6 py-2">
-          <p className="flex items-center sm:gap-2">
+          <p className="flex  items-center sm:gap-2">
             Developed by
             <Link to="https://www.bytnext.com/" target="_blank">
               <img
-                className=" rounded-2xl w-17.5 hover:opacity-80 transition-opacity"
+                className=" ml-2 rounded-2xl w-17.5 hover:opacity-80 transition-opacity"
                 src="/bytnextlogo.jpeg"
                 alt="Logo"
               />
