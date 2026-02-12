@@ -7,7 +7,7 @@ import { NavHashLink } from "react-router-hash-link";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center md:pt-40  lg:pt-36">
+    <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center md:pt-40  lg:pt-40">
       <div className="container flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
         <nav>
           <Link className="text-[#FAF8F3 ] flex items-center gap-1">
