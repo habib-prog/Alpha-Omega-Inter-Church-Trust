@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import { Outlet } from "react-router";
 import { motion as Motion, useScroll, useSpring } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
+import SocialSidebar from "../../Pages/SocialSidebar";
 
 const Index = () => {
   // 1. Logic for the top Scroll Progress Bar
@@ -40,7 +41,7 @@ const Index = () => {
     <>
       {/* 3. Global Scroll Progress Bar - Visible on every page */}
       <Motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-[#E87461] origin-left z-[10000]"
+        className="fixed top-0 left-0 right-0 h-1 bg-[#E87461] origin-left z-10000"
         style={{ scaleX }}
       />
 
@@ -48,6 +49,7 @@ const Index = () => {
 
       {/* The main content area where Home, About, etc. will render */}
       <main>
+        <SocialSidebar />
         <Outlet />
       </main>
 
