@@ -37,7 +37,7 @@ const Navbar = () => {
           <Link to="/" className="p-1">
             <img
               className="w-10  hover:scale-110 transition-transform duration-300 ease-in-out"
-              src="/Logo-2.png"
+              src="/NewLogo.png"
               alt="Logo"
             />
           </Link>

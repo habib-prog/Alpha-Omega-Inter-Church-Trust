@@ -7,11 +7,11 @@ import { NavHashLink } from "react-router-hash-link";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col items-center md:pt-40  lg:pt-44">
+    <footer className="bg-[#4A3F35] py-10 text-neutral-content flex flex-col  items-center md:pt-32  lg:pt-44">
       <div className="container flex flex-wrap sm:footer-horizontal w-full justify-between items-start mb-10">
         <nav>
           <Link className="text-[#FAF8F3 ] flex items-center gap-1">
-            <img src="/Logo-2.png" alt="alphaomega" className="  max-w-8" />
+            <img src="/NewLogo.png" alt="alphaomega" className="  max-w-8" />
             <span className="font-bold text-xl">Inter Church</span>Trust
           </Link>
           <p className="text-[#FAF8F3]/60 max-w-75 mt-2">
