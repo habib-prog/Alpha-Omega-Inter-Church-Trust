@@ -1,13 +1,7 @@
 import React from "react";
 import { RiDoubleQuotesR } from "react-icons/ri";
 
-const TestimonialCard = ({
-  image,
-  name,
-  role,
-  quote,
-  impact,
-}) => {
+const TestimonialCard = ({ image, name, role, quote, impact }) => {
   return (
     <div className="w-full max-w-md bg-[#FAF9F6] rounded-3xl p-6 shadow-sm hover:shadow-xl transition-shadow">
       {/* Header */}
@@ -20,17 +14,14 @@ const TestimonialCard = ({
           />
 
           <div>
-            <h4 className="text-base font-semibold text-gray-800">
-              {name}
-            </h4>
+            <h4 className="text-base font-semibold text-gray-800">{name}</h4>
             <p className="text-xs uppercase tracking-widest text-orange-400">
               {role}
             </p>
           </div>
         </div>
 
-    
-         <RiDoubleQuotesR className="text-3xl text-orange-400 leading-none select-none" />
+        <RiDoubleQuotesR className="text-3xl text-orange-400 leading-none select-none" />
       </div>
 
       {/* Quote */}
@@ -39,9 +30,7 @@ const TestimonialCard = ({
       </p>
 
       {/* Footer */}
-      <p className="text-sm font-medium text-green-700">
-        Impact: {impact}
-      </p>
+      <p className="text-sm font-medium text-green-700">Impact: {impact}</p>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
+import { motion as Motion } from "framer-motion"; // Importing Framer Motion
 
 const Signup = () => {
   return (
@@ -15,13 +16,18 @@ const Signup = () => {
         </div>
 
         {/* Right Side: Form Container */}
-
+        {/* Login er motoi exact same padding and alignment */}
         <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-orange-300 md:bg-orange-300 bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
-          {/* Mobile-e image-er upore ekta halka overlay jate form-ta spoushto thake */}
+          {/* Mobile Overlay */}
           <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
 
-          {/* Card Container */}
-          <div className="w-full max-w-md z-10">
+          {/* Card Container with Motion - Login er motoi Left theke slide hobe */}
+          <Motion.div
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full max-w-md z-10"
+          >
             <section id="back-div" className="rounded-3xl">
               <div className="border-8 border-transparent rounded-xl bg-white/90 backdrop-blur-sm dark:bg-gray-900 shadow-xl p-6 sm:p-8">
                 <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default dark:text-gray-300 text-gray-900 mb-6">
@@ -42,7 +48,7 @@ const Signup = () => {
                     </label>
                     <input
                       id="email"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300"
+                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="email"
                       placeholder="Email"
                       required
@@ -58,7 +64,7 @@ const Signup = () => {
                     </label>
                     <input
                       id="password"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300"
+                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="password"
                       placeholder="Password"
                       required
@@ -126,9 +132,11 @@ const Signup = () => {
                       alt: "Apple",
                     },
                   ].map((icon, index) => (
-                    <button
+                    <Motion.button
                       key={index}
-                      className="p-2 bg-gray-50/80 dark:bg-gray-800 rounded-lg hover:scale-110 transition-transform shadow-md"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-2 bg-gray-50/80 dark:bg-gray-800 rounded-lg shadow-md"
                     >
                       <img
                         className={`w-5 h-5 ${icon.invert ? "dark:invert" : ""}`}
@@ -136,7 +144,7 @@ const Signup = () => {
                         src={`https://ucarecdn.com/${icon.src}/`}
                         alt={icon.alt}
                       />
-                    </button>
+                    </Motion.button>
                   ))}
                 </div>
 
@@ -147,7 +155,7 @@ const Signup = () => {
                 </div>
               </div>
             </section>
-          </div>
+          </Motion.div>
         </div>
       </div>
     </div>
