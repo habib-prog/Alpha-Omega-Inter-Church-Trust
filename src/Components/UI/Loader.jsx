@@ -32,12 +32,15 @@ const Loader = ({ onComplete }) => {
         </div>
 
         {/* Brand Text */}
-        <h1 className="text-2xl md:text-3xl font-bold uppercase tracking-widest mb-2">
-          <span className="text-[#E87461]">A</span>lpha
-          <span className="text-[#E87461]">O</span>mega
-          <span className="text-[#E87461]">C</span>harity
-        </h1>
-
+        <div className="text-center mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold uppercase tracking-[0.2em] text-gray-800">
+            <span className="text-[#E87461]">A</span>lpha{" "}
+            <span className="text-[#E87461]">O</span>mega{" "}
+            <span className="text-[#E87461]">C</span>harity
+          </h1>
+          {/* Underline for style */}
+          <div className="h-1 w-16 bg-[#E87461] mx-auto mt-2 rounded-full"></div>
+        </div>
         {/* Percentage and Bar */}
         <div className="flex flex-col items-center gap-2">
           <span className="text-4xl font-black text-[#E87461]">
