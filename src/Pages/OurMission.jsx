@@ -14,7 +14,7 @@ const OurMission = () => {
             <h2 className='font-inter font-bold text-3xl mt-6 mb-13'>
               Our Mission
             </h2>
-            <p className='text-[15px] text-[#475569] mb-6 font-inter leading-6 sm:leading-8 w-full sm:max-w-[438px]'>
+            <p className='text-[15px] text-[#475569] mb-6 font-inter leading-6 sm:leading-8 w-full sm:max-w-109.5'>
               To empower organizations with intuitive, scalable, and robust
               digital solutions that drive growth and efficiency. We believe in
               stripping away complexity to reveal the true potential of
@@ -40,7 +40,7 @@ const OurMission = () => {
               development that stands the test of time.
             </p>
             <div className='pt-6 p-6 bg-slate-50 rounded-xl border border-slate-100 w-full'>
-              <p className='text-sm font-medium leading-6 text-[#475569] w-full  sm:max-w-[420px]'>
+              <p className='text-sm font-medium leading-6 text-[#475569] w-full  sm:max-w-105'>
                 "We believe in creating a world where every child has the
                 opportunity to grow, thrive, and reach their full potential, no
                 matter their background."

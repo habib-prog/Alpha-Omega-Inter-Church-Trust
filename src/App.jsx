@@ -8,6 +8,7 @@ import Signup from "./Pages/Signup";
 import Aboutus from "./Pages/Aboutus";
 import Profile from "./Pages/Profile";
 import EditProfile from "./Pages/EditProfile";
+import CampaignHeader from "./Components/UI/Charts/CampaignHeader";
 
 function App() {
   return (
@@ -15,12 +16,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-
           <Route path="/about" element={<Aboutus />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/all-campaigns" element={<CampaignHeader />} />
         </Route>
       </Routes>
     </BrowserRouter>
