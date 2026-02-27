@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
 
@@ -210,9 +210,9 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-white rounded-box z-130 mt-3 w-52 p-2 shadow text-gray-800"
             >
               <li>
-                <a>
+                <Link to="/profile">
                   Profile <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
                 <a>Settings</a>

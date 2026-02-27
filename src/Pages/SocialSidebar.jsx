@@ -26,7 +26,7 @@ const SocialSidebar = () => {
   ];
 
   return (
-    <div className="fixed left-0 top-1/2 -translate-y-1/2 z-[9999]">
+    <div className="fixed left-0 top-1/2 -translate-y-1/2 z-9999">
       <div className="relative flex items-center">
         {/* Sidebar Container */}
         <Motion.div
