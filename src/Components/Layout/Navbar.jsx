@@ -4,6 +4,7 @@ import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
 
 const Navbar = () => {
+  const [login, setLogin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -34,7 +35,7 @@ const Navbar = () => {
   return (
     <div className="relative">
       <div
-        className={`fixed top-0 left-0 w-full z-[120] navbar transition-all duration-500 flex justify-center items-center 
+        className={`fixed top-0 left-0 w-full z-120 navbar transition-all duration-500 flex justify-center items-center 
         ${
           isScrolled
             ? "bg-[#FAF8F3]/95 py-3 shadow-md"
@@ -106,7 +107,7 @@ const Navbar = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content z-[130] menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-48 mt-0 text-gray-800"
+                className="dropdown-content z-130 menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-48 mt-0 text-gray-800"
               >
                 <li>
                   <NavHashLink
@@ -180,7 +181,7 @@ const Navbar = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content z-[130] menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-44 mt-0 text-gray-800"
+                className="dropdown-content z-130 menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-44 mt-0 text-gray-800"
               >
                 <li>
                   <NavHashLink smooth to="/#gallery" onClick={closeDropdown}>
@@ -223,15 +224,15 @@ const Navbar = () => {
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
+              className="btn btn-ghost sm:mr-4 btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
             >
-              <div className="w-10 rounded-full">
-                <img alt="User" src="/russel.png" />
+              <div className="w-7 rounded-full">
+                <img alt="User" src={login ? "/russel.png" : "/user.png"} />
               </div>
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-white rounded-box z-[130] mt-3 w-52 p-2 shadow text-gray-800"
+              className="menu menu-sm dropdown-content bg-white rounded-box z-130 mt-3 w-52 p-2 shadow text-gray-800"
             >
               <li>
                 <Link to="/profile" onClick={closeDropdown}>
@@ -245,7 +246,7 @@ const Navbar = () => {
                 <a onClick={closeDropdown}>Admin Panel</a>
               </li>
               <li>
-                <a onClick={closeDropdown}>Logout</a>
+                <a onClick={closeDropdown}>{login ? "Logout" : "Log In"}</a>
               </li>
             </ul>
           </div>
@@ -254,7 +255,7 @@ const Navbar = () => {
         {/* Hamburger - Mobile only */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`sm:hidden block px-4 z-[130] transition-colors duration-300 ${
+          className={`sm:hidden block px-4 z-130 transition-colors duration-300 ${
             isScrolled ? "text-gray-800" : "text-white"
           }`}
         >
@@ -268,7 +269,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Content */}
       <div
-        className={`fixed inset-0 z-[110] sm:hidden transition-all duration-300 ${
+        className={`fixed inset-0 z-110 sm:hidden transition-all duration-300 ${
           isOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
       >
