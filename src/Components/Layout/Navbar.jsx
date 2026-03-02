@@ -35,11 +35,11 @@ const Navbar = () => {
   return (
     <div className="relative">
       <div
-        className={`fixed top-0 left-0 w-full z-120 navbar transition-all duration-500 flex justify-center items-center 
+        className={`fixed top-0  left-0 w-full z-120 navbar transition-all duration-500 flex justify-center items-center 
         ${
           isScrolled
-            ? "bg-[#FAF8F3]/95 py-3 shadow-md"
-            : "bg-transparent py-5 shadow-none"
+            ? "bg-[#FAF8F3]/95 py-0.5 shadow-md"
+            : "bg-transparent py-0.5 shadow-none"
         }`}
       >
         <div className="flex-1 flex items-center gap-2 px-4 sm:px-8">
