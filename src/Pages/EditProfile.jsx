@@ -33,7 +33,7 @@ const EditProfile = () => {
   return (
     <div className="min-h-screen bg- pb-10">
       {/* Top Navigation Bar */}
-      <div className="bg-[#4A3F35] w-full h-22  absolute top-0 "></div>
+      <div className="bg-[#4A3F35] w-full h-16  absolute top-0 "></div>
 
       <div className="container mx-auto px-4 mt-32">
         <div className="container mx-auto flex items-center gap-4">

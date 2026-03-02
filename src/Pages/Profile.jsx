@@ -13,7 +13,7 @@ const Profile = () => {
   return (
     <div className="py-10 bg-white relative min-h-screen overflow-x-hidden">
       {/* Brown Header Bar */}
-      <div className="bg-[#4A3F35] w-full h-24 absolute top-0"></div>
+      <div className="bg-[#4A3F35] w-full h-16 absolute top-0"></div>
 
       {/* Main Container */}
       <div className="relative w-full container mx-auto flex flex-col lg:flex-row gap-6 pt-18 px-4 lg:px-0 items-start">
