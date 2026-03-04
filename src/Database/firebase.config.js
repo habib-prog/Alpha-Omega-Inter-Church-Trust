@@ -11,11 +11,11 @@ const firebaseConfig = {
   appId: "1:686440883297:web:451af4cb3c2cea1a7bf620",
 };
 
-// ১. Firebase App ইনিশিয়ালাইজ করা
+// ১. Firebase App initialize
 const app = initializeApp(firebaseConfig);
 
-// ২. সার্ভিসগুলো আলাদাভাবে এক্সপোর্ট করা
-export const auth = getAuth(app); // লগইন/সাইনআপের জন্য
-export const db = getFirestore(app); // ডাটা সেভ করার জন্য (Firestore)
+// ২. Exporting services individually
+export const auth = getAuth(app); // Login/Signup
+export const db = getFirestore(app); // Storing the authentication Data in Firestore
 
 export default app;
