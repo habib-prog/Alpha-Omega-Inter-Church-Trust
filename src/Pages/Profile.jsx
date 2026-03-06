@@ -6,9 +6,18 @@ import { IoStatsChart, IoAccessibilityOutline } from "react-icons/io5";
 import { PiTree } from "react-icons/pi";
 import DonationActivity from "../Components/UI/Charts/DonationActivity";
 import { Link } from "react-router-dom";
+import useAuthStore from "../Zustand/authStore";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("impact");
+  const { user } = useAuthStore();
+
+  // নামের প্রথম অক্ষর বের করার লজিক
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name.charAt(0).toUpperCase();
+  };
+  const initials = getInitials(user?.displayName);
 
   return (
     <div className="py-10 bg-white relative min-h-screen overflow-x-hidden">
@@ -24,14 +33,24 @@ const Profile = () => {
           </p>
 
           <div className="Usercard w-full p-6 flex gap-2 justify-center items-center flex-col">
-            <div className="img_box shadow-lg border-brand border-4 rounded-full p-1">
-              <img
-                src="/russel.png"
-                className="rounded-full w-24 h-24 object-cover"
-                alt="User"
-              />
+            {/* এখানে ইমেজ লজিক পরিবর্তন করা হয়েছে */}
+            <div className="img_box shadow-lg border-brand border-4 rounded-full p-1 flex items-center justify-center">
+              {user?.photoURL ? (
+                <img
+                  src={user.photoURL}
+                  className="rounded-full w-24 h-24 object-cover"
+                  alt="User"
+                />
+              ) : (
+                <div className="rounded-full w-24 h-24 bg-brand flex items-center justify-center text-white text-4xl font-bold">
+                  {initials}
+                </div>
+              )}
             </div>
-            <h1 className="font-bold text-2xl text-gray-800">Russel Abraham</h1>
+
+            <h1 className="font-bold text-2xl text-gray-800">
+              {user?.displayName}
+            </h1>
             <div className="flex flex-col items-center text-center">
               <div className="flex items-center gap-1 text-gray-500">
                 <CiLocationOn className="text-brand text-xl" />
@@ -62,7 +81,7 @@ const Profile = () => {
           </Link>
         </div>
 
-        {/* Right Side: Stats/Impact Section */}
+        {/* Right Side: Stats/Impact Section - ডিজাইন অপরিবর্তিত */}
         <div className="stats border-brand border-4 flex flex-col w-full bg-white shadow-sm rounded-xl overflow-hidden">
           {/* Tabs Menu */}
           <div className="flex items-center justify-around h-14 bg-brand text-white">
@@ -103,7 +122,7 @@ const Profile = () => {
             </button>
           </div>
 
-          {/* Impact Content */}
+          {/* Impact Content - ডিজাইন অপরিবর্তিত */}
           {activeTab === "impact" && (
             <div className="stats-content p-6 animate-fadeIn">
               <div className="anual-impact">
@@ -120,9 +139,7 @@ const Profile = () => {
                              [&::-webkit-progress-value]:bg-brand"
                 />
 
-                {/* Updated Impact Cards with Brand Colors */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                  {/* Card 1: Lives Impacted */}
                   <div className="bg-brand/5 p-6 rounded-xl shadow-sm border border-brand/20 flex gap-4 items-center hover:bg-brand/10 transition-colors">
                     <div className="bg-brand p-3 rounded-xl shadow-md">
                       <IoAccessibilityOutline
@@ -135,13 +152,12 @@ const Profile = () => {
                         84 Lives Impacted
                       </p>
                       <p className="text-gray-600 text-sm leading-relaxed">
-                        Your contributions have provided education and nutrition
-                        to children.
+                        Your contributions have provided education and
+                        nutrition.
                       </p>
                     </div>
                   </div>
 
-                  {/* Card 2: Trees Planted */}
                   <div className="bg-brand/5 p-6 rounded-xl shadow-sm border border-brand/20 flex gap-4 items-center hover:bg-brand/10 transition-colors">
                     <div className="bg-brand p-3 rounded-xl shadow-md">
                       <PiTree size={32} className="text-white" />
@@ -151,8 +167,7 @@ const Profile = () => {
                         120 Trees Planted
                       </p>
                       <p className="text-gray-600 text-sm leading-relaxed">
-                        You've helped offset approximately 2.4 tons of carbon
-                        annually.
+                        You've helped offset approximately 2.4 tons of carbon.
                       </p>
                     </div>
                   </div>

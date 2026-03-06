@@ -227,11 +227,25 @@ const Navbar = () => {
               role="button"
               className="btn btn-ghost sm:mr-4 btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
             >
-              <div className="w-7 rounded-full">
-                <img
-                  alt="User"
-                  src={user?.emailVerified ? "/russel.png" : "/user.png"}
-                />
+              <div className="w-7 rounded-full flex items-center justify-center overflow-hidden bg-[#E87461] text-white font-bold">
+                {user ? (
+                  user.photoURL ? (
+                    // Jodi photoURL thake, tobe image dekhabe
+                    <img
+                      alt="User"
+                      src={user.photoURL}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    // Jodi photoURL na thake, tobe namer prothom okkhor dekhabe
+                    <div className="w-full h-full flex items-center justify-center">
+                      {user.displayName?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )
+                ) : (
+                  // User login na thakle default image
+                  <img alt="User" src="/user.png" />
+                )}
               </div>
             </div>
             <ul

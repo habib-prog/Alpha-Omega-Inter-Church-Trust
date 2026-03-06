@@ -2,6 +2,7 @@ import { Navigate, Outlet, Link } from "react-router";
 import useAuthStore from "../../Zustand/authStore";
 import Navbar from "../Layout/Navbar";
 import Footer from "../Layout/Footer";
+import SocialSidebar from "../../Pages/SocialSidebar";
 
 const Protected = () => {
   const User = useAuthStore((state) => state.user);
@@ -27,6 +28,7 @@ const Protected = () => {
   return (
     <>
       <Navbar />
+      <SocialSidebar />
       <Outlet />
       <Footer />
     </>

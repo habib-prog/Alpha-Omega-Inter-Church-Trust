@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion"; // Importing Framer Motion
 import useAuthStore from "../Zustand/authStore";
@@ -7,14 +7,6 @@ import { auth } from "../Database/firebase.config";
 
 const Login = () => {
   const navigate = useNavigate();
-
-  const { user } = useAuthStore();
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
