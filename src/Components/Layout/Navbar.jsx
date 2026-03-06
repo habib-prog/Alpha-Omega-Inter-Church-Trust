@@ -297,6 +297,16 @@ const Navbar = () => {
             <NavHashLink
               onClick={() => setIsOpen(false)}
               smooth
+              to="/"
+              className="text-lg font-medium"
+            >
+              Home
+            </NavHashLink>
+          </li>
+          <li>
+            <NavHashLink
+              onClick={() => setIsOpen(false)}
+              smooth
               to="/about"
               className="text-lg font-medium"
             >
