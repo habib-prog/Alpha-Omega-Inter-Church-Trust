@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
+import useAuthStore from "../../Zustand/authStore";
+import { signOut } from "firebase/auth";
+import { auth } from "../../Database/firebase.config";
 
 const Navbar = () => {
-  const [login, setLogin] = useState(false);
+  const { user } = useAuthStore();
+  const Signout = () => {
+    signOut(auth);
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -198,14 +204,9 @@ const Navbar = () => {
                     Legal
                   </NavHashLink>
                 </li>
-                <li>
+                <li className={user?.emailVerified ? "block" : "hidden"}>
                   <NavHashLink smooth to="/#history" onClick={closeDropdown}>
                     Donation History
-                  </NavHashLink>
-                </li>
-                <li>
-                  <NavHashLink smooth to="/login" onClick={closeDropdown}>
-                    Login
                   </NavHashLink>
                 </li>
               </ul>
@@ -227,26 +228,35 @@ const Navbar = () => {
               className="btn btn-ghost sm:mr-4 btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
             >
               <div className="w-7 rounded-full">
-                <img alt="User" src={login ? "/russel.png" : "/user.png"} />
+                <img
+                  alt="User"
+                  src={user?.emailVerified ? "/russel.png" : "/user.png"}
+                />
               </div>
             </div>
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-white rounded-box z-130 mt-3 w-52 p-2 shadow text-gray-800"
             >
-              <li>
+              <li className={user ? "block" : "hidden"}>
                 <Link to="/profile" onClick={closeDropdown}>
                   Profile <span className="badge">New</span>
                 </Link>
               </li>
-              <li>
+              <li className={user ? "block" : "hidden"}>
                 <a onClick={closeDropdown}>Settings</a>
               </li>
-              <li>
+              <li className={user?.emailVerified ? "block" : "hidden"}>
                 <a onClick={closeDropdown}>Admin Panel</a>
               </li>
-              <li>
-                <a onClick={closeDropdown}>{login ? "Logout" : "Log In"}</a>
+              <li onClick={closeDropdown}>
+                {user?.emailVerified ? (
+                  <a onClick={Signout}>Log Out</a>
+                ) : (
+                  <Link to="login" onClick={closeDropdown}>
+                    Log In
+                  </Link>
+                )}
               </li>
             </ul>
           </div>
@@ -283,26 +293,6 @@ const Navbar = () => {
             isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
           } text-gray-800 rounded-b-3xl`}
         >
-          <li>
-            <NavHashLink
-              onClick={() => setIsOpen(false)}
-              smooth
-              to="/#home"
-              className="text-lg font-medium"
-            >
-              Home
-            </NavHashLink>
-          </li>
-          <li>
-            <NavHashLink
-              onClick={() => setIsOpen(false)}
-              smooth
-              to="/login"
-              className="text-lg font-medium"
-            >
-              Login
-            </NavHashLink>
-          </li>
           <li>
             <NavHashLink
               onClick={() => setIsOpen(false)}

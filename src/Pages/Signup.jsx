@@ -13,14 +13,17 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     const result = await signup(email, password, name);
-    result.success && toast.success("Account created ! verification mail sent");
+    result.success && toast.success("Account created");
+    result.success &&
+      toast.warning(`verification mail sent
+      verify mail before login`);
     setName("");
     setEmail("");
     setPassword("");
 
     setTimeout(() => {
-      navigate("/profile");
-    }, 2000);
+      navigate("/login");
+    }, 3000);
   };
   return (
     <div className="min-h-screen">
