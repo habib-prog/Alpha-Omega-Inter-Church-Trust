@@ -78,16 +78,6 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // --- Logout ---
-  logout: async () => {
-    try {
-      await signOut(auth);
-      set({ user: null });
-    } catch (err) {
-      console.error("Logout error", err);
-    }
-  },
-
   // --- Session Persistence ---
   setUser: (user) => set({ user, authLoading: false }),
 }));

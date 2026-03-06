@@ -1,29 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion"; // Importing Framer Motion
 import useAuthStore from "../Zustand/authStore";
 import { toast, ToastContainer } from "react-toastify";
+import { auth } from "../Database/firebase.config";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { user, login, authLoading } = useAuthStore();
-  const verified = user?.emailVerified;
+  const { login, authLoading } = useAuthStore();
+
   const hanslelogin = async (e) => {
     e.preventDefault();
 
     const status = await login(email, password);
-    if (status.success && verified) {
-      toast.success("Login Successfull");
+
+    if (status.success) {
+      const currentUser = auth.currentUser;
+
+      if (currentUser && !currentUser.emailVerified) {
+        toast.warn("Please verify your email first!");
+
+        return;
+      }
+
+      toast.success("Login Successful");
       setEmail("");
       setPassword("");
       setTimeout(() => {
         navigate("/profile");
       }, 1000);
     } else {
-      toast.error("Something went wrong!");
+      toast.error(status.message);
     }
   };
   return (
