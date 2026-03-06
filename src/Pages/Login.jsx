@@ -9,23 +9,21 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login, authLoading } = useAuthStore();
-
+  const { user, login, authLoading } = useAuthStore();
+  const verified = user?.emailVerified;
   const hanslelogin = async (e) => {
     e.preventDefault();
 
     const status = await login(email, password);
-    if (status.success) {
+    if (status.success && verified) {
       toast.success("Login Successfull");
       setEmail("");
       setPassword("");
       setTimeout(() => {
         navigate("/profile");
       }, 1000);
-    }
-    if (!status.success) {
-      toast.error(status.message);
-      return;
+    } else {
+      toast.error("Something went wrong!");
     }
   };
   return (
