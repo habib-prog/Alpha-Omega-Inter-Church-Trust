@@ -39,20 +39,21 @@ function App() {
         <Preloader onComplete={() => setIsLoading(false)} />
       ) : (
         <BrowserRouter>
-          {/* Suspense*/}
           <Suspense fallback={<PageLoader />}>
             <Routes>
+              {/* Public Routes */}
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
-                <Route path="/about" element={<Aboutus />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="about" element={<Aboutus />} />
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+                <Route path="all-campaigns" element={<CampaignHeader />} />
+              </Route>
+
+              {/* Authorised Protected Route*/}
+              <Route element={<Protected />}>
                 <Route path="editprofile" element={<EditProfile />} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="/signup" element={<Signup />} />
-                {/* Authorized Layout */}
-                <Route path="/" element={<Protected />}></Route>
-
-                <Route path="/all-campaigns" element={<CampaignHeader />} />
               </Route>
             </Routes>
           </Suspense>

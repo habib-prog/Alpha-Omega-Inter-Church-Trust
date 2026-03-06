@@ -1,14 +1,22 @@
 import { Navigate, Outlet } from "react-router";
 import useAuthStore from "../../Zustand/authStore";
-import PageLoader from "../UI/Skeleton/PageLoader";
+import Navbar from "../Layout/Navbar";
+import Footer from "../Layout/Footer";
 
 const Protected = () => {
   const user = useAuthStore((state) => state.user);
-  const loading = useAuthStore((state) => state.authLoading);
 
-  if (loading) return <PageLoader />;
-  if (!user) return <Navigate to="/login" replace />;
-  return <Outlet />;
+  if (!user) {
+    return <Navigate to="login" />;
+  }
+
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </>
+  );
 };
 
 export default Protected;
