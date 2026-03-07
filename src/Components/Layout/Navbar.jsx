@@ -204,6 +204,11 @@ const Navbar = () => {
                     Legal
                   </NavHashLink>
                 </li>
+                <li>
+                  <NavHashLink smooth to="/privacy" onClick={closeDropdown}>
+                    Privacy & Policy
+                  </NavHashLink>
+                </li>
                 <li className={user?.emailVerified ? "block" : "hidden"}>
                   <NavHashLink smooth to="/#history" onClick={closeDropdown}>
                     Donation History

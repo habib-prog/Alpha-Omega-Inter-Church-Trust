@@ -50,7 +50,7 @@ const Footer = () => {
             Contact
           </Link>
           <Link
-            to="/contact"
+            to="/privacy"
             className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
           >
             Privacy & Policy

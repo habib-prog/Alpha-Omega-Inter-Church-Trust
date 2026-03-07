@@ -21,6 +21,7 @@ const DonationForm = lazy(() => import("./Pages/DonationForm"));
 import { onAuthStateChanged } from "firebase/auth";
 import useAuthStore from "./Zustand/authStore";
 import { auth } from "./Database/firebase.config";
+import Privacy from "./Pages/Privacy";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +50,7 @@ function App() {
                 <Route path="signup" element={<Signup />} />
                 <Route path="all-campaigns" element={<CampaignHeader />} />
                 <Route path="donation" element={<DonationForm />} />
+                <Route path="privacy" element={<Privacy />} />
               </Route>
 
               {/* Protected Routes */}
