@@ -47,10 +47,11 @@
 
 import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion"; // ← Aliased as Motion
 
 const Hero = () => {
+  const navigate = useNavigate();
   // Parent container – only for staggering children
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -123,16 +124,18 @@ const Hero = () => {
               <Motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
+                onClick={() => navigate("/donation")}
                 className="
-                  bg-[#E87461] hover:bg-[#d45a4a] 
-                  text-white text-lg sm:text-xl 
-                  px-10 sm:px-12 py-3.5 sm:py-4 
-                  rounded-full font-medium
-                  transition-colors duration-300 shadow-lg
-                "
+        bg-[#E87461] hover:bg-[#d45a4a] 
+        text-white text-lg sm:text-xl 
+        px-10 sm:px-12 py-3.5 sm:py-4 
+        rounded-full font-medium
+        transition-colors duration-300 shadow-lg
+      "
               >
                 Donate Now
               </Motion.button>
+
 
               <Motion.div
                 whileHover={{ scale: 1.05 }}

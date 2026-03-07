@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
 
@@ -351,9 +351,9 @@ const Navbar = () => {
             </li>
           </div>
 
-          <button className="w-full bg-[#E87461] text-white py-3 mt-2 rounded-full font-bold shadow-lg">
+          <Link to="/donation" className="w-full bg-[#E87461] text-white py-3 mt-2 rounded-full font-bold shadow-lg">
             Donate Now
-          </button>
+          </Link>
         </ul>
       </div>
     </div>
