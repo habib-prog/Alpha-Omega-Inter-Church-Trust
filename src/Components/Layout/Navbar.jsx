@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
 import useAuthStore from "../../Zustand/authStore";
@@ -213,7 +213,7 @@ const Navbar = () => {
             </li>
           </ul>
           <div className="px-4">
-            <button className="items-center cursor-pointer font-medium transition-all bg-[#E87461] text-white hover:bg-[#D66350] shadow-lg shadow-[#E87461]/20 h-9 px-4 text-sm rounded-full active:scale-95">
+            <button className="items-center cursor-pointer font-medium transition-all bg-[#E87461] text-white hover:bg-[#D66350] shadow-lg shadow-[#E87461]/20 h-9 px-4 text-sm rounded-full border-2 active:scale-95">
               Donate Now
             </button>
           </div>
@@ -377,11 +377,10 @@ const Navbar = () => {
             </li>
           </div>
 
-
-          <Link to="/donation" className="w-full bg-[#E87461] text-white py-3 mt-2 rounded-full font-bold shadow-lg">
-
-          
-
+          <Link
+            to="/donation"
+            className="w-full text-center bg-[#E87461] text-white py-3 mt-2 rounded-full font-bold shadow-lg"
+          >
             Donate Now
           </Link>
         </ul>
