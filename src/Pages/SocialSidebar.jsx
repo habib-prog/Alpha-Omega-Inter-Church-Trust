@@ -48,7 +48,7 @@ const SocialSidebar = () => {
               href={link.url}
               whileHover={{ scale: 1.1, x: 8 }}
               whileTap={{ scale: 0.9 }}
-              className={`${link.color} text-white w-12 h-12 flex items-center justify-center rounded-2xl text-2xl transition-all shadow-lg`}
+              className={`${link.color} text-white w-7 h-7 flex items-center justify-center rounded-2xl text-md transition-all shadow-lg`}
             >
               {link.icon}
             </Motion.a>
@@ -64,12 +64,12 @@ const SocialSidebar = () => {
           /**
            * pointer-events-auto ensures the toggle button remains clickable.
            */
-          className="bg-[#E87461] text-white p-2 h-20 w-12 rounded-r-2xl shadow-lg hover:brightness-110 active:scale-95 flex items-center justify-center cursor-pointer border-y border-r border-white/30 pointer-events-auto -ml-0.5"
+          className="bg-[#E87461] text-white p-2 h-12 w-14 rounded-r-2xl shadow-lg hover:brightness-110 active:scale-95 flex items-center justify-center cursor-pointer border-y border-r border-white/30 pointer-events-auto -ml-0.5"
         >
           {isOpen ? (
-            <FaChevronLeft size={20} />
+            <FaChevronLeft size={15} />
           ) : (
-            <div className="pl-1">
+            <div className="pl-4">
               <FaChevronRight size={20} />
             </div>
           )}
