@@ -98,9 +98,9 @@ const AdminPrivacyPanel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col md:flex-row relative pt-16 overflow-x-hidden">
+    <div className="min-h-screen container bg-white flex flex-col md:flex-row relative pt-16 overflow-x-hidden">
       {/* --- Fixed Header --- */}
-      <header className="bg-[#4A3F35] w-full h-16 fixed top-0 left-0 z-[60] flex items-center px-6 justify-between shadow-md">
+      <header className="bg-[#4A3F35] w-full h-16 fixed top-0 left-0 z-60 flex items-center px-6 justify-between shadow-md">
         {/* Mobile Hamburger Button */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -126,17 +126,15 @@ const AdminPrivacyPanel = () => {
       {/* --- Sidebar Navigation --- */}
       <aside
         className={`
-            
-        
           fixed md:sticky top-0.6 left-0 z-50 
-          w-72 md:w-64 h-243.75
-          bg-[#E87461] text-white p-6 shadow-2xl 
+          w-72 md:w-64 h-[calc(100vh-64px)]
+          bg-[#E87461] text-white p-6 sm:shadow-xl 
           transition-transform duration-500 ease-in-out
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
         <button
-          className=" mt-14 sm:hidden ml-2 bg-white p-2 rounded-full text-red-500"
+          className=" mt-14 cursor-pointer sm:hidden ml-2 bg-white p-2 rounded-full text-red-500"
           onClick={() => setIsMenuOpen(false)}
         >
           Close
@@ -155,7 +153,7 @@ const AdminPrivacyPanel = () => {
                 setActive(item);
                 setIsMenuOpen(false);
               }}
-              className={` w-full text-left p-4 rounded-xl transition-all duration-300 flex items-center justify-between group ${
+              className={` cursor-pointer w-full text-left p-4 rounded-xl transition-all duration-300 flex items-center justify-between group ${
                 active === item
                   ? "bg-white text-[#E87461] shadow-xl font-bold"
                   : "hover:bg-white/10 text-white"
@@ -179,7 +177,7 @@ const AdminPrivacyPanel = () => {
       </aside>
 
       {/* --- Main Content Area --- */}
-      <main className="mt-8  flex-1 p-4 md:p-10 lg:p-16 min-h-[calc(100vh-64px)] overflow-y-auto">
+      <main className="mt-8 sm:-mt-12  flex-1 p-4 md:p-10 lg:p-16 min-h-[calc(100vh-64px)] overflow-y-auto">
         <AnimatePresence mode="wait">
           <Motion.div
             key={active}
@@ -187,13 +185,13 @@ const AdminPrivacyPanel = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className=" max-w-4xl mx-auto pb-4--- bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-100"
+            className=" max-w-4xl mx-auto pb-4--- bg-white sm:shadow-2xl rounded-3xl overflow-hidden border border-gray-100"
           >
             {/* Header */}
-            <div className="bg-[#FDF2F0] p-6 md:p-10 border-b border-[#FCE3DF] ">
+            <div className="bg-[#FDF2F0] p-6  md:p-10 border-b border-[#FCE3DF] ">
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-8 h-[2px] bg-[#E87461]"></span>
+                  <span className="w-8 h-0.5 bg-[#E87461]"></span>
                   <span className="text-[#E87461] text-[10px] font-bold uppercase tracking-[0.2em]">
                     Alpha Omega Charity
                   </span>
@@ -216,7 +214,7 @@ const AdminPrivacyPanel = () => {
                     className="group"
                   >
                     <h3 className="text-[#E87461] font-extrabold text-lg mb-3 flex items-start gap-4 uppercase tracking-wide">
-                      <span className="mt-1 flex-shrink-0 w-5 h-5 bg-[#E87461]/10 text-[#E87461] rounded-full flex items-center justify-center text-[10px] border border-[#E87461]/20">
+                      <span className="mt-1 shrink-0 w-5 h-5 bg-[#E87461]/10 text-[#E87461] rounded-full flex items-center justify-center text-[10px] border border-[#E87461]/20">
                         {idx + 1}
                       </span>
                       {detail.subtitle}
