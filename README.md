@@ -6,4 +6,4 @@ A comprehensive web platform for Alpha Omega Inter Church Trust, currently under
 
 🚧 **This project is currently under active development.** Features are being added and refined regularly.
 
-![alt text](image.png)
+![alt text](image.png) ![alt text](image-1.png)
