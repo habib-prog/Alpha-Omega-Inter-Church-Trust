@@ -33,19 +33,10 @@ const Profile = () => {
           </p>
 
           <div className="Usercard w-full p-6 flex gap-2 justify-center items-center flex-col">
-            {/* এখানে ইমেজ লজিক পরিবর্তন করা হয়েছে */}
             <div className="img_box shadow-lg border-brand border-4 rounded-full p-1 flex items-center justify-center">
-              {user?.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  className="rounded-full w-24 h-24 object-cover"
-                  alt="User"
-                />
-              ) : (
-                <div className="rounded-full w-24 h-24 bg-brand flex items-center justify-center text-white text-4xl font-bold">
-                  {initials}
-                </div>
-              )}
+              <div className="rounded-full w-24 h-24 bg-brand flex items-center justify-center text-white text-4xl font-bold">
+                {initials}
+              </div>
             </div>
 
             <h1 className="font-bold text-2xl text-gray-800">

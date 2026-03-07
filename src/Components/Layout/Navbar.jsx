@@ -213,9 +213,12 @@ const Navbar = () => {
             </li>
           </ul>
           <div className="px-4">
-            <button className="items-center cursor-pointer font-medium transition-all bg-[#E87461] text-white hover:bg-[#D66350] shadow-lg shadow-[#E87461]/20 h-9 px-4 text-sm rounded-full border-2 active:scale-95">
+            <Link
+              to="/donation"
+              className=" p-2 items-center cursor-pointer font-medium transition-all bg-[#E87461] text-white hover:bg-[#D66350] shadow-lg shadow-[#E87461]/20 h-9 px-4 text-sm rounded-full border-2 active:scale-95"
+            >
               Donate Now
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -229,21 +232,12 @@ const Navbar = () => {
             >
               <div className="w-7 rounded-full flex items-center justify-center overflow-hidden bg-[#E87461] text-white font-bold">
                 {user ? (
-                  user.photoURL ? (
-                    // Jodi photoURL thake, tobe image dekhabe
-                    <img
-                      alt="User"
-                      src={user.photoURL}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    // Jodi photoURL na thake, tobe namer prothom okkhor dekhabe
-                    <div className="w-full h-full flex items-center justify-center">
-                      {user.displayName?.charAt(0).toUpperCase() || "U"}
-                    </div>
-                  )
+                  <div className="w-full h-full flex items-center justify-center uppercase">
+                    {user.displayName?.charAt(0).toUpperCase() ||
+                      user.email?.charAt(0).toUpperCase() ||
+                      "U"}
+                  </div>
                 ) : (
-                  // User login na thakle default image
                   <img alt="User" src="/user.png" />
                 )}
               </div>

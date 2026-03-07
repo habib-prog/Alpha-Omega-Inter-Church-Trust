@@ -1,32 +1,26 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { motion as Motion } from "framer-motion"; // Importing Framer Motion
+import { motion as Motion } from "framer-motion";
 import useAuthStore from "../Zustand/authStore";
 import { toast, ToastContainer } from "react-toastify";
 import { auth } from "../Database/firebase.config";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"; // Google Login
 
 const Login = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const { login, authLoading } = useAuthStore();
+  const { login, authLoading, setUser } = useAuthStore(); // setUser
 
   const hanslelogin = async (e) => {
     e.preventDefault();
-
     const status = await login(email, password);
-
     if (status.success) {
       const currentUser = auth.currentUser;
-
       if (currentUser && !currentUser.emailVerified) {
         toast.warn("Please verify your email first!");
-
         return;
       }
-
       toast.success("Login Successful");
       setEmail("");
       setPassword("");
@@ -37,11 +31,26 @@ const Login = () => {
       toast.error(status.message);
     }
   };
+
+  // Google Login
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      setUser(result.user);
+      toast.success("Google Login Successful");
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1000);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <ToastContainer />
       <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
-        {/* Left Side: Image (Only for Desktop) */}
         <div className="h-full hidden md:block">
           <img
             src="/hero.jpeg"
@@ -49,13 +58,8 @@ const Login = () => {
             className="w-full h-full object-cover"
           />
         </div>
-
-        {/* Right Side: Form Container */}
         <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-orange-300 md:bg-brand bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
-          {/* Mobile Overlay */}
           <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
-
-          {/* Card Container with Motion - Sliding from Left */}
           <Motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
@@ -67,7 +71,6 @@ const Login = () => {
                 <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default dark:text-gray-300 text-gray-900 mb-6">
                   Log in
                 </h1>
-
                 <form
                   action="#"
                   method="post"
@@ -90,7 +93,6 @@ const Login = () => {
                       required
                     />
                   </div>
-
                   <div>
                     <label
                       htmlFor="password"
@@ -108,7 +110,6 @@ const Login = () => {
                       required
                     />
                   </div>
-
                   <div className="flex justify-start">
                     <a
                       href="#"
@@ -117,10 +118,9 @@ const Login = () => {
                       Forget your password?
                     </a>
                   </div>
-
                   {authLoading ? (
                     <button
-                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg  animate-pulse `}
+                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg animate-pulse`}
                       onClick={hanslelogin}
                     >
                       Loging In....
@@ -134,7 +134,6 @@ const Login = () => {
                     </button>
                   )}
                 </form>
-
                 <div className="flex flex-col mt-6 text-sm text-center dark:text-gray-300">
                   <p>
                     Don't have an account?{" "}
@@ -146,8 +145,6 @@ const Login = () => {
                     </Link>
                   </p>
                 </div>
-
-                {/* Third Party Icons */}
                 <div
                   id="third-party-auth"
                   className="flex flex-wrap justify-center gap-3 mt-5"
@@ -156,16 +153,13 @@ const Login = () => {
                     {
                       src: "8f25a2ba-bdcf-4ff1-b596-088f330416ef",
                       alt: "Google",
+                      onClick: handleGoogleLogin,
                     },
                     {
                       src: "95eebb9c-85cf-4d12-942f-3c40d7044dc6",
                       alt: "LinkedIn",
                     },
-                    {
-                      src: "be5b0ffd-85e8-4639-83a6-5162dfa15a16",
-                      alt: "GitHub",
-                      invert: true,
-                    },
+
                     {
                       src: "6f56c0f1-c9c0-4d72-b44d-51a79ff38ea9",
                       alt: "Facebook",
@@ -174,13 +168,10 @@ const Login = () => {
                       src: "82d7ca0a-c380-44c4-ba24-658723e2ab07",
                       alt: "Twitter",
                     },
-                    {
-                      src: "3277d952-8e21-4aad-a2b7-d484dad531fb",
-                      alt: "Apple",
-                    },
                   ].map((icon, index) => (
                     <Motion.button
                       key={index}
+                      onClick={icon.onClick ? icon.onClick : null}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       className="p-2 bg-gray-50/80 dark:bg-gray-800 rounded-lg hover:scale-110 transition-transform shadow-md"
@@ -194,7 +185,6 @@ const Login = () => {
                     </Motion.button>
                   ))}
                 </div>
-
                 <div className="mt-6 text-center text-xs text-gray-500">
                   <p>
                     By signing in, you agree to our Terms and Privacy Policy.
