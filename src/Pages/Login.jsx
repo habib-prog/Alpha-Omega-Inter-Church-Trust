@@ -3,14 +3,15 @@ import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion";
 import useAuthStore from "../Zustand/authStore";
 import { toast, ToastContainer } from "react-toastify";
-import { auth } from "../Database/firebase.config";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"; // Google Login
+import { auth, db } from "../Database/firebase.config"; // db ইমপোর্ট নিশ্চিত করুন
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore"; // Firestore ফাংশন
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, authLoading, setUser } = useAuthStore(); // setUser
+  const { login, authLoading, setUser } = useAuthStore();
 
   const hanslelogin = async (e) => {
     e.preventDefault();
@@ -37,7 +38,23 @@ const Login = () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
+      const user = result.user;
+
+      // Firestore
+      const userRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          createdAt: new Date(),
+        });
+      }
+
+      setUser(user);
       toast.success("Google Login Successful");
       setTimeout(() => {
         navigate("/profile");
@@ -71,11 +88,7 @@ const Login = () => {
                 <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default dark:text-gray-300 text-gray-900 mb-6">
                   Log in
                 </h1>
-                <form
-                  action="#"
-                  method="post"
-                  className="space-y-4 sm:space-y-6"
-                >
+                <form onSubmit={hanslelogin} className="space-y-4 sm:space-y-6">
                   <div>
                     <label
                       htmlFor="email"
@@ -118,21 +131,12 @@ const Login = () => {
                       Forget your password?
                     </a>
                   </div>
-                  {authLoading ? (
-                    <button
-                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg animate-pulse`}
-                      onClick={hanslelogin}
-                    >
-                      Loging In....
-                    </button>
-                  ) : (
-                    <button
-                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg`}
-                      onClick={hanslelogin}
-                    >
-                      Log In
-                    </button>
-                  )}
+                  <button
+                    type="submit"
+                    className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg ${authLoading ? "animate-pulse" : ""}`}
+                  >
+                    {authLoading ? "Loging In...." : "Log In"}
+                  </button>
                 </form>
                 <div className="flex flex-col mt-6 text-sm text-center dark:text-gray-300">
                   <p>
@@ -159,7 +163,6 @@ const Login = () => {
                       src: "95eebb9c-85cf-4d12-942f-3c40d7044dc6",
                       alt: "LinkedIn",
                     },
-
                     {
                       src: "6f56c0f1-c9c0-4d72-b44d-51a79ff38ea9",
                       alt: "Facebook",
@@ -177,18 +180,13 @@ const Login = () => {
                       className="p-2 bg-gray-50/80 dark:bg-gray-800 rounded-lg hover:scale-110 transition-transform shadow-md"
                     >
                       <img
-                        className={`w-5 h-5 ${icon.invert ? "dark:invert" : ""}`}
+                        className="w-5 h-5"
                         loading="lazy"
                         src={`https://ucarecdn.com/${icon.src}/`}
                         alt={icon.alt}
                       />
                     </Motion.button>
                   ))}
-                </div>
-                <div className="mt-6 text-center text-xs text-gray-500">
-                  <p>
-                    By signing in, you agree to our Terms and Privacy Policy.
-                  </p>
                 </div>
               </div>
             </section>
