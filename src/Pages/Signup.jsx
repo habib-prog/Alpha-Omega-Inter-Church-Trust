@@ -9,7 +9,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signup, isLoading } = useAuthStore();
+  const { signup, authLoading } = useAuthStore();
   const handleSignup = async (e) => {
     e.preventDefault();
     const result = await signup(email, password, name);
@@ -23,7 +23,7 @@ const Signup = () => {
 
     setTimeout(() => {
       navigate("/login");
-    }, 3000);
+    }, 1000);
   };
   return (
     <div className="min-h-screen">
@@ -124,12 +124,21 @@ const Signup = () => {
                     </a>
                   </div>
 
-                  <button
-                    className="w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg"
-                    onClick={handleSignup}
-                  >
-                    {isLoading ? "Signing up" : "Sign Up"}
-                  </button>
+                  {authLoading ? (
+                    <button
+                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg  animate-pulse `}
+                      onClick={handleSignup}
+                    >
+                      Signing Up....
+                    </button>
+                  ) : (
+                    <button
+                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg`}
+                      onClick={handleSignup}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </form>
 
                 <div className="flex flex-col mt-6 text-sm text-center dark:text-gray-300">
