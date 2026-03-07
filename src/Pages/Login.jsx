@@ -75,7 +75,7 @@ const Login = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-orange-300 md:bg-brand bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
+        <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-brand md:bg-brand bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
           <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
           <Motion.div
             initial={{ opacity: 0, x: -100 }}
@@ -84,21 +84,21 @@ const Login = () => {
             className="w-full max-w-md z-10"
           >
             <section id="back-div" className="rounded-3xl">
-              <div className="border-8 border-transparent rounded-xl bg-white/90 backdrop-blur-sm dark:bg-gray-900 shadow-xl p-6 sm:p-8">
-                <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default dark:text-gray-300 text-gray-900 mb-6">
+              <div className="border-8 border-transparent rounded-xl bg-white/90 backdrop-blur-sm shadow-xl p-6 sm:p-8">
+                <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default text-gray-900 mb-6">
                   Log in
                 </h1>
                 <form onSubmit={hanslelogin} className="space-y-4 sm:space-y-6">
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-lg dark:text-gray-300"
+                      className="block mb-2 text-lg text-black"
                     >
                       Email
                     </label>
                     <input
                       id="email"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
+                      className="border p-3 placeholder:text-gray-500 shadow-md    border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="email"
                       onChange={(e) => setEmail(e.target.value)}
                       value={email}
@@ -109,13 +109,13 @@ const Login = () => {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-lg dark:text-gray-300"
+                      className="block mb-2 text-lg text-black"
                     >
                       Password
                     </label>
                     <input
                       id="password"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
+                      className="border p-3 placeholder:text-gray-500 shadow-md    border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="password"
                       placeholder="Password"
                       value={password}
@@ -138,7 +138,7 @@ const Login = () => {
                     {authLoading ? "Loging In...." : "Log In"}
                   </button>
                 </form>
-                <div className="flex flex-col mt-6 text-sm text-center dark:text-gray-300">
+                <div className="flex flex-col mt-6 text-sm text-center text-brand ">
                   <p>
                     Don't have an account?{" "}
                     <Link
@@ -177,7 +177,7 @@ const Login = () => {
                       onClick={icon.onClick ? icon.onClick : null}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-2 bg-gray-50/80 dark:bg-gray-800 rounded-lg hover:scale-110 transition-transform shadow-md"
+                      className="p-2 bg-gray-50/80  rounded-lg hover:scale-110 transition-transform shadow-md"
                     >
                       <img
                         className="w-5 h-5"

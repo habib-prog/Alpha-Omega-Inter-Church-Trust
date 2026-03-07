@@ -40,7 +40,7 @@ const Signup = () => {
 
         {/* Right Side: Form Container */}
         {/* Login er motoi exact same padding and alignment */}
-        <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-orange-300 md:bg-orange-300 bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
+        <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-brand md:bg-brand bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
           {/* Mobile Overlay */}
           <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
 
@@ -52,8 +52,8 @@ const Signup = () => {
             className="w-full max-w-md z-10"
           >
             <section id="back-div" className="rounded-3xl">
-              <div className="border-8 border-transparent rounded-xl bg-white/90 backdrop-blur-sm dark:bg-gray-900 shadow-xl p-6 sm:p-8">
-                <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default dark:text-gray-300 text-gray-900 mb-6">
+              <div className="border-8 border-transparent rounded-xl bg-white/90 backdrop-blur-sm  shadow-xl p-6 sm:p-8">
+                <h1 className="text-3xl sm:text-5xl font-bold text-center cursor-default  text-gray-900 mb-6">
                   Sign Up
                 </h1>
 
@@ -65,13 +65,13 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="Name"
-                      className="block mb-2 text-lg dark:text-gray-300"
+                      className="block mb-2 text-lg text-black"
                     >
                       Name
                     </label>
                     <input
                       id="Name"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
+                      className="border p-3 placeholder:text-gray-500 shadow-md    border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="text"
                       placeholder="Name"
                       onChange={(e) => setName(e.target.value)}
@@ -82,13 +82,13 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-lg dark:text-gray-300"
+                      className="block mb-2 text-lg text-black"
                     >
                       Email
                     </label>
                     <input
                       id="email"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
+                      className="border p-3 placeholder:text-gray-500 shadow-md    border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="email"
                       placeholder="Email"
                       onChange={(e) => setEmail(e.target.value)}
@@ -100,13 +100,13 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-lg dark:text-gray-300"
+                      className="block mb-2 text-lg text-black"
                     >
                       Password
                     </label>
                     <input
                       id="password"
-                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
+                      className="border p-3 placeholder:text-gray-500 shadow-md    border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="password"
                       placeholder="Password"
                       value={password}
@@ -141,7 +141,7 @@ const Signup = () => {
                   )}
                 </form>
 
-                <div className="flex flex-col mt-6 text-sm text-center dark:text-gray-300">
+                <div className="flex flex-col mt-6 text-sm text-center text-brand">
                   <p>
                     Already have an account?{" "}
                     <Link
