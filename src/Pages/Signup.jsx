@@ -1,10 +1,33 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion"; // Importing Framer Motion
+import useAuthStore from "../Zustand/authStore";
+import { toast, ToastContainer } from "react-toastify";
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { signup, authLoading } = useAuthStore();
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    const result = await signup(email, password, name);
+    result.success && toast.success("Account created");
+    result.success &&
+      toast.warning(`verification mail sent
+      verify mail before login`);
+    setName("");
+    setEmail("");
+    setPassword("");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
+  };
   return (
     <div className="min-h-screen">
+      <ToastContainer />
       <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
         {/* Left Side: Image (Only for Desktop) */}
         <div className="h-full hidden md:block">
@@ -41,6 +64,23 @@ const Signup = () => {
                 >
                   <div>
                     <label
+                      htmlFor="Name"
+                      className="block mb-2 text-lg dark:text-gray-300"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="Name"
+                      className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
+                      type="text"
+                      placeholder="Name"
+                      onChange={(e) => setName(e.target.value)}
+                      value={name}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
                       htmlFor="email"
                       className="block mb-2 text-lg dark:text-gray-300"
                     >
@@ -51,6 +91,8 @@ const Signup = () => {
                       className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="email"
                       placeholder="Email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                       required
                     />
                   </div>
@@ -67,6 +109,8 @@ const Signup = () => {
                       className="border p-3 shadow-md dark:bg-indigo-700 dark:text-gray-300 dark:border-gray-700 border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 transition transform hover:scale-[1.02] duration-300 outline-none"
                       type="password"
                       placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -80,12 +124,21 @@ const Signup = () => {
                     </a>
                   </div>
 
-                  <button
-                    className="w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg"
-                    type="submit"
-                  >
-                    Sign Up
-                  </button>
+                  {authLoading ? (
+                    <button
+                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg  animate-pulse `}
+                      onClick={handleSignup}
+                    >
+                      Signing Up....
+                    </button>
+                  ) : (
+                    <button
+                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg`}
+                      onClick={handleSignup}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </form>
 
                 <div className="flex flex-col mt-6 text-sm text-center dark:text-gray-300">

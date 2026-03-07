@@ -1,30 +1,67 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useState, lazy, Suspense, useEffect } from "react";
 import "./App.css";
-import Home from "./Pages/Home";
-import Layout from "./Components/Layout";
 
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
-import Aboutus from "./Pages/Aboutus";
-import CampaignHeader from "./Components/UI/Charts/CampaignHeader";
-import DonationForm from "./Pages/DonationForm";
+// Components
+import Preloader from "./Components/UI/Loader";
+import PageLoader from "./Components/UI/Skeleton/PageLoader";
+import Layout from "./Components/Layout"; // Contains the <Outlet />
+import Protected from "./Components/Auth/Protected";
 
-function App() {   
+// Lazy Loaded Pages
+const Home = lazy(() => import("./Pages/Home"));
+const Login = lazy(() => import("./Pages/Login"));
+const Signup = lazy(() => import("./Pages/Signup"));
+const Aboutus = lazy(() => import("./Pages/Aboutus"));
+const Profile = lazy(() => import("./Pages/Profile"));
+const EditProfile = lazy(() => import("./Pages/EditProfile"));
+const CampaignHeader = lazy(() => import("./Pages/CampaignHeader"));
+const DonationForm = lazy(() => import("./Pages/DonationForm"));
+
+import { onAuthStateChanged } from "firebase/auth";
+import useAuthStore from "./Zustand/authStore";
+import { auth } from "./Database/firebase.config";
+
+function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const setUser = useAuthStore((state) => state.setUser);
+
+  useEffect(() => {
+    const unSubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user || null);
+    });
+    return () => unSubscribe();
+  }, [setUser]);
+
   return (
-    <BrowserRouter>    
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+    <>
+      {isLoading ? (
+        <Preloader onComplete={() => setIsLoading(false)} />
+      ) : (
+        <BrowserRouter>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Layout wraps all public pages */}
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="about" element={<Aboutus />} />
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+                <Route path="all-campaigns" element={<CampaignHeader />} />
+                <Route path="donation" element={<DonationForm />} />
+              </Route>
 
-          <Route path="/about" element={<Aboutus />} />
-          <Route path="/login" element={<Login />} />   
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/all-campaigns" element={<CampaignHeader />} />
-           <Route path="/donation" element={<DonationForm />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );          
+              {/* Protected Routes */}
+              <Route element={<Protected />}>
+                <Route path="editprofile" element={<EditProfile />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      )}
+    </>
+  );
 }
 
 export default App;

@@ -2,10 +2,25 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
+import useAuthStore from "../../Zustand/authStore";
+import { signOut } from "firebase/auth";
+import { auth } from "../../Database/firebase.config";
 
 const Navbar = () => {
+  const { user } = useAuthStore();
+  const Signout = () => {
+    signOut(auth);
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Function to force close DaisyUI dropdowns by removing focus
+  const closeDropdown = () => {
+    const elem = document.activeElement;
+    if (elem) {
+      elem.blur();
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,17 +41,17 @@ const Navbar = () => {
   return (
     <div className="relative">
       <div
-        className={`fixed top-0 left-0 w-full z-120 navbar transition-all duration-500 flex justify-center items-center 
+        className={`fixed top-0  left-0 w-full z-120 navbar transition-all duration-500 flex justify-center items-center 
         ${
           isScrolled
-            ? "bg-[#FAF8F3]/95 py-3 shadow-md"
-            : "bg-transparent py-5 shadow-none"
+            ? "bg-[#FAF8F3]/95 py-0.5 shadow-md"
+            : "bg-transparent py-0.5 shadow-none"
         }`}
       >
-        <div className="flex-1 flex items-center gap-2 px-4  sm:px-8">
+        <div className="flex-1 flex items-center gap-2 px-4 sm:px-8">
           <Link to="/" className="p-1">
             <img
-              className="w-10  hover:scale-110 transition-transform duration-300 ease-in-out"
+              className="w-10 hover:scale-110 transition-transform duration-300 ease-in-out"
               src="/NewLogo.png"
               alt="Logo"
             />
@@ -46,10 +61,10 @@ const Navbar = () => {
               isScrolled ? "text-gray-800" : "text-white"
             }`}
           >
-            <p className="font-bold  text-sm  uppercase">
-              <span className="  text-orange-400">A</span>lpha
-              <span className=" ml-1 text-orange-400">O</span>mega
-              <span className=" ml-1 text-orange-400">C</span>harity
+            <p className="font-bold text-sm uppercase">
+              <span className="text-orange-400">A</span>lpha
+              <span className="ml-1 text-orange-400">O</span>mega
+              <span className="ml-1 text-orange-400">C</span>harity
             </p>
           </span>
         </div>
@@ -67,20 +82,23 @@ const Navbar = () => {
                 About us
               </NavHashLink>
             </li>
-            
 
             {/* Campaigns Dropdown */}
             <li className="dropdown dropdown-hover group">
               <div
                 tabIndex={0}
                 role="button"
-                className={`flex items-center gap-1 cursor-pointer py-4 transition-colors duration-300 ${isScrolled ? "text-gray-800" : "text-white"}`}
+                className={`flex items-center gap-1 cursor-pointer py-4 transition-colors duration-300 ${
+                  isScrolled ? "text-gray-800" : "text-white"
+                }`}
               >
                 <span className="relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-[#E87461] after:transition-all after:duration-300 group-hover:after:w-full">
                   Campaigns
                 </span>
                 <svg
-                  className={`w-4 h-4 transition-transform group-hover:rotate-180 ${isScrolled ? "text-gray-600" : "text-white"}`}
+                  className={`w-4 h-4 transition-transform group-hover:rotate-180 ${
+                    isScrolled ? "text-gray-600" : "text-white"
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -98,27 +116,35 @@ const Navbar = () => {
                 className="dropdown-content z-130 menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-48 mt-0 text-gray-800"
               >
                 <li>
-                  <NavHashLink smooth to="/all-campaigns">
+                  <NavHashLink
+                    smooth
+                    to="/all-campaigns"
+                    onClick={closeDropdown}
+                  >
                     All Campaigns
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/goal">
+                  <NavHashLink smooth to="/goal" onClick={closeDropdown}>
                     Goal Amount
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/raised">
+                  <NavHashLink smooth to="/raised" onClick={closeDropdown}>
                     Raised Amount
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/progress">
+                  <NavHashLink smooth to="/progress" onClick={closeDropdown}>
                     Progress Bar
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/past-campaigns">
+                  <NavHashLink
+                    smooth
+                    to="/past-campaigns"
+                    onClick={closeDropdown}
+                  >
                     Past Campaigns
                   </NavHashLink>
                 </li>
@@ -136,13 +162,17 @@ const Navbar = () => {
               <div
                 tabIndex={0}
                 role="button"
-                className={`flex items-center gap-1 cursor-pointer py-4 transition-colors duration-300 ${isScrolled ? "text-gray-800" : "text-white"}`}
+                className={`flex items-center gap-1 cursor-pointer py-4 transition-colors duration-300 ${
+                  isScrolled ? "text-gray-800" : "text-white"
+                }`}
               >
                 <span className="relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-[#E87461] after:transition-all after:duration-300 group-hover:after:w-full">
                   More
                 </span>
                 <svg
-                  className={`w-4 h-4 transition-transform group-hover:rotate-180 ${isScrolled ? "text-gray-600" : "text-white"}`}
+                  className={`w-4 h-4 transition-transform group-hover:rotate-180 ${
+                    isScrolled ? "text-gray-600" : "text-white"
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -160,28 +190,23 @@ const Navbar = () => {
                 className="dropdown-content z-130 menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-44 mt-0 text-gray-800"
               >
                 <li>
-                  <NavHashLink smooth to="/#gallery">
+                  <NavHashLink smooth to="/#gallery" onClick={closeDropdown}>
                     Gallery
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/#contact">
+                  <NavHashLink smooth to="/#contact" onClick={closeDropdown}>
                     Contact Us
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/#legal">
+                  <NavHashLink smooth to="/#legal" onClick={closeDropdown}>
                     Legal
                   </NavHashLink>
                 </li>
-                <li>
-                  <NavHashLink smooth to="/#history">
+                <li className={user?.emailVerified ? "block" : "hidden"}>
+                  <NavHashLink smooth to="/#history" onClick={closeDropdown}>
                     Donation History
-                  </NavHashLink>
-                </li>
-                <li>
-                  <NavHashLink smooth to="/login">
-                    Login
                   </NavHashLink>
                 </li>
               </ul>
@@ -194,35 +219,58 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Profile */}
+        {/* User Profile Dropdown */}
         <div className="flex-none px-2">
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
+              className="btn btn-ghost sm:mr-4 btn-circle avatar border-2 border-transparent hover:border-[#E87461]"
             >
-              <div className="w-10 rounded-full">
-                <img alt="User" src="/russel.png" />
+              <div className="w-7 rounded-full flex items-center justify-center overflow-hidden bg-[#E87461] text-white font-bold">
+                {user ? (
+                  user.photoURL ? (
+                    // Jodi photoURL thake, tobe image dekhabe
+                    <img
+                      alt="User"
+                      src={user.photoURL}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    // Jodi photoURL na thake, tobe namer prothom okkhor dekhabe
+                    <div className="w-full h-full flex items-center justify-center">
+                      {user.displayName?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )
+                ) : (
+                  // User login na thakle default image
+                  <img alt="User" src="/user.png" />
+                )}
               </div>
             </div>
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-white rounded-box z-130 mt-3 w-52 p-2 shadow text-gray-800"
             >
-              <li>
-                <a>
+              <li className={user ? "block" : "hidden"}>
+                <Link to="/profile" onClick={closeDropdown}>
                   Profile <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
-              <li>
-                <a>Settings</a>
+              <li className={user ? "block" : "hidden"}>
+                <a onClick={closeDropdown}>Settings</a>
               </li>
-              <li>
-                <a>Admin Panel</a>
+              <li className={user?.emailVerified ? "block" : "hidden"}>
+                <a onClick={closeDropdown}>Admin Panel</a>
               </li>
-              <li>
-                <a>Logout</a>
+              <li onClick={closeDropdown}>
+                {user?.emailVerified ? (
+                  <a onClick={Signout}>Log Out</a>
+                ) : (
+                  <Link to="login" onClick={closeDropdown}>
+                    Log In
+                  </Link>
+                )}
               </li>
             </ul>
           </div>
@@ -231,27 +279,31 @@ const Navbar = () => {
         {/* Hamburger - Mobile only */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`sm:hidden block px-4 z-130 transition-colors duration-300 ${isScrolled ? "text-gray-800" : "text-white"}`}
+          className={`sm:hidden block px-4 z-130 transition-colors duration-300 ${
+            isScrolled ? "text-gray-800" : "text-white"
+          }`}
         >
           <HiBarsArrowDown
-            className={`text-3xl transition-transform ${isOpen ? "rotate-180 text-[#E87461]" : ""}`}
+            className={`text-3xl transition-transform ${
+              isOpen ? "rotate-180 text-[#E87461]" : ""
+            }`}
           />
         </button>
       </div>
 
-      {/* Mobile Menu Content - Top & Left Entry */}
+      {/* Mobile Menu Content */}
       <div
-        className={`fixed inset-0 z-110 sm:hidden transition-all duration-300 ${isOpen ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-0 z-110 sm:hidden transition-all duration-300 ${
+          isOpen ? "visible opacity-100" : "invisible opacity-0"
+        }`}
       >
-        {/* Background Overlay */}
         <div
           className="absolute inset-0 bg-black/40 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         ></div>
 
-        {/* Menu Items: top-22 (from top) and transform (from left) */}
         <ul
-          className={`absolute top-0 left-0 w-full bg-[#FAF8F3] pt-29 pb-10 px-6 shadow-2xl flex flex-col gap-4 transform transition-transform duration-500 ease-in-out ${
+          className={`absolute top-0 left-0 w-full bg-[#FAF8F3] pt-28 pb-10 px-6 shadow-2xl flex flex-col gap-4 transform transition-transform duration-500 ease-in-out ${
             isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
           } text-gray-800 rounded-b-3xl`}
         >
@@ -259,20 +311,10 @@ const Navbar = () => {
             <NavHashLink
               onClick={() => setIsOpen(false)}
               smooth
-              to="/#home"
+              to="/"
               className="text-lg font-medium"
             >
               Home
-            </NavHashLink>
-          </li>
-          <li>
-            <NavHashLink
-              onClick={() => setIsOpen(false)}
-              smooth
-              to="/login"
-              className="text-lg font-medium"
-            >
-              Login
             </NavHashLink>
           </li>
           <li>
@@ -287,7 +329,9 @@ const Navbar = () => {
           </li>
 
           <div className="border-t border-gray-200 pt-2">
-            <span className="font-bold text-[#E87461] text-xs">CAMPAIGNS</span>
+            <span className="font-bold text-[#E87461] text-xs uppercase">
+              Campaigns
+            </span>
             <li className="pl-2 mt-2">
               <NavHashLink onClick={() => setIsOpen(false)} to="/all-campaigns">
                 All Campaigns
@@ -301,28 +345,10 @@ const Navbar = () => {
                 Past Campaigns
               </NavHashLink>
             </li>
+            {/* Added other mobile links for consistency */}
             <li className="pl-2 mt-2">
-              <NavHashLink
-                onClick={() => setIsOpen(false)}
-                to="/past-campaigns"
-              >
+              <NavHashLink onClick={() => setIsOpen(false)} to="/goal">
                 Goal Amount
-              </NavHashLink>
-            </li>
-            <li className="pl-2 mt-2">
-              <NavHashLink
-                onClick={() => setIsOpen(false)}
-                to="/past-campaigns"
-              >
-                Raised Amount
-              </NavHashLink>
-            </li>
-            <li className="pl-2 mt-2">
-              <NavHashLink
-                onClick={() => setIsOpen(false)}
-                to="/past-campaigns"
-              >
-                Progress Bar
               </NavHashLink>
             </li>
           </div>
@@ -351,7 +377,11 @@ const Navbar = () => {
             </li>
           </div>
 
+
           <Link to="/donation" className="w-full bg-[#E87461] text-white py-3 mt-2 rounded-full font-bold shadow-lg">
+
+          
+
             Donate Now
           </Link>
         </ul>

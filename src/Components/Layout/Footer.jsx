@@ -49,6 +49,18 @@ const Footer = () => {
           >
             Contact
           </Link>
+          <Link
+            to="/contact"
+            className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
+          >
+            Privacy & Policy
+          </Link>
+          <Link
+            to="/contact"
+            className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
+          >
+            Terms & Conditions
+          </Link>
         </nav>
         {/*Social link*/}
         <nav>
@@ -91,7 +103,7 @@ const Footer = () => {
         <p className="flex justify-center ">
           © {new Date().getDate()}{" "}
           {new Date().toLocaleString("en-US", { month: "long" })}{" "}
-          {new Date().getFullYear()} Apha Omega Inter Church Trust. All rights
+          {new Date().getFullYear()} Alpha Omega Inter Church Trust. All rights
           reserved.
         </p>
         <div className="flex items-center justify-center px-6 py-2">

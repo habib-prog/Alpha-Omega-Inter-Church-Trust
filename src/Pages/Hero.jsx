@@ -86,7 +86,6 @@ const Hero = () => {
           after:absolute after:inset-0 after:bg-black/45
         "
       />
-
       <div className="relative container mx-auto px-5 py-20 sm:py-28 lg:py-32 flex items-center justify-center min-h-[80vh] lg:min-h-screen">
         <Motion.div
           className="max-w-4xl mx-auto text-center"
@@ -98,6 +97,16 @@ const Hero = () => {
           <Motion.div variants={itemVariants}>
             <span className="inline-block py-1.5 px-4 rounded-full bg-white/15 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/25">
               Non-profit Organization
+            </span>
+          </Motion.div>
+          <Motion.div variants={itemVariants}>
+            <span className=" animate-pulse inline-block text-center sm:p-4 p-2 rounded-full bg-red-500 text-white backdrop-blur-md sm:text-lg text-md  font-bold  mb-6 border border-white/25">
+              ⚠️ This website is under ongoing development by{" "}
+              <span className="underline text-yellow-400">
+                <a target="blank" href="https://www.bytnext.com">
+                  BytNext
+                </a>
+              </span>
             </span>
           </Motion.div>
 
