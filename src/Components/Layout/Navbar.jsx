@@ -370,6 +370,11 @@ const Navbar = () => {
               </NavHashLink>
             </li>
             <li>
+              <NavHashLink onClick={() => setIsOpen(false)} to="/legal">
+                Legal
+              </NavHashLink>
+            </li>
+            <li>
               <NavHashLink onClick={() => setIsOpen(false)} to="/#contact">
                 Contact Us
               </NavHashLink>
