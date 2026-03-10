@@ -7,6 +7,7 @@ import Preloader from "./Components/UI/Loader";
 import PageLoader from "./Components/UI/Skeleton/PageLoader";
 import Layout from "./Components/Layout"; // Contains the <Outlet />
 import Protected from "./Components/Auth/Protected";
+import Legal from "./Pages/Legal";
 
 // Lazy Loaded Pages
 const Home = lazy(() => import("./Pages/Home"));
@@ -51,6 +52,7 @@ function App() {
                 <Route path="all-campaigns" element={<CampaignHeader />} />
                 <Route path="donation" element={<DonationForm />} />
                 <Route path="privacy" element={<Privacy />} />
+                <Route path="legal" element={<Legal />} />
               </Route>
 
               {/* Protected Routes */}

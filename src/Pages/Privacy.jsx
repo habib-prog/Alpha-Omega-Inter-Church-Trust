@@ -126,9 +126,9 @@ const AdminPrivacyPanel = () => {
       {/* --- Sidebar Navigation --- */}
       <aside
         className={`
-          fixed md:sticky top-0.6 left-0 z-50 
+          fixed md:sticky top-0.6 left-0 z-50
           w-72 md:w-64 h-[calc(100vh-64px)]
-          bg-[#E87461] text-white p-6 sm:shadow-xl 
+          bg-[#E87461] text-white p-6 sm:shadow-xl
           transition-transform duration-500 ease-in-out
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
@@ -177,7 +177,7 @@ const AdminPrivacyPanel = () => {
       </aside>
 
       {/* --- Main Content Area --- */}
-      <main className="mt-8 sm:-mt-12  flex-1 p-4 md:p-10 lg:p-16 min-h-[calc(100vh-64px)] overflow-y-auto">
+      <main className=" mt-8 sm:-mt-12  flex-1 p-4 md:p-10 lg:p-16 min-h-[calc(100vh-64px)] overflow-y-auto">
         <AnimatePresence mode="wait">
           <Motion.div
             key={active}

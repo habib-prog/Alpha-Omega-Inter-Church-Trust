@@ -200,7 +200,7 @@ const Navbar = () => {
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/#legal" onClick={closeDropdown}>
+                  <NavHashLink smooth to="/legal" onClick={closeDropdown}>
                     Legal
                   </NavHashLink>
                 </li>
