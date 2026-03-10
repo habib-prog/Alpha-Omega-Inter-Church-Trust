@@ -45,7 +45,7 @@ const LegalDashboard = () => {
           {isMobileMenuOpen ? "Close" : "More"}
         </button>
       </header>
-      <div className="sm:w-200 w-60 mx-auto rounded-xl bg-brand">
+      <div className=" w-60 mx-auto rounded-xl bg-brand">
         <h1 className="text-2xl pb-1 text-white font-bold text-center mt-2">
           Legal
         </h1>
