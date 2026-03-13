@@ -6,8 +6,4 @@ A comprehensive web platform for Alpha Omega Inter Church Trust, currently under
 
 🚧 **This project is currently under active development.** Features are being added and refined regularly.
 
-![alt text](image-4.png) ![alt text](image-1.png)
-![alt text](image-2.png) ![alt text](image-3.png)
-![alt text](image-5.png) ![alt text](image-6.png)
-![alt text](image-7.png) ![alt text](image-8.png)
-![alt text](image-9.png) ![alt text](image-10.png)
+[text](README.md) ![text](<image-1.png 01-32-40-346.png>) ![text](<image-2.png 01-32-40-261.png>) ![text](<image-3.png 01-32-40-190.png>) ![text](<image-4.png 01-32-40-057.png>) ![text](<image-5.png 01-32-39-982.png>) ![text](<image-6.png 01-32-39-791.png>) ![text](<image-7.png 01-32-39-645.png>) ![text](<image-8.png 01-32-39-555.png>) ![text](<image-9.png 01-32-39-394.png>) ![text](<image-10.png 01-32-38-808.png>) ![text](<image.png 01-32-37-680.png>)
