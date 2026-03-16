@@ -5,7 +5,7 @@ import { LuHeartHandshake } from "react-icons/lu";
 import TestimonialCard from "../Components/TestimonialCard";
 import { Link } from "react-router";
 
-const CoreValue = () => {
+const CoreValues = () => {
   return (
     <>
       <section>
@@ -142,4 +142,6 @@ const CoreValue = () => {
   );
 };
 
-export default CoreValue;
+export default CoreValues;
+
+// add volunteer section
