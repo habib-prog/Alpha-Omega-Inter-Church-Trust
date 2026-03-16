@@ -287,45 +287,94 @@
 // };
 
 // export default DonationForm;
+
 import React, { useState } from "react";
-import { FaDonate } from "react-icons/fa";
+import { FaDonate, FaTimes } from "react-icons/fa";
 
 const DonationForm = () => {
   // Logic states
   const [amount, setAmount] = useState(100);
   const [donationType, setDonationType] = useState("Monthly");
+  const [showModal, setShowModal] = useState(false); // Modal state
+  const [customVal, setCustomVal] = useState(""); // Custom input state
+
   const amounts = [25, 50, 100, 150, 200];
 
+  // Handle Custom Amount Submit
+  const handleCustomSubmit = (e) => {
+    e.preventDefault();
+    if (customVal && !isNaN(customVal) && customVal > 0) {
+      setAmount(Number(customVal));
+      setShowModal(false);
+      setCustomVal(""); // Input clear kora
+    }
+  };
+
   return (
-    <main className="min-h-screen relative py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center overflow-hidden">
+    <main className="min-h-screen relative py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center overflow-hidden bg-black">
       {/* --- Background Wrapper --- */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        {/* 1. Mobile Background Image (Default: Visible, Desktop: Hidden) */}
         <div
           className="block md:hidden w-full h-full bg-cover bg-center"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop')`,
           }}
         ></div>
-
-        {/* 2. Desktop Background Video (Default: Hidden, Desktop: Visible) */}
         <video
           autoPlay
           loop
           muted
-          preload="auto"
           playsInline
+          preload="auto"
           className="hidden md:block w-full h-full object-cover"
         >
           <source src="/vdo.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-
-        {/* 3. Dark Overlay (Common for both) */}
         <div className="absolute inset-0 bg-black/65 z-10 pointer-events-none"></div>
       </div>
-      {/* --- End Background Wrapper --- */}
 
+      {/* --- Custom Amount Pop-up (Modal) --- */}
+      {showModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-sm relative shadow-2xl animate-in zoom-in duration-200">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors"
+            >
+              <FaTimes size={20} />
+            </button>
+
+            <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">
+              Custom Amount
+            </h3>
+
+            <form onSubmit={handleCustomSubmit}>
+              <div className="relative mb-6">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-[#E87461]">
+                  $
+                </span>
+                <input
+                  autoFocus
+                  type="number"
+                  value={customVal}
+                  onChange={(e) => setCustomVal(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full pl-10 pr-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-2xl text-2xl font-bold focus:border-[#E87461] focus:ring-0 outline-none transition-all"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-[#E87461] text-white font-bold py-4 rounded-xl hover:bg-[#D66350] transition-all shadow-lg active:scale-95"
+              >
+                Confirm Amount
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
       <div className="w-full max-w-xl z-20 relative">
         {/* Header section */}
         <div className="text-center mb-10">
@@ -347,7 +396,6 @@ const DonationForm = () => {
           </h2>
 
           <div className="space-y-8">
-            {/* Type buttons */}
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setDonationType("Single Time")}
@@ -371,7 +419,6 @@ const DonationForm = () => {
               </button>
             </div>
 
-            {/* Amount grid */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
               {amounts.map((value) => (
                 <button
@@ -386,7 +433,10 @@ const DonationForm = () => {
                   ${value}
                 </button>
               ))}
-              <button className="bg-white/80 border-2 border-gray-300 text-gray-800 font-semibold rounded-xl hover:border-[#E87461] transition-all">
+              <button
+                onClick={() => setShowModal(true)}
+                className="bg-white/80 border-2 border-gray-300 text-gray-800 font-semibold rounded-xl hover:border-[#E87461] transition-all"
+              >
                 Custom
               </button>
             </div>
@@ -400,7 +450,6 @@ const DonationForm = () => {
               Your Details
             </h2>
 
-            {/* Selection summary */}
             <div className="flex justify-between items-center bg-gray-100/80 rounded-xl p-4 my-6 border border-gray-200">
               <p className="text-gray-700 font-medium">
                 Type: <strong>{donationType}</strong>
@@ -411,7 +460,6 @@ const DonationForm = () => {
               </p>
             </div>
 
-            {/* Info inputs */}
             <div className="space-y-5">
               <div className="grid grid-cols-2 gap-5">
                 <input
@@ -432,7 +480,6 @@ const DonationForm = () => {
               />
             </div>
 
-            {/* Payment fields */}
             <div className="mt-10 pt-8 border-t border-gray-200 space-y-5">
               <h3 className="text-xl font-serif font-semibold text-gray-900 mb-5">
                 Payment Method
@@ -456,7 +503,6 @@ const DonationForm = () => {
               </div>
             </div>
 
-            {/* Submit button */}
             <div className="flex justify-center mt-10">
               <button
                 type="submit"
