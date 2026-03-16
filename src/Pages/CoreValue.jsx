@@ -113,23 +113,23 @@ const CoreValues = () => {
             </div>
           </div>
         </div>
-        <section className='bg-brand px-64 py-20'>
+        <section className='bg-brand  py-20'>
           <div className='container'>
             <div className='flex flex-col justify-center items-center'>
               <p className=' m-auto inline-block py-1 px-3 rounded-full bg-white/20 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/30  '>
                 Non-profit Organization
               </p>
-              <h3 className='text-5xl font-black pb-5 text-white'>
+              <h3 className='text-3xl sm:text-5xl font-black pb-5 text-white'>
                 Become a Volunteer
               </h3>
-              <p className='w-[624px] text-center text-white'>
+              <p className='max-w-2xl text-center text-white'>
                 Your time is the most valuable gift you can give. Join our
                 dedicated team and help us bring sustainable change to
                 communities that need it most. Every hour you contribute creates
                 a ripple effect of hope.
               </p>
               <Link
-                className='mt-5 p-4 text-xl font-bold text-brand rounded-2xl bg-white'
+                className='mt-6 px-6 py-3 text-xl font-bold text-brand rounded-2xl bg-white inline-block'
                 to='/'
               >
                 Engage With Us
