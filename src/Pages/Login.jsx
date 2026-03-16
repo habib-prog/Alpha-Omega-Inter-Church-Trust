@@ -76,7 +76,7 @@ const Login = () => {
           />
         </div>
         <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-brand md:bg-brand bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
-          <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
+          {/* <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div> */}
           <Motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}

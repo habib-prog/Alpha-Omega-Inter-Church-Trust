@@ -42,7 +42,7 @@ const Signup = () => {
         {/* Login er motoi exact same padding and alignment */}
         <div className="relative flex justify-center items-center pt-24 p-4 sm:pt-22 bg-brand md:bg-brand bg-[url('/hero.jpeg')] md:bg-none bg-cover bg-center">
           {/* Mobile Overlay */}
-          <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div>
+          {/* <div className="absolute inset-0 bg-orange-300/60 md:hidden"></div> */}
 
           {/* Card Container with Motion - Login er motoi Left theke slide hobe */}
           <Motion.div
