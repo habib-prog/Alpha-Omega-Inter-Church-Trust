@@ -313,6 +313,7 @@ const DonationForm = () => {
           autoPlay
           loop
           muted
+          preload="auto"
           playsInline
           className="hidden md:block w-full h-full object-cover"
         >
