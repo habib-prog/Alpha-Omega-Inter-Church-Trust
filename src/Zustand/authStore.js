@@ -33,6 +33,7 @@ const useAuthStore = create((set) => ({
         uid: user.uid,
         name: displayName,
         email: email,
+
         createdAt: new Date().toISOString(),
       });
 
