@@ -112,7 +112,181 @@
 //   )
 // }
 
-// export default DonationForm
+// // export default DonationForm
+// import React, { useState } from "react";
+// import { FaDonate } from "react-icons/fa";
+
+// const DonationForm = () => {
+//   // Logic states
+//   const [amount, setAmount] = useState(100);
+//   const [donationType, setDonationType] = useState("Monthly");
+//   const amounts = [25, 50, 100, 150, 200];
+
+//   return (
+//     // Background image
+//     <main
+//       className="min-h-screen bg-cover bg-center bg-no-repeat relative py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+//       style={{
+//         backgroundImage: `url('https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop')`,
+//       }}
+//     >
+//       {/* Dark overlay */}
+//       <div className="absolute inset-0 bg-black/60 z-0"></div>
+
+//       <div className="w-full max-w-xl z-10 relative">
+//         {/* Header section */}
+//         <div className="text-center mb-10">
+//           <div className="inline-flex items-center justify-center bg-[#E87461] rounded-full p-6 mb-5 shadow-lg animate-pulse-slow">
+//             <FaDonate className="text-5xl text-white" />
+//           </div>
+//           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-3 text-shadow-md">
+//             Inter Church Trust
+//           </h1>
+//           <p className="text-lg text-gray-200 max-w-md mx-auto font-light">
+//             Bringing hope to communities in need around the world.
+//           </p>
+//         </div>
+
+//         {/* Selection card */}
+//         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-10 border border-brand mb-8">
+//           <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-6 border-b border-brand pb-3">
+//             Select Donation
+//           </h2>
+
+//           <div className="space-y-8">
+//             {/* Type buttons */}
+//             <div className="grid grid-cols-2 gap-4">
+//               <button
+//                 onClick={() => setDonationType("Single Time")}
+//                 className={`py-3 rounded-full font-bold transition-all ${donationType === "Single Time" ? "bg-[#D66350] text-white scale-105" : "bg-white border border-[#E87461] text-[#E87461]"}`}
+//               >
+//                 Give Once
+//               </button>
+//               <button
+//                 onClick={() => setDonationType("Monthly")}
+//                 className={`py-3 rounded-full font-bold transition-all ${donationType === "Monthly" ? "bg-[#D66350] text-white scale-105" : "bg-white border border-[#E87461] text-[#E87461]"}`}
+//               >
+//                 Monthly
+//               </button>
+//             </div>
+
+//             {/* Amount grid */}
+//             <div className="grid grid-cols-3 gap-3 sm:gap-4">
+//               {amounts.map((value) => (
+//                 <button
+//                   key={value}
+//                   onClick={() => setAmount(value)}
+//                   className={`py-3 rounded-xl font-bold text-xl transition-all border-2 ${amount === value ? "bg-[#E87461] border-[#E87461] text-white shadow-lg scale-105" : "bg-white border-gray-300 text-gray-800"}`}
+//                 >
+//                   ${value}
+//                 </button>
+//               ))}
+//               <button className="bg-white border-2 border-gray-300 text-gray-800 font-semibold rounded-xl">
+//                 Custom
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Details form */}
+//         <form action="#" className="defaultForm">
+//           <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-10 border border-brand">
+//             <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-6 border-b border-brand pb-3">
+//               Your Details
+//             </h2>
+
+//             {/* Selection summary */}
+//             <div className="flex justify-between items-center bg-gray-100 rounded-xl p-4 my-6 border border-gray-200">
+//               <p className="text-gray-700">
+//                 Type: <strong>{donationType}</strong>
+//               </p>
+//               <p className="text-gray-700">
+//                 Amount:{" "}
+//                 <strong className="text-[#E87461] text-xl">${amount}</strong>
+//               </p>
+//             </div>
+
+//             {/* Info inputs */}
+//             <div className="space-y-5">
+//               <div className="grid grid-cols-2 gap-5">
+//                 <input
+//                   type="text"
+//                   placeholder="First Name"
+//                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+//                 />
+//                 <input
+//                   type="text"
+//                   placeholder="Last Name"
+//                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+//                 />
+//               </div>
+//               <input
+//                 type="email"
+//                 placeholder="Email Address"
+//                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+//               />
+//             </div>
+
+//             {/* Payment fields */}
+//             <div className="mt-10 pt-8 border-t border-gray-200 space-y-5">
+//               <h3 className="text-xl font-serif font-semibold text-gray-900 mb-5">
+//                 Payment Method
+//               </h3>
+//               <input
+//                 type="text"
+//                 placeholder="💳 Card Number"
+//                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+//               />
+//               <div className="grid grid-cols-2 gap-5">
+//                 <input
+//                   type="text"
+//                   placeholder="MM/YY"
+//                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+//                 />
+//                 <input
+//                   type="password"
+//                   placeholder="CVC"
+//                   className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Submit button */}
+//             <div className="flex justify-center mt-10">
+//               <button
+//                 type="submit"
+//                 className="w-full bg-[#E87461] hover:bg-[#D66350] text-white font-bold text-xl py-4 rounded-full shadow-lg transition-all active:scale-95"
+//               >
+//                 Donate ${amount} Now
+//               </button>
+//             </div>
+//           </div>
+//         </form>
+//       </div>
+
+//       {/* Global styles */}
+//       <style jsx global>{`
+//         @keyframes pulse-slow {
+//           0%,
+//           100% {
+//             opacity: 1;
+//           }
+//           50% {
+//             opacity: 0.85;
+//           }
+//         }
+//         .animate-pulse-slow {
+//           animation: pulse-slow 3s infinite;
+//         }
+//         .text-shadow-md {
+//           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+//         }
+//       `}</style>
+//     </main>
+//   );
+// };
+
+// export default DonationForm;
 import React, { useState } from "react";
 import { FaDonate } from "react-icons/fa";
 
@@ -123,24 +297,42 @@ const DonationForm = () => {
   const amounts = [25, 50, 100, 150, 200];
 
   return (
-    // Background image
-    <main
-      className="min-h-screen bg-cover bg-center bg-no-repeat relative py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
-      style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop')`,
-      }}
-    >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/60 z-0"></div>
+    <main className="min-h-screen relative py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center overflow-hidden">
+      {/* --- Background Wrapper --- */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+        {/* 1. Mobile Background Image (Default: Visible, Desktop: Hidden) */}
+        <div
+          className="block md:hidden w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop')`,
+          }}
+        ></div>
 
-      <div className="w-full max-w-xl z-10 relative">
+        {/* 2. Desktop Background Video (Default: Hidden, Desktop: Visible) */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="hidden md:block w-full h-full object-cover"
+        >
+          <source src="/vdo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* 3. Dark Overlay (Common for both) */}
+        <div className="absolute inset-0 bg-black/65 z-10 pointer-events-none"></div>
+      </div>
+      {/* --- End Background Wrapper --- */}
+
+      <div className="w-full max-w-xl z-20 relative">
         {/* Header section */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center bg-[#E87461] rounded-full p-6 mb-5 shadow-lg animate-pulse-slow">
             <FaDonate className="text-5xl text-white" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-3 text-shadow-md">
-            Inter Church Trust
+            Alpha Omega Trust
           </h1>
           <p className="text-lg text-gray-200 max-w-md mx-auto font-light">
             Bringing hope to communities in need around the world.
@@ -148,8 +340,8 @@ const DonationForm = () => {
         </div>
 
         {/* Selection card */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-10 border border-brand mb-8">
-          <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-6 border-b border-brand pb-3">
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#E87461]/30 mb-8">
+          <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-6 border-b border-[#E87461]/20 pb-3">
             Select Donation
           </h2>
 
@@ -158,13 +350,21 @@ const DonationForm = () => {
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setDonationType("Single Time")}
-                className={`py-3 rounded-full font-bold transition-all ${donationType === "Single Time" ? "bg-[#D66350] text-white scale-105" : "bg-white border border-[#E87461] text-[#E87461]"}`}
+                className={`py-3 rounded-full font-bold transition-all ${
+                  donationType === "Single Time"
+                    ? "bg-[#D66350] text-white scale-105 shadow-md"
+                    : "bg-white/50 border border-[#E87461] text-[#E87461] hover:bg-white"
+                }`}
               >
                 Give Once
               </button>
               <button
                 onClick={() => setDonationType("Monthly")}
-                className={`py-3 rounded-full font-bold transition-all ${donationType === "Monthly" ? "bg-[#D66350] text-white scale-105" : "bg-white border border-[#E87461] text-[#E87461]"}`}
+                className={`py-3 rounded-full font-bold transition-all ${
+                  donationType === "Monthly"
+                    ? "bg-[#D66350] text-white scale-105 shadow-md"
+                    : "bg-white/50 border border-[#E87461] text-[#E87461] hover:bg-white"
+                }`}
               >
                 Monthly
               </button>
@@ -176,12 +376,16 @@ const DonationForm = () => {
                 <button
                   key={value}
                   onClick={() => setAmount(value)}
-                  className={`py-3 rounded-xl font-bold text-xl transition-all border-2 ${amount === value ? "bg-[#E87461] border-[#E87461] text-white shadow-lg scale-105" : "bg-white border-gray-300 text-gray-800"}`}
+                  className={`py-3 rounded-xl font-bold text-xl transition-all border-2 ${
+                    amount === value
+                      ? "bg-[#E87461] border-[#E87461] text-white shadow-lg scale-105"
+                      : "bg-white/80 border-gray-300 text-gray-800 hover:border-[#E87461]"
+                  }`}
                 >
                   ${value}
                 </button>
               ))}
-              <button className="bg-white border-2 border-gray-300 text-gray-800 font-semibold rounded-xl">
+              <button className="bg-white/80 border-2 border-gray-300 text-gray-800 font-semibold rounded-xl hover:border-[#E87461] transition-all">
                 Custom
               </button>
             </div>
@@ -190,17 +394,17 @@ const DonationForm = () => {
 
         {/* Details form */}
         <form action="#" className="defaultForm">
-          <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-10 border border-brand">
-            <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-6 border-b border-brand pb-3">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#E87461]/30">
+            <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-6 border-b border-[#E87461]/20 pb-3">
               Your Details
             </h2>
 
             {/* Selection summary */}
-            <div className="flex justify-between items-center bg-gray-100 rounded-xl p-4 my-6 border border-gray-200">
-              <p className="text-gray-700">
+            <div className="flex justify-between items-center bg-gray-100/80 rounded-xl p-4 my-6 border border-gray-200">
+              <p className="text-gray-700 font-medium">
                 Type: <strong>{donationType}</strong>
               </p>
-              <p className="text-gray-700">
+              <p className="text-gray-700 font-medium">
                 Amount:{" "}
                 <strong className="text-[#E87461] text-xl">${amount}</strong>
               </p>
@@ -212,18 +416,18 @@ const DonationForm = () => {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461] transition-all"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461] transition-all"
                 />
               </div>
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461] transition-all"
               />
             </div>
 
@@ -235,18 +439,18 @@ const DonationForm = () => {
               <input
                 type="text"
                 placeholder="💳 Card Number"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461] transition-all"
               />
               <div className="grid grid-cols-2 gap-5">
                 <input
                   type="text"
                   placeholder="MM/YY"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461] transition-all"
                 />
                 <input
                   type="password"
                   placeholder="CVC"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461]"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#E87461] transition-all"
                 />
               </div>
             </div>
@@ -264,22 +468,23 @@ const DonationForm = () => {
         </form>
       </div>
 
-      {/* Global styles */}
       <style jsx global>{`
         @keyframes pulse-slow {
           0%,
           100% {
             opacity: 1;
+            transform: scale(1);
           }
           50% {
-            opacity: 0.85;
+            opacity: 0.9;
+            transform: scale(1.02);
           }
         }
         .animate-pulse-slow {
-          animation: pulse-slow 3s infinite;
+          animation: pulse-slow 3s infinite ease-in-out;
         }
         .text-shadow-md {
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
       `}</style>
     </main>
