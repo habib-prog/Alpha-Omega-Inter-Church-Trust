@@ -14,6 +14,7 @@ const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./Pages/Login"));
 const Signup = lazy(() => import("./Pages/Signup"));
 const Aboutus = lazy(() => import("./Pages/Aboutus"));
+const NewsLetters = lazy(() => import("./Pages/NewsLetters"));
 const Profile = lazy(() => import("./Pages/Profile"));
 const EditProfile = lazy(() => import("./Pages/EditProfile"));
 const CampaignHeader = lazy(() => import("./Pages/CampaignHeader"));
@@ -47,6 +48,7 @@ function App() {
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="about" element={<Aboutus />} />
+                <Route path="newsletters" element={<NewsLetters />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<Signup />} />
                 <Route path="all-campaigns" element={<CampaignHeader />} />

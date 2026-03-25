@@ -38,6 +38,12 @@ const Footer = () => {
             About Us
           </Link>
           <Link
+            to="/newsletters"
+            className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
+          >
+            News Letters
+          </Link>
+          <Link
             to="/work"
             className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
           >
