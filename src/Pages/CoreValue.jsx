@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsTransparency } from "react-icons/bs";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { LuHeartHandshake } from "react-icons/lu";
@@ -6,6 +6,16 @@ import TestimonialCard from "../Components/TestimonialCard";
 import { Link } from "react-router";
 
 const CoreValues = () => {
+  const handleClick = () => {
+    const to = "xavierjames701@gmail.com";
+    const subject = "Engage with us";
+    const body = "Hi, I would like to connect with you.";
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.open(gmailUrl, "_blank");
+  };
+
   return (
     <>
       <section>
@@ -128,12 +138,16 @@ const CoreValues = () => {
                 communities that need it most. Every hour you contribute creates
                 a ripple effect of hope.
               </p>
-              <Link
-                className='mt-6 px-6 py-3 text-xl font-bold text-brand rounded-2xl bg-white inline-block'
-                to='/'
+              <input
+                type='text'
+                className='bg-white px-2 py-5 text-center m-3 block w-96 max-w-96 h-8 max-w-8 rounded-xl outline-none'
+              />
+              <button
+                onClick={handleClick}
+                className=' px-6 py-3 text-xl font-bold text-brand rounded-2xl bg-white inline-block cursor-pointer'
               >
                 Engage With Us
-              </Link>
+              </button>
             </div>
           </div>
         </section>
