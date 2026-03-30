@@ -140,7 +140,7 @@ const CoreValues = () => {
               </p>
               <input
                 type='text'
-                className='bg-white px-2 py-5 text-center m-3 block w-96 max-w-96 h-8 max-w-8 rounded-xl outline-none'
+                className='bg-white px-2 py-5 text-center m-3 block w-70 sm:w-96 max-w-96 h-8 max-w-8 rounded-xl outline-none'
               />
               <button
                 onClick={handleClick}
