@@ -1,0 +1,11 @@
+{
+  "campaignName": "Test",
+  "title": "Test title",
+  "summary": "Test Des",
+  "image": "Airbus.jpg",
+  "category": "",
+  "goal": 111,
+  "raised": 2222,
+  "comment": "adadadadadasd",
+  "completed": true
+}
