@@ -1,0 +1,14 @@
+{
+  "secondaryButtonLink": "/mission",
+  "primaryButtonText": "Donate Now",
+  "badge": "Non-Profit-Org",
+  "backgroundImage": "/slum.jpg",
+  "primaryButtonLink": "/donation",
+  "noticeLink": "https://www.bytnext.com",
+  "secondaryButtonText": "Our Mission",
+  "highlight": "Creates Ripples of Hope",
+  "title": "Every Act of Kindness",
+  "notice": "This website is under ongoing development by BytNext",
+  "description": "Join our global community of changemakers. Your generosity transforms lives and builds a brighter future for everyone.",
+  "noticeLinkText": "BytNext"
+}

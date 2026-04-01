@@ -1,0 +1,62 @@
+{
+  "navigationTitle": "Policy Navigation",
+  "navigationSubtitle": "USA & BD Governance",
+  "helpText": "Need help? contact our legal team for specific policy queries.",
+  "headerLabel": "Alpha Omega Charity",
+  "contextTitle": "Audit Compliance",
+  "contextText": "Section verified for 2026 humanitarian operations in Bangladesh river erosion zones.",
+  "footerLabel": "Alpha Omega Inter Church Trust",
+  "sections": [
+    {
+      "key": "Compliance",
+      "navLabel": "Compliance",
+      "title": "Regulatory Compliance",
+      "details": [
+        { "subtitle": "Governance Structure", "text": "Alpha Omega Charity operates as a primary subsidiary of the Alpha Omega Inter Church Trust. We maintain strict ecclesiastical and legal oversight to ensure every mission aligns with our core humanitarian values." },
+        { "subtitle": "IRS & Tax-Exempt Status", "text": "Our financial operations are structured to comply with IRS guidelines for non-profit organizations. This ensures that donors from the USA can contribute with confidence, knowing their support is recognized under federal tax-deductible standards." },
+        { "subtitle": "Audit & Transparency", "text": "We conduct internal and independent annual audits. Our mission records in Bangladesh—covering maternal health clinics, street children rehabilitation, and river erosion relief—are documented and available for regulatory review." }
+      ]
+    },
+    {
+      "key": "Data Usage",
+      "navLabel": "Data Usage",
+      "title": "Data Collection & Governance",
+      "details": [
+        { "subtitle": "1. Personal Identifiers", "text": "We collect identifiers such as full name, email, and billing address. This data is essential for generating IRS-compliant tax receipts and maintaining your donor profile within the Alpha Omega Trust system." },
+        { "subtitle": "2. The 'No-Sell' Promise", "text": "We value your privacy as a sacred trust. Alpha Omega Charity never sells, rents, or trades donor lists or personal information with third-party marketing firms or commercial entities." },
+        { "subtitle": "3. Project Impact Reporting", "text": "Your contact information allows us to share the direct impact of your sponsorship. We send detailed updates on how your funds are preventing maternal mortality and providing shelter to children in Bangladesh." },
+        { "subtitle": "4. Global Protection Standards", "text": "We adhere to CCPA (California) and international data frameworks. All information is hosted on secure, encrypted servers with restricted access protocols to prevent unauthorized data breaches." }
+      ]
+    },
+    {
+      "key": "Payments",
+      "navLabel": "Payments",
+      "title": "Payment Security",
+      "details": [
+        { "subtitle": "Encryption Protocols", "text": "All transactions are processed through SSL (Secure Socket Layer) 256-bit encryption. Whether using SSLCommerz for local transfers or Stripe/PayPal for international donations, your data is always tunneled securely." },
+        { "subtitle": "Zero-Storage Policy", "text": "Our servers never store your raw credit card numbers or CVV codes. The payment process is handled by certified Level 1 PCI-compliant service providers, mitigating any risk of financial data theft." },
+        { "subtitle": "Automated Verification", "text": "Every donation undergoes an automated fraud detection check to protect both the donor and the organization from unauthorized or suspicious financial activities." }
+      ]
+    },
+    {
+      "key": "Legal",
+      "navLabel": "Legal",
+      "title": "Legal Framework (USA)",
+      "details": [
+        { "subtitle": "Cross-Border Regulations", "text": "Our operations comply with USA laws governing international charitable giving. We ensure that funds transferred to Bangladesh are utilized strictly for the humanitarian purposes stated: child sponsorship and disaster relief." },
+        { "subtitle": "Donor Rights", "text": "Under the CCPA, our US-based donors have the right to request access to the data we hold, the right to request deletion, and the right to opt-out of any non-essential communication at any time." },
+        { "subtitle": "Anti-Money Laundering (AML)", "text": "Alpha Omega Charity maintains strict AML and KYC (Know Your Customer) protocols to ensure the integrity of the funds used for our projects in river erosion and street children assistance." }
+      ]
+    },
+    {
+      "key": "Support",
+      "navLabel": "Support",
+      "title": "Financial Support & Refunds",
+      "details": [
+        { "subtitle": "Refund Policy", "text": "While charitable donations are generally non-refundable, we understand that errors happen. If a duplicate charge or an incorrect amount is processed, we offer a 7-day window for refund requests." },
+        { "subtitle": "Dispute Resolution", "text": "To initiate a refund, please contact finance@alphaomegacharity.org with your transaction ID. Each case is manually verified against our bank statements by the Alpha Omega Inter Church Trust finance team." },
+        { "subtitle": "Technical Assistance", "text": "Our support team is available to help with donor portal logins, tax receipt downloads, and updates to recurring sponsorship plans to ensure a seamless experience for our partners." }
+      ]
+    }
+  ]
+}

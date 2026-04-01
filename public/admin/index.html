@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin</title>
+    <link rel="icon" type="image/png" href="/NewLogo.png" />
+  </head>
+  <body>
+    <div
+      id="admin-guard"
+      style="
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+        font-family: Arial, sans-serif;
+        background: #faf8f3;
+        color: #4a3f35;
+      "
+    >
+      <img src="/NewLogo.png" alt="Logo" style="width: 72px; height: 72px" />
+      <p style="margin: 0; font-size: 18px; font-weight: 700">
+        Checking admin access...
+      </p>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+      import {
+        getDatabase,
+        get,
+        ref,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyASA3pOCHe5Y3nkw5XwsoPPN4cg6K15-vM",
+        authDomain: "alpha-omega-trust.firebaseapp.com",
+        databaseURL: "https://alpha-omega-trust-default-rtdb.firebaseio.com",
+        projectId: "alpha-omega-trust",
+        storageBucket: "alpha-omega-trust.firebasestorage.app",
+        messagingSenderId: "1075031776025",
+        appId: "1:1075031776025:web:d35cd8ecf136589ac08388",
+      };
+
+      const DEFAULT_SUPER_ADMINS = ["xavierjames701@gmail.com"];
+      const normalizeEmail = (email = "") => email.trim().toLowerCase();
+      const getSuperAdminDocId = (email = "") =>
+        normalizeEmail(email).replaceAll(".", ",");
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const database = getDatabase(app);
+
+      const openFirebaseAdmin = () => {
+        window.location.replace("/admin-panel");
+      };
+
+      const denyAccess = () => {
+        window.location.replace("/login");
+      };
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          denyAccess();
+          return;
+        }
+
+        const email = normalizeEmail(user.email);
+
+        if (DEFAULT_SUPER_ADMINS.includes(email)) {
+          openFirebaseAdmin();
+          return;
+        }
+
+        try {
+          const adminRef = ref(
+            database,
+            `super_admins/${getSuperAdminDocId(email)}`,
+          );
+          const adminSnap = await get(adminRef);
+
+          if (!adminSnap.exists()) {
+            denyAccess();
+            return;
+          }
+
+          openFirebaseAdmin();
+        } catch (error) {
+          denyAccess();
+        }
+      });
+    </script>
+  </body>
+</html>

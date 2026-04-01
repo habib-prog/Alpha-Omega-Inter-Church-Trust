@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "featured": true,
+      "goal": 15000,
+      "raised": 9800,
+      "title": "সবার জন্য শিক্ষা ",
+      "image": "/cardphoto.avif",
+      "campaignName": "৫০০+ ছাত্র ",
+      "description": "Building learning spaces, equipping classrooms, and supporting students with materials that help them thrive.",
+      "category": "Education",
+      "comment": "Students and parents are asking for more classes and more books because attendance is growing."
+    },
+    {
+      "featured": false,
+      "campaignName": "দেখা ",
+      "title": "দেখা দেখা ",
+      "description": "কঝদাক্সজদবাকজদবাকজধাকজধাক্লদাওকদাদ ",
+      "image": "/uploads/cleanwater.jpg"
+    }
+  ]
+}

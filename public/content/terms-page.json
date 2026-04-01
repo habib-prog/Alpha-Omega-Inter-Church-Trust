@@ -1,0 +1,26 @@
+{
+  "pageTitle": "Terms & Conditions",
+  "pageDescription": "Please review the terms that govern your use of the Alpha Omega Inter Church Trust website, donations, and related services.",
+  "sections": [
+    {
+      "title": "Use of Website",
+      "content": "By accessing this website, you agree to use it lawfully and respectfully. You may not misuse the website, attempt unauthorized access, or interfere with platform security."
+    },
+    {
+      "title": "Donations",
+      "content": "All donations are processed in good faith to support Alpha Omega Inter Church Trust initiatives. Donation receipts and policies are subject to the applicable legal and financial requirements of the operating jurisdictions."
+    },
+    {
+      "title": "Content Ownership",
+      "content": "Unless otherwise stated, the text, design, branding, and media published on this website belong to Alpha Omega Inter Church Trust or are used with permission. Unauthorized reproduction may be restricted."
+    },
+    {
+      "title": "External Links",
+      "content": "This website may contain links to third-party services. We are not responsible for the content, privacy practices, or policies of those external sites."
+    },
+    {
+      "title": "Policy Updates",
+      "content": "We may update these terms from time to time to reflect legal, operational, or service changes. Continued use of the website after updates indicates acceptance of the revised terms."
+    }
+  ]
+}

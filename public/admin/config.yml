@@ -1,0 +1,279 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+local_backend: true
+
+backend:
+  name: github
+  repo: habib-prog/Alpha-Omega-Inter-Church-Trust
+  branch: main
+
+site_url: http://localhost:5173
+display_url: http://localhost:5173
+logo_url: /NewLogo.png
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: website-content
+    label: Website Content
+    files:
+      - label: Active Campaigns
+        name: campaigns
+        file: public/content/campaigns.json
+        format: json
+        fields:
+          - label: Campaigns
+            name: items
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Campaign Name, name: campaignName, widget: string, hint: "Admin panel এ identify করার নাম" }
+              - { label: Title, name: title, widget: string, hint: "Website card বা section title" }
+              - { label: Description, name: description, widget: text }
+              - { label: Image, name: image, widget: image, required: false }
+              - { label: Category, name: category, widget: string, required: false }
+              - { label: Goal Amount, name: goal, widget: number, value_type: int, min: 0, required: false }
+              - { label: Raised Amount, name: raised, widget: number, value_type: int, min: 0, required: false }
+              - { label: Comment, name: comment, widget: text, required: false }
+              - { label: Featured, name: featured, widget: boolean, default: false, required: false }
+
+      - label: Past Campaigns
+        name: past-campaigns
+        file: public/content/past-campaigns.json
+        format: json
+        fields:
+          - label: Past Campaigns
+            name: items
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Campaign Name, name: campaignName, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: summary, widget: text }
+              - { label: Image, name: image, widget: image, required: false }
+              - { label: Category, name: category, widget: string, required: false }
+              - { label: Goal Amount, name: goal, widget: number, value_type: int, min: 0 }
+              - { label: Raised Amount, name: raised, widget: number, value_type: int, min: 0 }
+              - { label: Comment, name: comment, widget: text }
+              - { label: Completed, name: completed, widget: boolean, default: true, required: false }
+
+      - label: Home Hero
+        name: home-hero
+        file: public/content/home-hero.json
+        format: json
+        fields:
+          - { label: Badge, name: badge, widget: string }
+          - { label: Notice, name: notice, widget: string }
+          - { label: Notice Link Text, name: noticeLinkText, widget: string }
+          - { label: Notice Link, name: noticeLink, widget: string }
+          - { label: Title, name: title, widget: string }
+          - { label: Highlight, name: highlight, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Background Image, name: backgroundImage, widget: image }
+          - { label: Primary Button Text, name: primaryButtonText, widget: string }
+          - { label: Primary Button Link, name: primaryButtonLink, widget: string }
+          - { label: Secondary Button Text, name: secondaryButtonText, widget: string }
+          - { label: Secondary Button Link, name: secondaryButtonLink, widget: string }
+
+      - label: About Page
+        name: about-page
+        file: public/content/about-page.json
+        format: json
+        fields:
+          - { label: Hero Badge, name: heroBadge, widget: string }
+          - { label: Hero Title, name: heroTitle, widget: string }
+          - { label: Hero Highlight, name: heroHighlight, widget: string }
+          - { label: Hero Description, name: heroDescription, widget: text }
+          - { label: Hero Background Image, name: heroImage, widget: image }
+          - label: Hero Buttons
+            name: heroButtons
+            widget: list
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: link, widget: string }
+          - { label: Section Title, name: sectionTitle, widget: string }
+          - { label: Section Description One, name: sectionDescriptionOne, widget: text }
+          - { label: Section Description Two, name: sectionDescriptionTwo, widget: text }
+          - { label: Image One, name: imageOne, widget: image }
+          - { label: Image Two, name: imageTwo, widget: image }
+          - label: Stats
+            name: stats
+            widget: list
+            fields:
+              - { label: Count, name: count, widget: string }
+              - { label: Label, name: label, widget: string }
+              - { label: Icon, name: icon, widget: select, options: [people, globe, heart, sparkles] }
+              - { label: Color Class, name: color, widget: string }
+          - { label: Challenge Title, name: challengeTitle, widget: string }
+          - { label: Challenge Description, name: challengeDescription, widget: text }
+
+      - label: Newsletters Page
+        name: newsletters-page
+        file: public/content/newsletters-page.json
+        format: json
+        fields:
+          - { label: Badge, name: badge, widget: string }
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Primary Button Text, name: primaryButtonText, widget: string }
+          - { label: Primary Button Link, name: primaryButtonLink, widget: string }
+          - { label: Secondary Button Text, name: secondaryButtonText, widget: string }
+          - { label: Secondary Button Link, name: secondaryButtonLink, widget: string }
+          - { label: Aside Badge, name: asideBadge, widget: string }
+          - { label: Aside Title, name: asideTitle, widget: string }
+          - { label: Aside Description, name: asideDescription, widget: text }
+          - { label: Featured Focus Badge, name: featuredFocusBadge, widget: string }
+          - { label: Featured Focus Text, name: featuredFocusText, widget: text }
+          - { label: Aside Button Text, name: asideButtonText, widget: string }
+          - { label: Aside Button Link, name: asideButtonLink, widget: string }
+          - label: Newsletter Items
+            name: items
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Month, name: month, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Summary, name: summary, widget: text }
+              - { label: Category, name: category, widget: string }
+
+      - label: Sponsor Child Page
+        name: sponsor-child-page
+        file: public/content/sponsor-child-page.json
+        format: json
+        fields:
+          - { label: Badge, name: badge, widget: string }
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Primary Button Text, name: primaryButtonText, widget: string }
+          - { label: Primary Button Link, name: primaryButtonLink, widget: string }
+          - { label: Secondary Button Text, name: secondaryButtonText, widget: string }
+          - { label: Secondary Button Link, name: secondaryButtonLink, widget: string }
+          - { label: Impact Badge, name: impactBadge, widget: string }
+          - { label: Impact Title, name: impactTitle, widget: string }
+          - { label: Impact Description, name: impactDescription, widget: text }
+          - label: Sponsor Cards
+            name: sponsorCards
+            widget: list
+            summary: "{{fields.childName}}"
+            fields:
+              - { label: Photo, name: photo, widget: image, required: false }
+              - { label: Child Name, name: childName, widget: string }
+              - { label: Age, name: age, widget: string }
+              - { label: Religion, name: religion, widget: string }
+              - { label: Adress, name: address, widget: string }
+              - { label: School Name, name: schoolName, widget: string }
+              - { label: Sponsor Link, name: sponsorLink, widget: string, required: false }
+          - { label: Process Title, name: processTitle, widget: string }
+          - label: Process Steps
+            name: processSteps
+            widget: list
+            field: { label: Step, name: step, widget: string }
+
+      - label: Voices Of Hope
+        name: voices-of-hope
+        file: public/content/voices-of-hope.json
+        format: json
+        fields:
+          - { label: Section Title, name: title, widget: string }
+          - { label: Section Subtitle, name: subtitle, widget: text }
+          - label: Voice Cards
+            name: members
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Role, name: role, widget: string }
+              - { label: Image, name: image, widget: image, required: false }
+              - { label: Quote, name: quote, widget: text, required: false }
+
+      - label: Legal Page
+        name: legal-page
+        file: public/content/legal-page.json
+        format: json
+        fields:
+          - { label: Page Title, name: pageTitle, widget: string }
+          - { label: Status Text, name: statusText, widget: string }
+          - { label: Downloads Title, name: downloadsTitle, widget: string }
+          - label: Downloads
+            name: downloads
+            widget: list
+            field: { label: Download Label, name: item, widget: string }
+          - label: Sections
+            name: sections
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Key, name: key, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Content, name: content, widget: text }
+
+      - label: Privacy Page
+        name: privacy-page
+        file: public/content/privacy-page.json
+        format: json
+        fields:
+          - { label: Navigation Title, name: navigationTitle, widget: string }
+          - { label: Navigation Subtitle, name: navigationSubtitle, widget: string }
+          - { label: Help Text, name: helpText, widget: text }
+          - { label: Header Label, name: headerLabel, widget: string }
+          - { label: Context Title, name: contextTitle, widget: string }
+          - { label: Context Text, name: contextText, widget: text }
+          - { label: Footer Label, name: footerLabel, widget: string }
+          - label: Sections
+            name: sections
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Key, name: key, widget: string }
+              - { label: Navigation Label, name: navLabel, widget: string }
+              - { label: Title, name: title, widget: string }
+              - label: Details
+                name: details
+                widget: list
+                summary: "{{fields.subtitle}}"
+                fields:
+                  - { label: Subtitle, name: subtitle, widget: string }
+                  - { label: Text, name: text, widget: text }
+
+      - label: Terms Page
+        name: terms-page
+        file: public/content/terms-page.json
+        format: json
+        fields:
+          - { label: Page Title, name: pageTitle, widget: string }
+          - { label: Page Description, name: pageDescription, widget: text }
+          - label: Sections
+            name: sections
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Content, name: content, widget: text }
+
+  - name: newsletters
+    label: Newsletters
+    label_singular: Newsletter
+    folder: content/newsletters
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Publish Date, name: date, widget: datetime }
+      - { label: Excerpt, name: excerpt, widget: text }
+      - { label: Cover Image, name: coverImage, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
+
+  - name: site-settings
+    label: Site Settings
+    files:
+      - label: Organization Info
+        name: organization
+        file: content/settings/organization.yml
+        fields:
+          - { label: Organization Name, name: name, widget: string }
+          - { label: Tagline, name: tagline, widget: string, required: false }
+          - { label: Donation CTA, name: donationCta, widget: string, required: false }
+          - { label: Contact Email, name: contactEmail, widget: string, required: false }

@@ -1,0 +1,37 @@
+{
+  "pageTitle": "Legal",
+  "statusText": "Verified Compliance: 2026 Humanitarian Fiscal Year",
+  "downloadsTitle": "Quick Downloads",
+  "downloads": [
+    "Download 2025 Audit PDF",
+    "IRS Tax Exempt Letter",
+    "Privacy Agreement"
+  ],
+  "sections": [
+    {
+      "key": "TaxExempt",
+      "title": "Tax & Financial Status (USA)",
+      "content": "Alpha Omega Charity holds 501(c)(3) tax-exempt status in the USA. All donations made by US citizens are tax-deductible to the extent allowed by law. Donors will receive an automated annual tax receipt via email for all contributions exceeding $250."
+    },
+    {
+      "key": "CrossBorder",
+      "title": "Cross-Border Fund Transfer",
+      "content": "We adhere strictly to both USA (OFAC/Anti-Money Laundering) and Bangladesh (NGO Affairs Bureau) regulations. Funds are transferred through authorized banking channels, and every transfer is documented with clear humanitarian intent."
+    },
+    {
+      "key": "Audit",
+      "title": "Annual Audit & Transparency",
+      "content": "We conduct annual independent audits to ensure financial integrity. Our financial statements, including administrative overhead costs and direct project spend in Bangladesh, are available for review upon request by certified donors."
+    },
+    {
+      "key": "DataPrivacy",
+      "title": "Data Privacy & Donor Rights",
+      "content": "We comply with CCPA and GDPR protocols. You have the right to request access to your data, request deletion, or opt-out of newsletters. We maintain a 'No-Sell' policy: your information is never shared with third-party marketers."
+    },
+    {
+      "key": "RefundPolicy",
+      "title": "Donation Refund Policy",
+      "content": "While charitable donations are non-refundable, we offer a 7-day grace period for duplicate transactions or erroneous donation amounts. Please contact finance@alphaomegacharity.org with your transaction ID for manual verification."
+    }
+  ]
+}

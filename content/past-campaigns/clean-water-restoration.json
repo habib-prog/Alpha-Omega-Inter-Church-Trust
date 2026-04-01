@@ -1,0 +1,11 @@
+{
+  "campaignName": "12",
+  "title": "Clean",
+  "summary": "Repaired key water points and improved access to safer drinking water for nearby families.",
+  "image": "/cleanwater.jpg",
+  "category": "Water Access",
+  "goal": 18000,
+  "raised": 18000,
+  "comment": "Community leaders reported safer water and less time spent collecting it each day.",
+  "completed": true
+}

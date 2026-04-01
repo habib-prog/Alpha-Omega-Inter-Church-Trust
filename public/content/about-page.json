@@ -1,0 +1,25 @@
+{
+  "heroBadge": "ESTABLISHED 2018",
+  "heroTitle": "Why We Do",
+  "heroHighlight": "What We Do",
+  "heroDescription": "Our mission is to ensure that every child, regardless of their background, has access to the resources, love, and opportunities they need to reach their full potential.",
+  "heroImage": "/aboutus_hero.jpg",
+  "heroButtons": [
+    { "label": "Our Mission & Our Vision", "link": "/mission" },
+    { "label": "Our Journey", "link": "/mission" },
+    { "label": "Meet the Team", "link": "/mission" }
+  ],
+  "sectionTitle": "We believe in the power of community to change lives.",
+  "sectionDescriptionOne": "Founded on the belief that everyone deserves a chance at a better life, KindredHearts has been working tirelessly to bridge the gap between those who want to help and those in need.",
+  "sectionDescriptionTwo": "Our approach is simple yet profound: we listen to communities, understand their unique challenges, and work alongside them to build sustainable solutions that last for generations.",
+  "imageOne": "/aboutus-1.png",
+  "imageTwo": "/aboutus-2.png",
+  "stats": [
+    { "count": "50k+", "label": "Lives Impacted", "icon": "people", "color": "text-brand" },
+    { "count": "12", "label": "Countries Served", "icon": "globe", "color": "text-[#8BA88E]" },
+    { "count": "100%", "label": "Donation Impact", "icon": "heart", "color": "text-[#F4A261]" },
+    { "count": "50k+", "label": "Expert Volunteers", "icon": "sparkles", "color": "text-[#4B443D]" }
+  ],
+  "challengeTitle": "Understanding the Challenges in Bangladesh",
+  "challengeDescription": "Bangladesh faces complex challenges in education, nutrition, and women’s empowerment, affecting millions of children and families. The charts below provide a clear snapshot of these challenges."
+}

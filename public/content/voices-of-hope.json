@@ -1,0 +1,30 @@
+{
+  "title": "Voices of Hope",
+  "subtitle": "Hear from the incredible people who make our mission possible.",
+  "members": [
+    {
+      "name": "Russel Abraham",
+      "role": "Founder",
+      "image": "/russel.png",
+      "quote": "Seeing direct impact on families has been incredibly moving."
+    },
+    {
+      "name": "Parvez Youhonna",
+      "role": "Secretary",
+      "image": "/parvez.png",
+      "quote": "Every contribution creates hope for people who need support most."
+    },
+    {
+      "name": "Dr. Subir Khiyang",
+      "role": "Accounts",
+      "image": "/subir.png",
+      "quote": "Transparency and compassion together can transform entire communities."
+    },
+    {
+      "name": "David Chen",
+      "role": "Monthly Donor",
+      "image": "/admin.jfif",
+      "quote": "I stay committed because I can see real, measurable change."
+    }
+  ]
+}

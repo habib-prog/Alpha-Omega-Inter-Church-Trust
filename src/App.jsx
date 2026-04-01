@@ -115,7 +115,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import useAuthStore from "./Zustand/authStore";
 import { auth } from "./Database/firebase.config";
 import Privacy from "./Pages/Privacy";
-import ContactUs from "./Pages/contactUs";
+import ContactUs from "./Pages/ContactUs";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

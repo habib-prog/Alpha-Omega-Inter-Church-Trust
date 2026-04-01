@@ -1,0 +1,47 @@
+{
+  "badge": "Sponsor A Child",
+  "title": "Stand beside one child and help shape a safer future.",
+  "description": "Child sponsorship helps provide consistent education support, nutrition, healthcare referrals, and emotional care through trusted local partnerships.",
+  "primaryButtonText": "Start Sponsoring",
+  "primaryButtonLink": "/donation",
+  "secondaryButtonText": "Talk To Our Team",
+  "secondaryButtonLink": "/#contact",
+  "impactBadge": "Your Monthly Impact",
+  "impactTitle": "Steady support creates real, long-term change.",
+  "impactDescription": "Your sponsorship contributes to school supplies, health checkups, and family support planning so each child can grow with dignity.",
+  "sponsorCards": [
+    {
+      "photo": "/user.png",
+      "childName": "Rahim Uddin",
+      "age": "9",
+      "religion": "Islam",
+      "address": "Sreepur, Gazipur",
+      "schoolName": "Sreepur Government Primary School",
+      "sponsorLink": "/donation"
+    },
+    {
+      "photo": "/female.png",
+      "childName": "Maya Rani",
+      "age": "11",
+      "religion": "Hindu",
+      "address": "Kaliakoir, Gazipur",
+      "schoolName": "Kaliakoir Girls High School",
+      "sponsorLink": "/donation"
+    },
+    {
+      "photo": "/user.webp",
+      "childName": "David Das",
+      "age": "10",
+      "religion": "Christian",
+      "address": "Tongi, Gazipur",
+      "schoolName": "Tongi Mission School",
+      "sponsorLink": "/donation"
+    }
+  ],
+  "processTitle": "How Sponsorship Works",
+  "processSteps": [
+    "Choose a sponsorship amount that fits your capacity.",
+    "Our team aligns your support with current child-focused needs.",
+    "Receive updates and stories showing the progress your support enables."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "badge": "News Letters",
+  "title": "Follow the stories, updates, and field highlights behind every act of care.",
+  "description": "Explore recent updates from Alpha Omega Inter Church Trust and see how campaigns, volunteers, and community partnerships are creating measurable impact.",
+  "primaryButtonText": "Support the Mission",
+  "primaryButtonLink": "/donation",
+  "secondaryButtonText": "Learn More",
+  "secondaryButtonLink": "/about",
+  "asideBadge": "Why It Matters",
+  "asideTitle": "Clear updates help supporters stay connected to real outcomes.",
+  "asideDescription": "This section gives visitors a simple place to check recent activity, campaign highlights, and community milestones without needing to search across the site.",
+  "featuredFocusBadge": "Featured Focus",
+  "featuredFocusText": "Volunteer spotlights, donation updates, and project progress in one place.",
+  "asideButtonText": "Visit About Us",
+  "asideButtonLink": "/about",
+  "items": [
+    {
+      "month": "March 2026",
+      "title": "Shelter and Safe Nights",
+      "summary": "A closer look at how emergency shelter support is helping children and families move from crisis to stability.",
+      "category": "Community Relief"
+    },
+    {
+      "month": "February 2026",
+      "title": "Education That Reaches Further",
+      "summary": "This edition highlights school support, mentorship, and the local volunteers helping students stay on track.",
+      "category": "Education"
+    },
+    {
+      "month": "January 2026",
+      "title": "Care Beyond Donations",
+      "summary": "Stories from the field on healthcare, follow-up visits, and the partnerships making long-term care possible.",
+      "category": "Healthcare"
+    }
+  ]
+}

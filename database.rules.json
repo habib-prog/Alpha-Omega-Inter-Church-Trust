@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "public_comments": {
+      ".read": true,
+      ".write": "auth != null",
+      "$uid": {
+        "$commentId": {
+          ".validate": "newData.hasChildren(['text','name','role','image','uid','createdAt'])"
+        }
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "site_content": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "super_admins": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
