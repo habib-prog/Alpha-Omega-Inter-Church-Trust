@@ -24,6 +24,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import useAuthStore from "./Zustand/authStore";
 import { auth } from "./Database/firebase.config";
 import Privacy from "./Pages/Privacy";
+import ContactUs from "./Pages/contactUs";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +56,7 @@ function App() {
                 <Route path="donation" element={<DonationForm />} />
                 <Route path="privacy" element={<Privacy />} />
                 <Route path="legal" element={<Legal />} />
+                <Route path="ContactUs" element={<ContactUs />} />
               </Route>
 
               {/* Protected Routes */}
