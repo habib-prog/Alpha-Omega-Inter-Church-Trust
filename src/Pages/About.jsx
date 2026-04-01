@@ -123,8 +123,48 @@ import FemaleEducationChart from "../Components/UI/Charts/FemaleEducationChart";
 import ChildStatistics from "../Components/UI/Charts/ChildStatistics";
 import StreetChildReason from "../Components/UI/Charts/StreetChildReason";
 import HolisticCareChart from "../Components/UI/Charts/HolisticCareChart";
+import { useSiteContent } from "../data/useSiteContent";
 
 const About = () => {
+  const aboutContent = useSiteContent("about-page", "/content/about-page.json", {
+    sectionTitle: "We believe in the power of community to change lives.",
+    sectionDescriptionOne:
+      "Founded on the belief that everyone deserves a chance at a better life, KindredHearts has been working tirelessly to bridge the gap between those who want to help and those in need.",
+    sectionDescriptionTwo:
+      "Our approach is simple yet profound: we listen to communities, understand their unique challenges, and work alongside them to build sustainable solutions that last for generations.",
+    imageOne: "/aboutus-1.png",
+    imageTwo: "/aboutus-2.png",
+    stats: [
+      {
+        count: "50k+",
+        label: "Lives Impacted",
+        icon: "people",
+        color: "text-brand",
+      },
+      {
+        count: "12",
+        label: "Countries Served",
+        icon: "globe",
+        color: "text-[#8BA88E]",
+      },
+      {
+        count: "100%",
+        label: "Donation Impact",
+        icon: "heart",
+        color: "text-[#F4A261]",
+      },
+      {
+        count: "50k+",
+        label: "Expert Volunteers",
+        icon: "sparkles",
+        color: "text-[#4B443D]",
+      },
+    ],
+    challengeTitle: "Understanding the Challenges in Bangladesh",
+    challengeDescription:
+      "Bangladesh faces complex challenges in education, nutrition, and women’s empowerment, affecting millions of children and families. The charts below provide a clear snapshot of these challenges.",
+  });
+
   const fadeIn = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
@@ -133,6 +173,13 @@ const About = () => {
   const fadeInLeft = {
     hidden: { opacity: 0, x: -50 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
+  };
+
+  const iconMap = {
+    people: <BsPeople />,
+    globe: <CiGlobe />,
+    heart: <FaRegHeart />,
+    sparkles: <LuSparkles />,
   };
 
   return (
@@ -148,47 +195,18 @@ const About = () => {
               variants={fadeInLeft}
             >
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-unique mb-6">
-                We believe in the power of community to change lives.
+                {aboutContent.sectionTitle}
               </h2>
               <p className="text-lg max-w-5xl text-unique/80 mb-6 leading-6">
-                Founded on the belief that everyone deserves a chance at a
-                better life, KindredHearts has been working tirelessly to bridge
-                the gap between those who want to help and those in need.
+                {aboutContent.sectionDescriptionOne}
               </p>
               <p className="text-lg max-w-5xl text-unique/80 mb-8 leading-6">
-                Our approach is simple yet profound: we listen to communities,
-                understand their unique challenges, and work alongside them to
-                build sustainable solutions that last for generations.
+                {aboutContent.sectionDescriptionTwo}
               </p>
 
               {/* Stats Section with Stagger effect */}
               <div className="grid grid-cols-2 gap-8">
-                {[
-                  {
-                    icon: <BsPeople />,
-                    count: "50k+",
-                    label: "Lives Impacted",
-                    color: "text-brand",
-                  },
-                  {
-                    icon: <CiGlobe />,
-                    count: "12",
-                    label: "Countries Served",
-                    color: "text-[#8BA88E]",
-                  },
-                  {
-                    icon: <FaRegHeart />,
-                    count: "100%",
-                    label: "Donation Impact",
-                    color: "text-[#F4A261]",
-                  },
-                  {
-                    icon: <LuSparkles />,
-                    count: "50k+",
-                    label: "Expert Volunteers",
-                    color: "text-[#4B443D]",
-                  },
-                ].map((stat, index) => (
+                {aboutContent.stats?.map((stat, index) => (
                   <Motion.div
                     key={index}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -196,7 +214,9 @@ const About = () => {
                     transition={{ delay: index * 0.1 }}
                     className="flex flex-col gap-2"
                   >
-                    <div className={`text-4xl ${stat.color}`}>{stat.icon}</div>
+                    <div className={`text-4xl ${stat.color}`}>
+                      {iconMap[stat.icon] || <BsPeople />}
+                    </div>
                     <p className="text-3xl font-bold text-unique">
                       {stat.count}
                     </p>
@@ -216,12 +236,12 @@ const About = () => {
               className="grid grid-cols-2 gap-4"
             >
               <img
-                src="/aboutus-1.png"
+                src={aboutContent.imageOne}
                 alt="About Us"
                 className="rounded-3xl w-full h-46 sm:h-64 object-cover shadow-lg translate-y-8 hover:translate-y-4 duration-500"
               />
               <img
-                src="/aboutus-2.png"
+                src={aboutContent.imageTwo}
                 alt="About Us"
                 className="rounded-3xl w-full h-46 sm:h-64 object-cover shadow-lg hover:-translate-y-4 duration-500"
               />
@@ -239,12 +259,10 @@ const About = () => {
             className="info-text flex flex-col gap-2 mb-12"
           >
             <h2 className="sm:text-3xl text-xl font-bold text-[#E87461]">
-              Understanding the Challenges in Bangladesh
+              {aboutContent.challengeTitle}
             </h2>
             <p className="text-unique text-sm max-w-4xl mx-auto">
-              Bangladesh faces complex challenges in education, nutrition, and
-              women’s empowerment, affecting millions of children and families.
-              The charts below provide a clear snapshot of these challenges.
+              {aboutContent.challengeDescription}
             </p>
           </Motion.div>
 

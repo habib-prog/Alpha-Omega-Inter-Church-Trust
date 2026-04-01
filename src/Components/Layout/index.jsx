@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import { motion as Motion, useScroll, useSpring } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 import SocialSidebar from "../../Pages/SocialSidebar";
 
 const Index = () => {
+  const location = useLocation();
+
   // 1. Logic for the top Scroll Progress Bar
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -14,6 +16,18 @@ const Index = () => {
     damping: 30, // How fast it stops bouncing
     restDelta: 0.001,
   });
+
+  useEffect(() => {
+    if (location.hash) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     // 2. Initialize Lenis for smooth "liquid" scrolling

@@ -117,7 +117,6 @@ const CoreValues = () => {
                   name={member.name}
                   role={member.role}
                   quote="Seeing the direct impact of my donation on these families' lives has been incredibly moving."
-                  impact='3 Families'
                 />
               ))}
             </div>

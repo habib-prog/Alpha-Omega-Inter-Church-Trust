@@ -3,16 +3,28 @@ import { Link } from "react-router-dom";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
 import useAuthStore from "../../Zustand/authStore";
+import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../Database/firebase.config";
+import { getUserAvatarUrl } from "../../utils/userProfile";
 
 const Navbar = () => {
-  const { user } = useAuthStore();
-  const Signout = () => {
-    signOut(auth);
+  const navigate = useNavigate();
+  const { user, setUser } = useAuthStore();
+  const Signout = async (event) => {
+    event.preventDefault();
+    setUser(null);
+    setIsOpen(false);
+    closeDropdown();
+    try {
+      await signOut(auth);
+    } finally {
+      navigate("/login", { replace: true });
+    }
   };
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const isSuperAdmin = useAuthStore((state) => state.isSuperAdmin);
 
   // Function to force close DaisyUI dropdowns by removing focus
   const closeDropdown = () => {
@@ -200,6 +212,15 @@ const Navbar = () => {
                   </NavHashLink>
                 </li>
                 <li>
+                  <NavHashLink
+                    smooth
+                    to="/sponsor-child"
+                    onClick={closeDropdown}
+                  >
+                    Sponsor Child
+                  </NavHashLink>
+                </li>
+                <li>
                   <NavHashLink smooth to="/legal" onClick={closeDropdown}>
                     Legal
                   </NavHashLink>
@@ -237,11 +258,11 @@ const Navbar = () => {
             >
               <div className="w-7 rounded-full flex items-center justify-center overflow-hidden bg-[#E87461] text-white font-bold">
                 {user ? (
-                  <div className="w-full h-full flex items-center justify-center uppercase">
-                    {user.displayName?.charAt(0).toUpperCase() ||
-                      user.email?.charAt(0).toUpperCase() ||
-                      "U"}
-                  </div>
+                  <img
+                    alt={user.displayName || user.email || "User"}
+                    src={getUserAvatarUrl(user)}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <img alt="User" src="/user.png" />
                 )}
@@ -259,14 +280,18 @@ const Navbar = () => {
               <li className={user ? "block" : "hidden"}>
                 <a onClick={closeDropdown}>Settings</a>
               </li>
-              <li className={user?.emailVerified ? "block" : "hidden"}>
-                <a onClick={closeDropdown}>Admin Panel</a>
+              <li className={isSuperAdmin ? "block" : "hidden"}>
+                <Link to="/admin-panel" onClick={closeDropdown}>
+                  Admin Panel
+                </Link>
               </li>
               <li onClick={closeDropdown}>
                 {user?.emailVerified ? (
-                  <a onClick={Signout}>Log Out</a>
+                  <button type="button" onClick={Signout}>
+                    Log Out
+                  </button>
                 ) : (
-                  <Link to="login" onClick={closeDropdown}>
+                  <Link to="/login" onClick={closeDropdown}>
                     Log In
                   </Link>
                 )}
@@ -326,7 +351,6 @@ const Navbar = () => {
               About us
             </NavHashLink>
           </li>
-
           <div className="border-t border-gray-200 pt-2">
             <span className="font-bold text-[#E87461] text-xs uppercase">
               Campaigns
@@ -374,9 +398,22 @@ const Navbar = () => {
                 Legal
               </NavHashLink>
             </li>
+            <li className={isSuperAdmin ? "block" : "hidden"}>
+              <Link to="/admin-panel" onClick={() => setIsOpen(false)}>
+                Admin Panel
+              </Link>
+            </li>
             <li>
               <NavHashLink onClick={() => setIsOpen(false)} to="/contact">
                 Contact Us
+              </NavHashLink>
+            </li>
+            <li>
+              <NavHashLink
+                onClick={() => setIsOpen(false)}
+                to="/sponsor-child"
+              >
+                Sponsor Child
               </NavHashLink>
             </li>
           </div>

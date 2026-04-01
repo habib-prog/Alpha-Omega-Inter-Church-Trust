@@ -7,17 +7,14 @@ import { PiTree } from "react-icons/pi";
 import DonationActivity from "../Components/UI/Charts/DonationActivity";
 import { Link } from "react-router-dom";
 import useAuthStore from "../Zustand/authStore";
+import { getUserAvatarUrl, getUserDisplayName } from "../utils/userProfile";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("impact");
   const { user } = useAuthStore();
 
-  // নামের প্রথম অক্ষর বের করার লজিক
-  const getInitials = (name) => {
-    if (!name) return "U";
-    return name.charAt(0).toUpperCase();
-  };
-  const initials = getInitials(user?.displayName);
+  const displayName = getUserDisplayName(user);
+  const profileImage = getUserAvatarUrl(user);
 
   return (
     <div className="py-10 bg-white relative min-h-screen overflow-x-hidden">
@@ -34,13 +31,15 @@ const Profile = () => {
 
           <div className="Usercard w-full p-6 flex gap-2 justify-center items-center flex-col">
             <div className="img_box shadow-lg border-brand border-4 rounded-full p-1 flex items-center justify-center">
-              <div className="rounded-full w-24 h-24 bg-brand flex items-center justify-center text-white text-4xl font-bold">
-                {initials}
-              </div>
+              <img
+                src={profileImage}
+                alt={displayName}
+                className="rounded-full w-24 h-24 object-cover"
+              />
             </div>
 
             <h1 className="font-bold text-2xl text-gray-800">
-              {user?.displayName}
+              {displayName}
             </h1>
             <div className="flex flex-col items-center text-center">
               <div className="flex items-center gap-1 text-gray-500">

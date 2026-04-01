@@ -1,66 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion";
 import useAuthStore from "../Zustand/authStore";
 import { toast, ToastContainer } from "react-toastify";
-import { auth, db } from "../Database/firebase.config"; // db ইমপোর্ট নিশ্চিত করুন
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore"; // Firestore ফাংশন
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, authLoading, setUser } = useAuthStore();
+  const [isManualSubmitting, setIsManualSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
+  const { user, login, googleLogin } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, [user, navigate]);
 
   const hanslelogin = async (e) => {
     e.preventDefault();
-    const status = await login(email, password);
-    if (status.success) {
-      const currentUser = auth.currentUser;
-      if (currentUser && !currentUser.emailVerified) {
-        toast.warn("Please verify your email first!");
-        return;
+    setIsManualSubmitting(true);
+    try {
+      const status = await login(email, password);
+      if (status.success) {
+        toast.success("Login Successful");
+        setEmail("");
+        setPassword("");
+        setTimeout(() => {
+          navigate("/profile");
+        }, 1000);
+      } else {
+        toast.error(status.message);
       }
-      toast.success("Login Successful");
-      setEmail("");
-      setPassword("");
-      setTimeout(() => {
-        navigate("/profile");
-      }, 1000);
-    } else {
-      toast.error(status.message);
+    } finally {
+      setIsManualSubmitting(false);
     }
   };
 
   // Google Login
   const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
+    setIsGoogleSubmitting(true);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      // Firestore
-      const userRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(userRef);
-
-      if (!docSnap.exists()) {
-        await setDoc(userRef, {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          createdAt: new Date(),
-        });
+      const result = await googleLogin();
+      if (!result.success) {
+        toast.error(result.message || "Google Login Failed");
+        return;
       }
-
-      setUser(user);
+      if (result.warning) {
+        toast.warning(result.warning);
+      }
       toast.success("Google Login Successful");
       setTimeout(() => {
         navigate("/profile");
       }, 1000);
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setIsGoogleSubmitting(false);
     }
   };
 
@@ -133,9 +130,10 @@ const Login = () => {
                   </div>
                   <button
                     type="submit"
-                    className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg ${authLoading ? "animate-pulse" : ""}`}
+                    disabled={isManualSubmitting || isGoogleSubmitting}
+                    className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg disabled:cursor-not-allowed disabled:opacity-70 ${isManualSubmitting ? "animate-pulse" : ""}`}
                   >
-                    {authLoading ? "Loging In...." : "Log In"}
+                    {isManualSubmitting ? "Loging In...." : "Log In"}
                   </button>
                 </form>
                 <div className="flex flex-col mt-6 text-sm text-center text-brand ">
@@ -174,10 +172,12 @@ const Login = () => {
                   ].map((icon, index) => (
                     <Motion.button
                       key={index}
+                      type="button"
                       onClick={icon.onClick ? icon.onClick : null}
+                      disabled={isManualSubmitting || isGoogleSubmitting}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-2 bg-gray-50/80  rounded-lg hover:scale-110 transition-transform shadow-md"
+                      className="p-2 bg-gray-50/80  rounded-lg hover:scale-110 transition-transform shadow-md disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <img
                         className="w-5 h-5"

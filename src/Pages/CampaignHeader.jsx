@@ -4,8 +4,14 @@ import { FaArrowRight } from "react-icons/fa";
 import { IoPlayCircleOutline } from "react-icons/io5";
 
 import Card from "../Components/Card";
+import { useSiteContent } from "../data/useSiteContent";
 
 const CampaignHeader = () => {
+  const campaignContent = useSiteContent("campaigns", "/content/campaigns.json", {
+    items: [],
+  });
+  const campaigns = campaignContent.items || [];
+
   return (
     <div>
       <section className="bg-amber-800 backdrop-blur-md py-36">
@@ -75,55 +81,15 @@ const CampaignHeader = () => {
       <section className="py-20">
         <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-            <Card
-              title="Education for All"
-              description="Building schools..."
-              campaign="500+ Students"
-              image="/cardphoto.avif"
-            />
-            <Card
-              title="Sustainable Farming"
-              description="Teaching modern...."
-              campaign="200 Families"
-              image="/agriculture.avif"
-            />
-            <Card
-              title="Clean Water Initiative"
-              description="Providing clean water..."
-              campaign="12 Wells Built"
-              image="/cleanwater.jpg"
-            />
-            <Card
-              title="Healthcare for All"
-              description="Providing medical care..."
-              campaign="1000+ Patients"
-              image="/healtcare.jpg"
-            />
-
-            <Card
-              title="Healthcare for All"
-              description="Providing medical care..."
-              campaign="1000+ Patients"
-              image="/healtcare.jpg"
-            />
-            <Card
-              title="Clean Water Initiative"
-              description="Providing clean water..."
-              campaign="12 Wells Built"
-              image="/cleanwater.jpg"
-            />
-            <Card
-              title="Sustainable Farming"
-              description="Teaching modern...."
-              campaign="200 Families"
-              image="/agriculture.avif"
-            />
-            <Card
-              title="Education for All"
-              description="Building schools..."
-              campaign="500+ Students"
-              image="/cardphoto.avif"
-            />
+            {campaigns.map((campaign) => (
+              <Card
+                key={`${campaign.title}-${campaign.campaignName ?? ""}`}
+                title={campaign.title}
+                description={campaign.description}
+                campaign={campaign.campaignName || campaign.category || "Campaign"}
+                image={campaign.image || "/cardphoto.avif"}
+              />
+            ))}
           </div>
         </div>
       </section>

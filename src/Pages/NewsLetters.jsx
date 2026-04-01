@@ -2,38 +2,43 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { IoIosArrowRoundForward } from "react-icons/io";
-
-const newsletters = [
-  {
-    month: "March 2026",
-    title: "Shelter and Safe Nights",
-    summary:
-      "A closer look at how emergency shelter support is helping children and families move from crisis to stability.",
-    category: "Community Relief",
-  },
-  {
-    month: "February 2026",
-    title: "Education That Reaches Further",
-    summary:
-      "This edition highlights school support, mentorship, and the local volunteers helping students stay on track.",
-    category: "Education",
-  },
-  {
-    month: "January 2026",
-    title: "Care Beyond Donations",
-    summary:
-      "Stories from the field on healthcare, follow-up visits, and the partnerships making long-term care possible.",
-    category: "Healthcare",
-  },
-];
+import { useSiteContent } from "../data/useSiteContent";
 
 const NewsLetters = () => {
+  const newsletterContent = useSiteContent(
+    "newsletters-page",
+    "/content/newsletters-page.json",
+    {
+    badge: "News Letters",
+    title:
+      "Follow the stories, updates, and field highlights behind every act of care.",
+    description:
+      "Explore recent updates from Alpha Omega Inter Church Trust and see how campaigns, volunteers, and community partnerships are creating measurable impact.",
+    primaryButtonText: "Support the Mission",
+    primaryButtonLink: "/donation",
+    secondaryButtonText: "Learn More",
+    secondaryButtonLink: "/about",
+    asideBadge: "Why It Matters",
+    asideTitle:
+      "Clear updates help supporters stay connected to real outcomes.",
+    asideDescription:
+      "This section gives visitors a simple place to check recent activity, campaign highlights, and community milestones without needing to search across the site.",
+    featuredFocusBadge: "Featured Focus",
+    featuredFocusText:
+      "Volunteer spotlights, donation updates, and project progress in one place.",
+    asideButtonText: "Visit About Us",
+    asideButtonLink: "/about",
+      items: [],
+    }
+  );
+
   return (
     <section
       id="newsletters"
-      className="bg-[#FAF8F3] text-[#4A3F35] pt-28 pb-18 sm:pt-32 sm:pb-24"
+      className="bg-[#FAF8F3] text-[#4A3F35] pb-18 sm:pb-24"
     >
-      <div className="container">
+      <div className="bg-[#4A3F35] pb-6 pt-10 shadow-sm sm:pt-10"></div>
+      <div className="container mt-8">
         <Motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,30 +50,27 @@ const NewsLetters = () => {
 
           <div className="relative max-w-3xl">
             <p className="mb-3 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1 text-sm font-medium tracking-[0.2em] uppercase">
-              News Letters
+              {newsletterContent.badge}
             </p>
             <h1 className="text-3xl font-bold leading-tight sm:text-5xl">
-              Follow the stories, updates, and field highlights behind every act
-              of care.
+              {newsletterContent.title}
             </h1>
             <p className="mt-4 max-w-2xl text-sm text-white/80 sm:text-base">
-              Explore recent updates from Alpha Omega Inter Church Trust and see
-              how campaigns, volunteers, and community partnerships are creating
-              measurable impact.
+              {newsletterContent.description}
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
-                to="/donation"
+                to={newsletterContent.primaryButtonLink}
                 className="inline-flex items-center justify-center rounded-full bg-[#E87461] px-6 py-3 font-medium text-white transition hover:bg-[#d66350]"
               >
-                Support the Mission
+                {newsletterContent.primaryButtonText}
               </Link>
               <Link
-                to="/about"
+                to={newsletterContent.secondaryButtonLink}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 font-medium text-white/95 transition hover:bg-white/10"
               >
-                Learn More
+                {newsletterContent.secondaryButtonText}
                 <IoIosArrowRoundForward className="text-2xl" />
               </Link>
             </div>
@@ -77,7 +79,7 @@ const NewsLetters = () => {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="grid gap-6">
-            {newsletters.map((item, index) => (
+            {newsletterContent.items?.map((item, index) => (
               <Motion.article
                 key={item.title}
                 initial={{ opacity: 0, y: 24 }}
@@ -113,33 +115,30 @@ const NewsLetters = () => {
             className="rounded-[1.75rem] border border-[#E7DED3] bg-white p-6 shadow-sm"
           >
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#E87461]">
-              Why It Matters
+              {newsletterContent.asideBadge}
             </p>
             <h3 className="mt-3 text-2xl font-bold">
-              Clear updates help supporters stay connected to real outcomes.
+              {newsletterContent.asideTitle}
             </h3>
             <p className="mt-4 text-[#6E625A]">
-              This section gives visitors a simple place to check recent
-              activity, campaign highlights, and community milestones without
-              needing to search across the site.
+              {newsletterContent.asideDescription}
             </p>
 
             <div className="mt-8 rounded-3xl bg-[#F7EFE7] p-5">
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#A54F3C]">
-                Featured Focus
+                {newsletterContent.featuredFocusBadge}
               </p>
               <p className="mt-3 text-lg font-semibold">
-                Volunteer spotlights, donation updates, and project progress in
-                one place.
+                {newsletterContent.featuredFocusText}
               </p>
             </div>
 
             <div className="mt-8">
               <Link
-                to="/about"
+                to={newsletterContent.asideButtonLink}
                 className="inline-flex items-center gap-2 rounded-full border border-[#E87461] px-5 py-3 font-medium text-[#E87461] transition hover:bg-[#E87461] hover:text-white"
               >
-                Visit About Us
+                {newsletterContent.asideButtonText}
                 <IoIosArrowRoundForward className="text-2xl" />
               </Link>
             </div>

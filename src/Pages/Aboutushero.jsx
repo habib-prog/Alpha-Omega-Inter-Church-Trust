@@ -1,42 +1,55 @@
 import React from "react";
 import { Link } from "react-router";
+import { useSiteContent } from "../data/useSiteContent";
 
 const Aboutushero = () => {
+  const aboutContent = useSiteContent("about-page", "/content/about-page.json", {
+    heroBadge: "ESTABLISHED 2018",
+    heroTitle: "Why We Do",
+    heroHighlight: "What We Do",
+    heroDescription:
+      "Our mission is to ensure that every child, regardless of their background, has access to the resources, love, and opportunities they need to reach their full potential.",
+    heroImage: "/aboutus_hero.jpg",
+    heroButtons: [
+      { label: "Our Mission & Our Vision", link: "/mission" },
+      { label: "Our Journey", link: "/mission" },
+      { label: "Meet the Team", link: "/mission" },
+    ],
+  });
+
   return (
     <section>
-      <div className=" w-full h-full pb-130 pt-25 max-h-72 sm:pt-35 sm:pb-135 bg-cover bg-center bg-no-repeat  bg-[url('/aboutus_hero.jpg')] ">
+      <div
+        className=" w-full h-full pb-130 pt-25 max-h-72 sm:pt-35 sm:pb-135 bg-cover bg-center bg-no-repeat "
+        style={{ backgroundImage: `url('${aboutContent.heroImage}')` }}
+      >
         <div className="container">
           <div className="max-w-210 m-auto">
             <div className="flex flex-col ">
               <p className=" m-auto inline-block py-1 px-3 rounded-full bg-white/20 text-white backdrop-blur-md text-sm font-medium mb-3 sm:mb-6 border border-white/30  ">
-                ESTABLISHED 2018
+                {aboutContent.heroBadge}
               </p>
               <h1 className=" text-4xl sm:text-5xl lg:text-7xl font-bold text-white text-center sm:mb-6">
-                Why We Do
-                <span className="block text-[#F4A261]">What We Do</span>
+                {aboutContent.heroTitle}
+                <span className="block text-[#F4A261]">
+                  {aboutContent.heroHighlight}
+                </span>
               </h1>
               <p className=" text-xl sm:text-2xl font-light text-white/90 mb-5  sm:mb-10 max-w-2xl mx-auto text-center font-raleway">
-                Our mission is to ensure that every child, regardless of their
-                background, has access to the resources, love, and opportunities
-                they need to reach their full potential.
+                {aboutContent.heroDescription}
               </p>
               <div>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <div className="text-white  hover:bg-br text-[14px] px-6 py-3.5 border-2 duration-300 bg-[#F4A261] hover:scale-102  rounded-full cursor-pointer">
-                    <Link to="/mission" className="flex">
-                      Our Mission & Our Vision{" "}
-                    </Link>
-                  </div>
-                  <div className="text-white  hover:bg-br text-[14px] px-15 sm:px-6 py-3.5 border-2 duration-300 bg-[#F4A261] hover:scale-102  rounded-full cursor-pointer">
-                    <Link to="/mission" className="flex">
-                      Our Journey{" "}
-                    </Link>
-                  </div>
-                  <div className="text-white  hover:bg-br text-[14px] px-15 sm:px-6 py-3.5 border-2 duration-300 bg-[#F4A261] hover:scale-102  rounded-full cursor-pointer">
-                    <Link to="/mission" className="flex">
-                      Meet the Team{" "}
-                    </Link>
-                  </div>
+                  {aboutContent.heroButtons?.map((button) => (
+                    <div
+                      key={`${button.label}-${button.link}`}
+                      className="text-white  hover:bg-br text-[14px] px-6 py-3.5 border-2 duration-300 bg-[#F4A261] hover:scale-102  rounded-full cursor-pointer"
+                    >
+                      <Link to={button.link} className="flex">
+                        {button.label}
+                      </Link>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

@@ -9,21 +9,53 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signup, authLoading } = useAuthStore();
+  const [isManualSubmitting, setIsManualSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
+  const { signup, googleLogin } = useAuthStore();
+
   const handleSignup = async (e) => {
     e.preventDefault();
-    const result = await signup(email, password, name);
-    result.success && toast.success("Account created");
-    result.success &&
-      toast.warning(`verification mail sent
-      verify mail before login`);
-    setName("");
-    setEmail("");
-    setPassword("");
+    setIsManualSubmitting(true);
+    try {
+      const result = await signup(email, password, name);
 
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
+      if (result.success) {
+        toast.success("Account created");
+        toast.warning(`verification mail sent
+      verify mail before login`);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      } else {
+        toast.error(result.message || "Sign up failed");
+      }
+    } finally {
+      setIsManualSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setIsGoogleSubmitting(true);
+    try {
+      const result = await googleLogin();
+      if (!result.success) {
+        toast.error(result.message || "Google sign-up failed");
+        return;
+      }
+      if (result.warning) {
+        toast.warning(result.warning);
+      }
+
+      toast.success("Google account connected successfully");
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1000);
+    } finally {
+      setIsGoogleSubmitting(false);
+    }
   };
   return (
     <div className="min-h-screen">
@@ -57,11 +89,7 @@ const Signup = () => {
                   Sign Up
                 </h1>
 
-                <form
-                  action="#"
-                  method="post"
-                  className="space-y-4 sm:space-y-6"
-                >
+                <form onSubmit={handleSignup} className="space-y-4 sm:space-y-6">
                   <div>
                     <label
                       htmlFor="Name"
@@ -124,21 +152,13 @@ const Signup = () => {
                     </a>
                   </div>
 
-                  {authLoading ? (
-                    <button
-                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg  animate-pulse `}
-                      onClick={handleSignup}
-                    >
-                      Signing Up....
-                    </button>
-                  ) : (
-                    <button
-                      className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg`}
-                      onClick={handleSignup}
-                    >
-                      Sign Up
-                    </button>
-                  )}
+                  <button
+                    type="submit"
+                    disabled={isManualSubmitting || isGoogleSubmitting}
+                    className={`w-full p-3 mt-4 text-white bg-[#E87461] font-semibold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-300 shadow-lg disabled:cursor-not-allowed disabled:opacity-70 ${isManualSubmitting ? "animate-pulse" : ""}`}
+                  >
+                    {isManualSubmitting ? "Signing Up...." : "Sign Up"}
+                  </button>
                 </form>
 
                 <div className="flex flex-col mt-6 text-sm text-center text-brand">
@@ -157,6 +177,23 @@ const Signup = () => {
                   <p>
                     By signing in, you agree to our Terms and Privacy Policy.
                   </p>
+                </div>
+
+                <div className="mt-5 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={handleGoogleSignup}
+                    disabled={isManualSubmitting || isGoogleSubmitting}
+                    className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <img
+                      className="h-5 w-5"
+                      loading="lazy"
+                      src="https://ucarecdn.com/8f25a2ba-bdcf-4ff1-b596-088f330416ef/"
+                      alt="Google"
+                    />
+                    Continue with Google
+                  </button>
                 </div>
               </div>
             </section>

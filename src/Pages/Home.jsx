@@ -15,22 +15,30 @@ const Home = () => {
   });
 
   useEffect(() => {
-    // Premium Lenis Settings
-    const lenis = new Lenis({
-      duration: 1.4, // Duration barano hoyeche smooth feeling er jonno
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1, // natural
-    });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return undefined;
     }
 
-    requestAnimationFrame(raf);
+    // Premium Lenis Settings
+    const lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+    });
 
-    return () => lenis.destroy();
+    let rafId = 0;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
   }, []);
 
   return (

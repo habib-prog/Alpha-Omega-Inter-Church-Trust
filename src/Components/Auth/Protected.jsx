@@ -5,11 +5,14 @@ import Footer from "../Layout/Footer";
 import SocialSidebar from "../../Pages/SocialSidebar";
 
 const Protected = () => {
-  const User = useAuthStore((state) => state.user);
-  const { user } = useAuthStore();
+  const { user, authLoading } = useAuthStore();
 
-  if (!User) {
-    return <Navigate to="login" />;
+  if (authLoading) {
+    return null;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
   if (!user.emailVerified) {

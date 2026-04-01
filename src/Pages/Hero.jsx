@@ -49,9 +49,25 @@ import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link, useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion"; // ← Aliased as Motion
+import { useSiteContent } from "../data/useSiteContent";
 
 const Hero = () => {
   const navigate = useNavigate();
+  const heroContent = useSiteContent("home-hero", "/content/home-hero.json", {
+    badge: "Non-profit Organization",
+    notice: "This website is under ongoing development by BytNext",
+    noticeLinkText: "BytNext",
+    noticeLink: "https://www.bytnext.com",
+    title: "Every Act of Kindness",
+    highlight: "Creates Ripples of Hope",
+    description:
+      "Join our global community of changemakers. Your generosity transforms lives and builds a brighter future for everyone.",
+    backgroundImage: "/slum.jpg",
+    primaryButtonText: "Donate Now",
+    primaryButtonLink: "/donation",
+    secondaryButtonText: "Our Mission",
+    secondaryButtonLink: "/mission",
+  });
   // Parent container – only for staggering children
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -82,9 +98,9 @@ const Hero = () => {
       <div
         className="
           absolute inset-0 bg-cover bg-center bg-no-repeat
-          bg-[url('/slum.jpg')]
           after:absolute after:inset-0 after:bg-black/45
         "
+        style={{ backgroundImage: `url('${heroContent.backgroundImage}')` }}
       />
       <div className="relative container mx-auto px-5 py-20 sm:py-28 lg:py-32 flex items-center justify-center min-h-[80vh] lg:min-h-screen">
         <Motion.div
@@ -96,15 +112,15 @@ const Hero = () => {
         >
           <Motion.div variants={itemVariants}>
             <span className="inline-block py-1.5 px-4 rounded-full bg-white/15 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/25">
-              Non-profit Organization
+              {heroContent.badge}
             </span>
           </Motion.div>
           <Motion.div variants={itemVariants}>
             <span className=" animate-pulse inline-block text-center sm:p-4 p-2 rounded-full bg-red-500 text-white backdrop-blur-md sm:text-lg text-md  font-bold  mb-6 border border-white/25">
-              ⚠️ This website is under ongoing development by{" "}
+              ⚠️ {heroContent.notice}{" "}
               <span className="underline text-yellow-400">
-                <a target="blank" href="https://www.bytnext.com">
-                  BytNext
+                <a target="blank" href={heroContent.noticeLink} rel="noreferrer">
+                  {heroContent.noticeLinkText}
                 </a>
               </span>
             </span>
@@ -114,9 +130,9 @@ const Hero = () => {
             variants={itemVariants}
             className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6"
           >
-            Every Act of Kindness
+            {heroContent.title}
             <span className="block text-[#F4A261] mt-2">
-              Creates Ripples of Hope
+              {heroContent.highlight}
             </span>
           </Motion.h1>
 
@@ -124,8 +140,7 @@ const Hero = () => {
             variants={itemVariants}
             className="text-lg sm:text-xl lg:text-2xl font-light text-white/90 mb-10 max-w-3xl mx-auto"
           >
-            Join our global community of changemakers. Your generosity
-            transforms lives and builds a brighter future for everyone.
+            {heroContent.description}
           </Motion.p>
 
           <Motion.div variants={itemVariants}>
@@ -133,7 +148,7 @@ const Hero = () => {
               <Motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
-                onClick={() => navigate("/donation")}
+                onClick={() => navigate(heroContent.primaryButtonLink)}
                 className="
         bg-[#E87461] hover:bg-[#d45a4a] 
         text-white text-lg sm:text-xl 
@@ -142,7 +157,7 @@ const Hero = () => {
         transition-colors duration-300 shadow-lg
       "
               >
-                Donate Now
+                {heroContent.primaryButtonText}
               </Motion.button>
 
 
@@ -151,7 +166,7 @@ const Hero = () => {
                 whileTap={{ scale: 0.96 }}
               >
                 <Link
-                  to="/mission"
+                  to={heroContent.secondaryButtonLink}
                   className="
                     inline-flex items-center gap-2
                     text-white text-lg sm:text-xl font-medium
@@ -161,7 +176,7 @@ const Hero = () => {
                     transition-all duration-300 backdrop-blur-sm
                   "
                 >
-                  Our Mission
+                  {heroContent.secondaryButtonText}
                   <IoIosArrowRoundForward className="text-3xl" />
                 </Link>
               </Motion.div>

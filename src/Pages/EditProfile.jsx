@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiCamera,
   FiSave,
@@ -7,31 +7,122 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom"; // Route change korar jonno
+import { toast, ToastContainer } from "react-toastify";
+import useAuthStore from "../Zustand/authStore";
+import { auth, rtdb, storage } from "../Database/firebase.config";
+import { updateProfile } from "firebase/auth";
+import { get, ref as dbRef, update } from "firebase/database";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getUserAvatarUrl, getUserDisplayName } from "../utils/userProfile";
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useAuthStore();
+  const [isSaving, setIsSaving] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState("");
   const [profile, setProfile] = useState({
-    name: "Russel Abraham",
-    email: "russel@example.com",
-    phone: "+1 234 567 890",
-    address: "New York, WA",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
     gender: "Male",
-    birthYear: "1995",
+    birthYear: "",
+    photoURL: "",
   });
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    const loadProfile = async () => {
+      try {
+        const userSnap = await get(dbRef(rtdb, `users/${user.uid}`));
+        const data = userSnap.exists() ? userSnap.val() : {};
+        const displayName = data?.name || getUserDisplayName(user);
+        const photoURL = data?.photoURL || getUserAvatarUrl(user);
+
+        setProfile({
+          name: displayName,
+          email: user.email || "",
+          phone: data?.phone || "",
+          address: data?.address || "",
+          gender: data?.gender || "Male",
+          birthYear: data?.birthYear || "",
+          photoURL,
+        });
+        setPhotoPreview(photoURL);
+      } catch (error) {
+        toast.error("Could not load profile.");
+      }
+    };
+
+    loadProfile();
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  const handleSave = (e) => {
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageFile(file);
+    const objectUrl = URL.createObjectURL(file);
+    setPhotoPreview(objectUrl);
+  };
+
+  const handleSave = async (e) => {
     e.preventDefault();
-    console.log("Updated Profile:", profile);
-    // Data save hoye gele profile page-e firat niye jabe
+    if (!user) return;
+
+    setIsSaving(true);
+    try {
+      let nextPhotoURL = profile.photoURL || getUserAvatarUrl(user);
+
+      if (imageFile) {
+        const imageRef = ref(
+          storage,
+          `profile_images/${user.uid}/${Date.now()}-${imageFile.name}`,
+        );
+        await uploadBytes(imageRef, imageFile);
+        nextPhotoURL = await getDownloadURL(imageRef);
+      }
+
+      await updateProfile(auth.currentUser, {
+        displayName: profile.name,
+        photoURL: nextPhotoURL,
+      });
+
+      await update(dbRef(rtdb, `users/${user.uid}`), {
+        uid: user.uid,
+        name: profile.name,
+        email: user.email || profile.email,
+        phone: profile.phone || "",
+        address: profile.address || "",
+        gender: profile.gender || "Male",
+        birthYear: profile.birthYear || "",
+        photoURL: nextPhotoURL,
+      });
+
+      await setUser(auth.currentUser);
+      toast.success("Profile updated successfully.");
+    } catch (error) {
+      toast.error("Could not update profile.");
+      return;
+    } finally {
+      setIsSaving(false);
+    }
+
     navigate("/profile");
   };
 
   return (
     <div className="min-h-screen bg- pb-10">
+      <ToastContainer />
       {/* Top Navigation Bar */}
       <div className="bg-[#4A3F35] w-full h-16  absolute top-0 "></div>
 
@@ -56,13 +147,18 @@ const EditProfile = () => {
             <div className="flex flex-col items-center mb-10">
               <div className="relative">
                 <img
-                  src="/russel.png"
+                  src={photoPreview || getUserAvatarUrl(user)}
                   className="w-32 h-32 rounded-full border-4 border-[#E87461] object-cover"
                   alt="Profile"
                 />
                 <label className="absolute bottom-1 right-1 bg-[#E87461] p-2.5 rounded-full text-white cursor-pointer hover:scale-110 transition-all border-2 border-white">
                   <FiCamera size={20} />
-                  <input type="file" className="hidden" />
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
                 </label>
               </div>
               <p className="mt-3 text-sm font-semibold text-[#E87461]">
@@ -89,7 +185,7 @@ const EditProfile = () => {
                   type="email"
                   name="email"
                   value={profile.email}
-                  onChange={handleChange}
+                  readOnly
                   className="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-[#E87461] outline-none transition-all"
                 />
               </div>
@@ -167,9 +263,10 @@ const EditProfile = () => {
             <div className="mt-10">
               <button
                 type="submit"
+                disabled={isSaving}
                 className="w-full py-4 bg-[#E87461] text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition-all"
               >
-                <FiSave /> Save All Changes
+                <FiSave /> {isSaving ? "Saving..." : "Save All Changes"}
               </button>
             </div>
           </form>

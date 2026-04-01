@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "cms": "npx decap-server",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
