@@ -375,9 +375,9 @@ const Navbar = () => {
               </NavHashLink>
             </li>
             <li>
-              <Link onClick={() => setIsOpen(false)} to="/contact">
+              <NavHashLink onClick={() => setIsOpen(false)} to="/contact">
                 Contact Us
-              </Link>
+              </NavHashLink>
             </li>
           </div>
 

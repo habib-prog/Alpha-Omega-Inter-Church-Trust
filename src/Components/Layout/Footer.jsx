@@ -50,7 +50,7 @@ const Footer = () => {
             Our Work
           </Link>
           <Link
-            to="/contactUs"
+            to="/contact"
             className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
           >
             Contact
