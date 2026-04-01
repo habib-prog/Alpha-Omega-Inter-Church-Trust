@@ -195,9 +195,9 @@ const Navbar = () => {
                   </NavHashLink>
                 </li>
                 <li>
-                  <Link smooth to="/contactUs" onClick={closeDropdown}>
+                  <NavHashLink smooth to="/contact" onClick={closeDropdown}>
                     Contact Us
-                  </Link>
+                  </NavHashLink>
                 </li>
                 <li>
                   <NavHashLink smooth to="/legal" onClick={closeDropdown}>
@@ -375,7 +375,7 @@ const Navbar = () => {
               </NavHashLink>
             </li>
             <li>
-              <Link onClick={() => setIsOpen(false)} to="/contactUs">
+              <Link onClick={() => setIsOpen(false)} to="/contact">
                 Contact Us
               </Link>
             </li>

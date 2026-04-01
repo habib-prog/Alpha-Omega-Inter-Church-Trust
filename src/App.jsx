@@ -56,7 +56,7 @@ function App() {
                 <Route path="donation" element={<DonationForm />} />
                 <Route path="privacy" element={<Privacy />} />
                 <Route path="legal" element={<Legal />} />
-                <Route path="contactUs" element={<ContactUs />} />
+                <Route path="contact" element={<ContactUs />} />
               </Route>
 
               {/* Protected Routes */}
