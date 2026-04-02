@@ -44,12 +44,6 @@ const Footer = () => {
             News Letters
           </Link>
           <Link
-            to="/work"
-            className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
-          >
-            Our Work
-          </Link>
-          <Link
             to="/contact"
             className=" flex text-[#FAF8F3]/60 hover:text-[#E87461]"
           >

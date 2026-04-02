@@ -560,7 +560,7 @@ const Ourimpacts = () => {
               initial={{ opacity: 0, x: slideDirection > 0 ? 40 : -40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
-              className="mt-8 grid gap-6"
+              className="mt-8 grid gap-3"
               style={{
                 gridTemplateColumns: `repeat(${Math.max(
                   1,

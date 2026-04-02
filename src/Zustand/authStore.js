@@ -123,6 +123,45 @@ const isRtdbPermissionDenied = (error) => {
   );
 };
 
+const getSnapshotValue = (snapshot) => {
+  if (snapshot && typeof snapshot.val === "function") {
+    return snapshot.val();
+  }
+  return snapshot ?? null;
+};
+
+const hasSnapshotData = (snapshot) => {
+  if (snapshot && typeof snapshot.exists === "function") {
+    return snapshot.exists();
+  }
+  const value = getSnapshotValue(snapshot);
+  if (value === null || value === undefined) {
+    return false;
+  }
+  if (typeof value === "object") {
+    return Object.keys(value).length > 0;
+  }
+  return Boolean(value);
+};
+
+const normalizeCreatedAt = (value) => {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value < 1e12 ? value * 1000 : value;
+  }
+
+  if (typeof value === "string") {
+    const numericValue = Number(value);
+    if (Number.isFinite(numericValue) && numericValue > 0) {
+      return numericValue < 1e12 ? numericValue * 1000 : numericValue;
+    }
+
+    const dateValue = new Date(value).getTime();
+    return Number.isFinite(dateValue) ? dateValue : 0;
+  }
+
+  return 0;
+};
+
 const getClientIp = async () => {
   const endpoints = [
     "https://api.ipify.org?format=json",
@@ -154,6 +193,78 @@ const getClientIp = async () => {
   }
 
   return "Unavailable";
+};
+
+const getGeoFromIp = async (ip = "") => {
+  if (!ip || ip === "Unavailable") {
+    return {
+      country: "Unknown",
+      region: "Unknown",
+      city: "Unknown",
+      latitude: null,
+      longitude: null,
+      timezone: "Unknown",
+    };
+  }
+
+  const endpoints = [
+    `https://ipwho.is/${ip}`,
+    `https://ipapi.co/${ip}/json/`,
+  ];
+
+  for (const endpoint of endpoints) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 3500);
+      const response = await fetch(endpoint, { signal: controller.signal });
+      clearTimeout(timer);
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const data = await response.json();
+
+      if (endpoint.includes("ipwho.is")) {
+        if (data?.success === false) {
+          continue;
+        }
+
+        return {
+          country: data?.country || "Unknown",
+          region: data?.region || "Unknown",
+          city: data?.city || "Unknown",
+          latitude:
+            typeof data?.latitude === "number" ? data.latitude : null,
+          longitude:
+            typeof data?.longitude === "number" ? data.longitude : null,
+          timezone: data?.timezone?.id || "Unknown",
+        };
+      }
+
+      return {
+        country: data?.country_name || data?.country || "Unknown",
+        region: data?.region || "Unknown",
+        city: data?.city || "Unknown",
+        latitude:
+          typeof data?.latitude === "number" ? data.latitude : null,
+        longitude:
+          typeof data?.longitude === "number" ? data.longitude : null,
+        timezone: data?.timezone || "Unknown",
+      };
+    } catch (error) {
+      // Try next geo endpoint.
+    }
+  }
+
+  return {
+    country: "Unknown",
+    region: "Unknown",
+    city: "Unknown",
+    latitude: null,
+    longitude: null,
+    timezone: "Unknown",
+  };
 };
 
 const getNavigatorMeta = () => {
@@ -202,6 +313,7 @@ const getNavigatorMeta = () => {
 const getClientMeta = async () => {
   const navigatorMeta = getNavigatorMeta();
   const ip = await getClientIp();
+  const geoMeta = await getGeoFromIp(ip);
 
   return {
     ip,
@@ -209,6 +321,12 @@ const getClientMeta = async () => {
     device: navigatorMeta.device,
     os: navigatorMeta.os,
     deviceName: navigatorMeta.deviceName,
+    country: geoMeta.country,
+    region: geoMeta.region,
+    city: geoMeta.city,
+    latitude: geoMeta.latitude,
+    longitude: geoMeta.longitude,
+    timezone: geoMeta.timezone,
     userAgent: navigatorMeta.userAgent,
   };
 };
@@ -219,6 +337,12 @@ const normalizeLogMeta = (meta = {}) => ({
   device: meta.device || "Unknown",
   os: meta.os || "Unknown",
   deviceName: meta.deviceName || "Unknown",
+  country: meta.country || "Unknown",
+  region: meta.region || "Unknown",
+  city: meta.city || "Unknown",
+  latitude: typeof meta.latitude === "number" ? meta.latitude : null,
+  longitude: typeof meta.longitude === "number" ? meta.longitude : null,
+  timezone: meta.timezone || "Unknown",
   userAgent: meta.userAgent || "",
 });
 
@@ -261,7 +385,7 @@ const syncGoogleUserProfile = async (user) => {
   let warningMessage = "";
 
   try {
-    if (!userSnap.exists()) {
+  if (!hasSnapshotData(userSnap)) {
       await setDb(userRef, {
         uid: user.uid,
         name: displayName,
@@ -330,7 +454,7 @@ const checkSuperAdminAccess = async (email = "") => {
       `super_admins/${getSuperAdminDocId(normalizedEmail)}`,
     );
     const adminSnap = await get(adminRef);
-    return adminSnap.exists();
+    return hasSnapshotData(adminSnap);
   } catch (error) {
     return false;
   }
@@ -351,15 +475,15 @@ const writeLogEntry = async (path, payload) => {
 const cleanupOldLogs = async (path) => {
   try {
     const snapshot = await get(ref(rtdb, path));
-    if (!snapshot.exists()) {
+    if (!hasSnapshotData(snapshot)) {
       return;
     }
 
     const now = Date.now();
-    const raw = snapshot.val() || {};
+    const raw = getSnapshotValue(snapshot) || {};
     const removalTasks = Object.entries(raw)
       .filter(([, item]) => {
-        const createdAt = Number(item?.createdAt || 0);
+        const createdAt = normalizeCreatedAt(item?.createdAt);
         return createdAt > 0 && now - createdAt > LOG_RETENTION_MS;
       })
       .map(([key]) => remove(ref(rtdb, `${path}/${key}`)));
@@ -523,8 +647,8 @@ const useAuthStore = create((set, get) => ({
 
   listSuperAdmins: async () => {
     const snapshot = await get(child(ref(rtdb), "super_admins"));
-    const dynamicAdmins = snapshot.exists()
-      ? Object.values(snapshot.val() || {})
+    const dynamicAdmins = hasSnapshotData(snapshot)
+      ? Object.values(getSnapshotValue(snapshot) || {})
           .map((item) => item?.email)
           .filter(Boolean)
           .map((email) => normalizeEmail(email))

@@ -115,16 +115,7 @@ const Hero = () => {
               {heroContent.badge}
             </span>
           </Motion.div>
-          <Motion.div variants={itemVariants}>
-            <span className=" animate-pulse inline-block text-center sm:p-4 p-2 rounded-full bg-red-500 text-white backdrop-blur-md sm:text-lg text-md  font-bold  mb-6 border border-white/25">
-              ⚠️ {heroContent.notice}{" "}
-              <span className="underline text-yellow-400">
-                <a target="blank" href={heroContent.noticeLink} rel="noreferrer">
-                  {heroContent.noticeLinkText}
-                </a>
-              </span>
-            </span>
-          </Motion.div>
+          <Motion.div variants={itemVariants}></Motion.div>
 
           <Motion.h1
             variants={itemVariants}
@@ -159,7 +150,6 @@ const Hero = () => {
               >
                 {heroContent.primaryButtonText}
               </Motion.button>
-
 
               <Motion.div
                 whileHover={{ scale: 1.05 }}

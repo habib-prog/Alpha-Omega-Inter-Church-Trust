@@ -1,22 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import useAuthStore from "../Zustand/authStore";
 import { rtdb } from "../Database/firebase.config";
-import {
-  get,
-  onValue,
-  push,
-  ref,
-  remove,
-  set,
-} from "firebase/database";
+import { get, onValue, push, ref, remove, set } from "firebase/database";
 
 const DEFAULT_SUPER_ADMIN = "xavierjames701@gmail.com";
 const MAX_RTDB_CONTENT_BYTES = 900000;
 const MAX_UPLOAD_FILE_BYTES = 4 * 1024 * 1024;
-const LOG_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
 
 const sanitizeForRtdb = (value) => {
   if (Array.isArray(value)) {
@@ -41,51 +34,141 @@ const sanitizeForRtdb = (value) => {
   return value;
 };
 
-const detectBrowserFromUa = (userAgent = "") => {
-  const ua = String(userAgent).toLowerCase();
-  if (!ua) return "Unknown";
-  if (ua.includes("edg/") || ua.includes("edgios/")) return "Edge";
-  if (ua.includes("samsungbrowser/")) return "Samsung Internet";
-  if (ua.includes("opr/") || ua.includes("opera/")) return "Opera";
-  if (ua.includes("chrome/") || ua.includes("crios/")) return "Chrome";
-  if (ua.includes("firefox/") || ua.includes("fxios/")) return "Firefox";
-  if (ua.includes("safari/") && !ua.includes("chrome/")) return "Safari";
-  return "Unknown";
+const normalizeCreatedAt = (value) => {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value < 1e12 ? value * 1000 : value;
+  }
+
+  if (typeof value === "string") {
+    const numeric = Number(value);
+    if (Number.isFinite(numeric) && numeric > 0) {
+      return numeric < 1e12 ? numeric * 1000 : numeric;
+    }
+    const parsedDate = new Date(value).getTime();
+    return Number.isFinite(parsedDate) ? parsedDate : 0;
+  }
+
+  return 0;
 };
 
-const detectDeviceFromUa = (userAgent = "") => {
-  const ua = String(userAgent).toLowerCase();
-  if (!ua) return "Unknown";
-  if (/android|iphone|ipad|ipod|mobile/i.test(ua)) return "Mobile";
-  if (ua.includes("tablet")) return "Tablet";
-  return "Desktop";
+const flattenLogNodes = (raw = {}) => {
+  const output = [];
+
+  const walk = (node, path = "") => {
+    if (!node || typeof node !== "object") {
+      return;
+    }
+
+    const isLeaf =
+      "event" in node ||
+      "action" in node ||
+      "email" in node ||
+      "actorEmail" in node ||
+      "createdAt" in node;
+
+    if (isLeaf) {
+      output.push({ id: path || `log-${output.length + 1}`, ...node });
+      return;
+    }
+
+    Object.entries(node).forEach(([key, value]) => {
+      const nextPath = path ? `${path}/${key}` : key;
+      walk(value, nextPath);
+    });
+  };
+
+  walk(raw);
+  return output;
 };
 
-const detectOsFromUa = (userAgent = "") => {
-  const ua = String(userAgent).toLowerCase();
-  if (!ua) return "Unknown";
-  if (ua.includes("windows")) return "Windows";
-  if (ua.includes("android")) return "Android";
-  if (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod"))
-    return "iOS";
-  if (ua.includes("mac os") || ua.includes("macintosh")) return "macOS";
-  if (ua.includes("linux")) return "Linux";
-  return "Unknown";
+const toAscii = (value = "") =>
+  String(value)
+    .replace(/[^\x20-\x7E]/g, "?")
+    .replace(/\r?\n/g, " ");
+
+const escapePdfText = (value = "") =>
+  toAscii(value).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+
+const buildPdfBytesFromLines = (title, lines) => {
+  const pageLineCapacity = 46;
+  const contentLines = [
+    toAscii(title || "Logs"),
+    `Generated: ${new Date().toLocaleString()}`,
+    "",
+    ...lines,
+  ];
+  const pages = [];
+
+  for (let i = 0; i < contentLines.length; i += pageLineCapacity) {
+    pages.push(contentLines.slice(i, i + pageLineCapacity));
+  }
+  if (!pages.length) {
+    pages.push(["No records found."]);
+  }
+
+  const objects = {};
+  const fontObjectId = 3;
+  const firstPageObjectId = 4;
+  const pageIds = [];
+  const contentIds = [];
+
+  pages.forEach((_, index) => {
+    const pageId = firstPageObjectId + index * 2;
+    pageIds.push(pageId);
+    contentIds.push(pageId + 1);
+  });
+
+  objects[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+  objects[2] = `<< /Type /Pages /Count ${pages.length} /Kids [${pageIds
+    .map((id) => `${id} 0 R`)
+    .join(" ")}] >>`;
+  objects[fontObjectId] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>";
+
+  pages.forEach((pageLines, idx) => {
+    const pageId = pageIds[idx];
+    const contentId = contentIds[idx];
+    const commands = ["BT", "/F1 10 Tf", "14 TL", "40 800 Td"];
+    pageLines.forEach((line, lineIndex) => {
+      if (lineIndex > 0) commands.push("T*");
+      commands.push(`(${escapePdfText(line)}) Tj`);
+    });
+    commands.push("ET");
+
+    const streamBody = commands.join("\n");
+    objects[contentId] = `<< /Length ${streamBody.length} >>\nstream\n${streamBody}\nendstream`;
+    objects[pageId] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontObjectId} 0 R >> >> /Contents ${contentId} 0 R >>`;
+  });
+
+  const maxId = Math.max(...Object.keys(objects).map(Number));
+  let pdf = "%PDF-1.4\n";
+  const offsets = [0];
+  const enc = new TextEncoder();
+
+  for (let id = 1; id <= maxId; id += 1) {
+    offsets[id] = enc.encode(pdf).length;
+    pdf += `${id} 0 obj\n${objects[id]}\nendobj\n`;
+  }
+
+  const xrefOffset = enc.encode(pdf).length;
+  pdf += `xref\n0 ${maxId + 1}\n0000000000 65535 f \n`;
+  for (let id = 1; id <= maxId; id += 1) {
+    pdf += `${String(offsets[id]).padStart(10, "0")} 00000 n \n`;
+  }
+  pdf += `trailer\n<< /Size ${maxId + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  return enc.encode(pdf);
 };
 
-const detectDeviceNameFromUa = (userAgent = "", deviceType = "Unknown") => {
-  const ua = String(userAgent).toLowerCase();
-  if (!ua) return "Unknown";
-  if (ua.includes("iphone")) return "iPhone";
-  if (ua.includes("ipad")) return "iPad";
-  if (ua.includes("ipod")) return "iPod";
-  if (ua.includes("macintosh") || ua.includes("mac os")) return "Mac";
-  if (ua.includes("windows")) return "Windows PC";
-  if (ua.includes("android")) return "Android Phone";
-  if (deviceType === "Desktop") return "Desktop";
-  if (deviceType === "Mobile") return "Mobile Phone";
-  if (deviceType === "Tablet") return "Tablet";
-  return "Unknown";
+const downloadPdfFile = (filename, title, lines) => {
+  const bytes = buildPdfBytesFromLines(title, lines);
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
 };
 
 const compressImageFile = (file) =>
@@ -234,29 +317,6 @@ const CONTENT_SECTIONS = [
       {
         name: "challengeDescription",
         label: "Challenge Description",
-        type: "textarea",
-      },
-      { name: "engageBadge", label: "Engage Badge", type: "text" },
-      { name: "engageTitle", label: "Engage Title", type: "text" },
-      {
-        name: "engageDescription",
-        label: "Engage Description",
-        type: "textarea",
-      },
-      { name: "engageEmail", label: "Engage Email", type: "text" },
-      {
-        name: "engageButtonText",
-        label: "Engage Button Text",
-        type: "text",
-      },
-      {
-        name: "engageMailSubject",
-        label: "Engage Mail Subject",
-        type: "text",
-      },
-      {
-        name: "engageMailBody",
-        label: "Engage Mail Body",
         type: "textarea",
       },
     ],
@@ -609,39 +669,10 @@ const AdminPortal = () => {
     setAdmins(nextAdmins);
   };
 
-  const cleanupOldLogs = async (path) => {
-    try {
-      const snap = await get(ref(rtdb, path));
-      if (!snap.exists()) {
-        return;
-      }
-
-      const now = Date.now();
-      const raw = snap.val() || {};
-      const staleKeys = Object.entries(raw)
-        .filter(([, item]) => {
-          const createdAt = Number(item?.createdAt || 0);
-          return createdAt > 0 && now - createdAt > LOG_RETENTION_MS;
-        })
-        .map(([key]) => key);
-
-      if (!staleKeys.length) {
-        return;
-      }
-
-      await Promise.all(
-        staleKeys.map((key) => remove(ref(rtdb, `${path}/${key}`))),
-      );
-    } catch (error) {
-      // Non-blocking cleanup.
-    }
-  };
-
   const logAdminActivity = async (action, details = {}) => {
     if (!user?.email) {
       return;
     }
-
     try {
       const entryRef = push(ref(rtdb, "admin_activity_logs"));
       await set(entryRef, {
@@ -651,7 +682,7 @@ const AdminPortal = () => {
         createdAt: Date.now(),
       });
     } catch (error) {
-      // Non-blocking logging.
+      // Non-blocking
     }
   };
 
@@ -666,7 +697,10 @@ const AdminPortal = () => {
       const contentRef = ref(rtdb, `site_content/${section.key}/content`);
       const contentSnap = await get(contentRef);
 
-      if (contentSnap.exists()) {
+      if (
+        (typeof contentSnap?.exists === "function" && contentSnap.exists()) ||
+        (typeof contentSnap?.val === "function" && contentSnap.val())
+      ) {
         const nextContent = contentSnap.val() ?? {};
         setFormData(nextContent);
         return;
@@ -714,7 +748,9 @@ const AdminPortal = () => {
             role: firstValue?.role || "Public Comment",
             uid: firstValue?.uid || "",
             createdAt:
-              typeof firstValue?.createdAt === "number" ? firstValue.createdAt : 0,
+              typeof firstValue?.createdAt === "number"
+                ? firstValue.createdAt
+                : 0,
           });
           return;
         }
@@ -754,64 +790,44 @@ const AdminPortal = () => {
     const adminLogsRef = ref(rtdb, "admin_activity_logs");
     const loginLogsRef = ref(rtdb, "user_login_logs");
 
-    cleanupOldLogs("admin_activity_logs");
-    cleanupOldLogs("user_login_logs");
-
     const unsubscribeAdminLogs = onValue(adminLogsRef, (snapshot) => {
-      const rawLogs = snapshot.val() || {};
-      const nextLogs = Object.entries(rawLogs).map(([id, item]) => ({
-        id,
-        action: item?.action || "unknown_action",
-        actorEmail: item?.actorEmail || "",
-        targetEmail: item?.targetEmail || "",
-        sectionKey: item?.sectionKey || "",
-        commentId: item?.commentId || "",
-        createdAt: typeof item?.createdAt === "number" ? item.createdAt : 0,
+      const raw = snapshot.val() || {};
+      const items = flattenLogNodes(raw).map((item) => ({
+        id: item.id,
+        action: item.action || "unknown_action",
+        actorEmail: item.actorEmail || "",
+        targetEmail: item.targetEmail || "",
+        sectionKey: item.sectionKey || "",
+        commentId: item.commentId || "",
+        createdAt: normalizeCreatedAt(item.createdAt),
       }));
-
-      nextLogs.sort((a, b) => b.createdAt - a.createdAt);
-      setAdminActivityLogs(nextLogs);
+      items.sort((a, b) => b.createdAt - a.createdAt);
+      setAdminActivityLogs(items);
       setLogsLoading(false);
     });
 
     const unsubscribeLoginLogs = onValue(loginLogsRef, (snapshot) => {
-      const rawLogs = snapshot.val() || {};
-      const nextLogs = Object.entries(rawLogs).map(([id, item]) => {
-        const ua = item?.userAgent || "";
-        const browser =
-          item?.browser && item.browser !== "Unknown"
-            ? item.browser
-            : detectBrowserFromUa(ua);
-        const device =
-          item?.device && item.device !== "Unknown"
-            ? item.device
-            : detectDeviceFromUa(ua);
-
-        return {
-          id,
-          uid: item?.uid || "",
-          email: item?.email || "",
-          name: item?.name || "",
-          provider: item?.provider || "",
-          event: item?.event || "login",
-          ip: item?.ip || "Unavailable",
-          browser,
-          device,
-          os:
-            item?.os && item.os !== "Unknown"
-              ? item.os
-              : detectOsFromUa(ua),
-          deviceName:
-            item?.deviceName && item.deviceName !== "Unknown"
-              ? item.deviceName
-              : detectDeviceNameFromUa(ua, device),
-          userAgent: ua,
-          createdAt: typeof item?.createdAt === "number" ? item.createdAt : 0,
-        };
-      });
-
-      nextLogs.sort((a, b) => b.createdAt - a.createdAt);
-      setLoginLogs(nextLogs);
+      const raw = snapshot.val() || {};
+      const items = flattenLogNodes(raw).map((item) => ({
+        id: item.id,
+        uid: item.uid || "",
+        email: item.email || "",
+        name: item.name || "",
+        provider: item.provider || "",
+        event: item.event || "login",
+        ip: item.ip || "Unavailable",
+        browser: item.browser || "Unknown",
+        device: item.device || "Unknown",
+        os: item.os || "Unknown",
+        deviceName: item.deviceName || "Unknown",
+        country: item.country || "Unknown",
+        region: item.region || "Unknown",
+        city: item.city || "Unknown",
+        timezone: item.timezone || "Unknown",
+        createdAt: normalizeCreatedAt(item.createdAt),
+      }));
+      items.sort((a, b) => b.createdAt - a.createdAt);
+      setLoginLogs(items);
     });
 
     return () => {
@@ -1177,6 +1193,54 @@ const AdminPortal = () => {
     }
   };
 
+  const handleDownloadAdminActivityPdf = () => {
+    const lines = adminActivityLogs.flatMap((item, index) => [
+      `#${index + 1}`,
+      `Action: ${String(item.action || "unknown").replaceAll("_", " ")}`,
+      `By: ${item.actorEmail || "Unknown admin"}`,
+      item.targetEmail ? `Target: ${item.targetEmail}` : "",
+      item.sectionKey ? `Section: ${item.sectionKey}` : "",
+      item.commentId ? `Comment ID: ${item.commentId}` : "",
+      `Time: ${
+        item.createdAt ? new Date(item.createdAt).toLocaleString() : "Unknown time"
+      }`,
+      "",
+    ]).filter(Boolean);
+
+    downloadPdfFile(
+      "super-admin-activity-logs.pdf",
+      "Super Admin Activity Logs",
+      lines.length ? lines : ["No admin activity logs found."],
+    );
+  };
+
+  const handleDownloadUserLogsPdf = () => {
+    const lines = loginLogs.flatMap((item, index) => [
+      `#${index + 1}`,
+      `Name: ${item.name || "User"}`,
+      `Email: ${item.email || "No email"}`,
+      `Event: ${item.event || "login"}`,
+      `Provider: ${item.provider || "unknown"}`,
+      `Browser: ${item.browser || "Unknown"}`,
+      `Device: ${item.device || "Unknown"}`,
+      `OS: ${item.os || "Unknown"}`,
+      `Device Name: ${item.deviceName || "Unknown"}`,
+      `Region: ${item.city || "Unknown"}, ${item.region || "Unknown"}, ${item.country || "Unknown"}`,
+      `Timezone: ${item.timezone || "Unknown"}`,
+      `IP: ${item.ip || "Unavailable"}`,
+      `Time: ${
+        item.createdAt ? new Date(item.createdAt).toLocaleString() : "Unknown time"
+      }`,
+      "",
+    ]);
+
+    downloadPdfFile(
+      "user-login-logout-logs.pdf",
+      "User Login And Logout Logs",
+      lines.length ? lines : ["No login or logout logs found."],
+    );
+  };
+
   return (
     <section className="min-h-screen bg-[#FAF8F3]">
       <ToastContainer />
@@ -1402,92 +1466,112 @@ const AdminPortal = () => {
                     Super Admin Activity Log
                   </h2>
                   <p className="mt-3 text-[#6E625A]">
-                    Track what each super admin added or changed.
+                    Track super admin changes and moderation actions.
                   </p>
+                  <button
+                    type="button"
+                    onClick={handleDownloadAdminActivityPdf}
+                    className="mt-4 rounded-full border border-[#E7DED3] bg-[#FFFCF8] px-4 py-2 text-xs font-semibold text-[#4A3F35] transition hover:bg-[#F8EEE9]"
+                  >
+                    Download PDF
+                  </button>
 
                   <div className="mt-6 space-y-3 max-h-96 overflow-y-auto pr-1">
                     {logsLoading ? (
                       <p className="text-[#6E625A]">Loading logs...</p>
                     ) : adminActivityLogs.length ? (
-                      adminActivityLogs.map((logItem) => (
+                      adminActivityLogs.map((item) => (
                         <div
-                          key={logItem.id}
+                          key={item.id}
                           className="rounded-2xl border border-[#E7DED3] bg-[#FFFCF8] p-4"
                         >
                           <p className="text-sm font-semibold text-[#4A3F35]">
-                            {logItem.action.replaceAll("_", " ")}
+                            {String(item.action || "unknown").replaceAll("_", " ")}
                           </p>
                           <p className="mt-1 text-xs text-[#6E625A]">
-                            By: {logItem.actorEmail || "Unknown admin"}
+                            By: {item.actorEmail || "Unknown admin"}
                           </p>
-                          {logItem.targetEmail ? (
+                          {item.targetEmail ? (
                             <p className="mt-1 text-xs text-[#6E625A]">
-                              Target: {logItem.targetEmail}
+                              Target: {item.targetEmail}
                             </p>
                           ) : null}
-                          {logItem.sectionKey ? (
+                          {item.sectionKey ? (
                             <p className="mt-1 text-xs text-[#6E625A]">
-                              Section: {logItem.sectionKey}
+                              Section: {item.sectionKey}
                             </p>
                           ) : null}
                           <p className="mt-2 text-xs text-[#A54F3C]">
-                            {logItem.createdAt
-                              ? new Date(logItem.createdAt).toLocaleString()
+                            {item.createdAt
+                              ? new Date(item.createdAt).toLocaleString()
                               : "Unknown time"}
                           </p>
                         </div>
                       ))
                     ) : (
-                      <p className="text-[#6E625A]">No admin activity yet.</p>
+                      <p className="text-[#6E625A]">No admin activity found.</p>
                     )}
                   </div>
                 </div>
 
                 <div className="rounded-[2rem] bg-white p-8 shadow-sm">
                   <h2 className="text-2xl font-bold text-[#4A3F35]">
-                    User Login Log
+                    User Login And Logout Log
                   </h2>
                   <p className="mt-3 text-[#6E625A]">
-                    See when users enter (login) and from which provider.
+                    Monitor user login and logout activity.
                   </p>
+                  <button
+                    type="button"
+                    onClick={handleDownloadUserLogsPdf}
+                    className="mt-4 rounded-full border border-[#E7DED3] bg-[#FFFCF8] px-4 py-2 text-xs font-semibold text-[#4A3F35] transition hover:bg-[#F8EEE9]"
+                  >
+                    Download PDF
+                  </button>
 
                   <div className="mt-6 space-y-3 max-h-96 overflow-y-auto pr-1">
                     {logsLoading ? (
                       <p className="text-[#6E625A]">Loading logs...</p>
                     ) : loginLogs.length ? (
-                      loginLogs.map((logItem) => (
+                      loginLogs.map((item) => (
                         <div
-                          key={logItem.id}
+                          key={item.id}
                           className="rounded-2xl border border-[#E7DED3] bg-[#FFFCF8] p-4"
                         >
                           <p className="text-sm font-semibold text-[#4A3F35]">
-                            {logItem.name || "User"}
+                            {item.name || "User"}
                           </p>
                           <p className="mt-1 text-xs text-[#6E625A]">
-                            {logItem.email || "No email"}
+                            {item.email || "No email"}
                           </p>
                           <p className="mt-1 text-xs text-[#6E625A]">
-                            Event: {logItem.event} | Provider:{" "}
-                            {logItem.provider || "unknown"}
+                            Event: {item.event || "login"} | Provider:{" "}
+                            {item.provider || "unknown"}
                           </p>
                           <p className="mt-1 text-xs text-[#6E625A]">
-                            Browser: {logItem.browser} | Device: {logItem.device}
+                            Browser: {item.browser} | Device: {item.device}
                           </p>
                           <p className="mt-1 text-xs text-[#6E625A]">
-                            OS: {logItem.os} | Device Name: {logItem.deviceName}
+                            OS: {item.os} | Device Name: {item.deviceName}
                           </p>
                           <p className="mt-1 text-xs text-[#6E625A]">
-                            IP: {logItem.ip}
+                            Region: {item.city}, {item.region}, {item.country}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            Timezone: {item.timezone || "Unknown"}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            IP: {item.ip}
                           </p>
                           <p className="mt-2 text-xs text-[#A54F3C]">
-                            {logItem.createdAt
-                              ? new Date(logItem.createdAt).toLocaleString()
+                            {item.createdAt
+                              ? new Date(item.createdAt).toLocaleString()
                               : "Unknown time"}
                           </p>
                         </div>
                       ))
                     ) : (
-                      <p className="text-[#6E625A]">No user login logs yet.</p>
+                      <p className="text-[#6E625A]">No login/logout logs found.</p>
                     )}
                   </div>
                 </div>
