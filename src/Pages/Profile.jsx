@@ -5,16 +5,34 @@ import { ImHistory } from "react-icons/im";
 import { IoStatsChart, IoAccessibilityOutline } from "react-icons/io5";
 import { PiTree } from "react-icons/pi";
 import DonationActivity from "../Components/UI/Charts/DonationActivity";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthStore from "../Zustand/authStore";
 import { get, ref as dbRef } from "firebase/database";
 import { rtdb } from "../Database/firebase.config";
 import { getUserAvatarUrl, getUserDisplayName } from "../utils/userProfile";
 import { toast, ToastContainer } from "react-toastify";
 
+const resolveProfileTab = (value = "") => {
+  const tab = String(value).trim().toLowerCase();
+
+  if (tab === "setting" || tab === "settings") {
+    return "setting";
+  }
+
+  if (tab === "history") {
+    return "history";
+  }
+
+  return "impact";
+};
+
 const Profile = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("impact");
+  const [activeTab, setActiveTab] = useState(() => {
+    const params = new URLSearchParams(location.search);
+    return resolveProfileTab(params.get("tab"));
+  });
   const { user, isSuperAdmin, deleteMyAccount } = useAuthStore();
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -25,6 +43,12 @@ const Profile = () => {
 
   const displayName = getUserDisplayName(user);
   const profileImage = getUserAvatarUrl(user);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const nextTab = resolveProfileTab(params.get("tab"));
+    setActiveTab(nextTab);
+  }, [location.search]);
 
   useEffect(() => {
     if (!user?.uid) {
@@ -58,7 +82,7 @@ const Profile = () => {
           address: data.address || "",
           createdAt,
         });
-      } catch (error) {
+      } catch {
         // Keep fallback UI values if profile metadata cannot be loaded.
       }
     };

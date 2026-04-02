@@ -2,12 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { get, ref } from "firebase/database";
 import { rtdb } from "../Database/firebase.config";
 
-export const useSiteContent = (docId, fallbackPath, fallbackData) => {
-  const [data, setData] = useState(fallbackData);
+export const useSiteContent = (docId, fallbackPath, fallbackData, options = {}) => {
+  const { deferFallback = false } = options;
+  const [data, setData] = useState(deferFallback ? null : fallbackData);
   const fallbackRef = useRef(fallbackData);
 
   useEffect(() => {
     let ignore = false;
+
+    if (deferFallback) {
+      setData(null);
+    }
 
     const loadData = async () => {
       try {
@@ -36,7 +41,7 @@ export const useSiteContent = (docId, fallbackPath, fallbackData) => {
         if (!ignore) {
           setData(nextFallback);
         }
-      } catch (error) {
+      } catch {
         if (!ignore) {
           setData(fallbackRef.current);
         }
@@ -57,7 +62,7 @@ export const useSiteContent = (docId, fallbackPath, fallbackData) => {
       window.removeEventListener("focus", handleFocus);
       document.removeEventListener("visibilitychange", handleFocus);
     };
-  }, [docId, fallbackPath]);
+  }, [docId, fallbackPath, deferFallback]);
 
   return data;
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Outlet, useLocation } from "react-router";
@@ -8,6 +8,7 @@ import SocialSidebar from "../../Pages/SocialSidebar";
 
 const Index = () => {
   const location = useLocation();
+  const lenisRef = useRef(null);
 
   // 1. Logic for the top Scroll Progress Bar
   const { scrollYProgress } = useScroll();
@@ -18,8 +19,8 @@ const Index = () => {
   });
 
   useEffect(() => {
-    if (location.hash) {
-      return;
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true, force: true });
     }
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -27,7 +28,7 @@ const Index = () => {
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     });
-  }, [location.pathname, location.hash]);
+  }, [location.pathname]);
 
   useEffect(() => {
     // 2. Initialize Lenis for smooth "liquid" scrolling
@@ -36,6 +37,7 @@ const Index = () => {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth easing function
       smooth: true,
     });
+    lenisRef.current = lenis;
 
     // Recursively call the animation frame for smooth updates
     function raf(time) {
@@ -47,6 +49,7 @@ const Index = () => {
 
     // Cleanup Lenis when the component unmounts
     return () => {
+      lenisRef.current = null;
       lenis.destroy();
     };
   }, []);

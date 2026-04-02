@@ -257,7 +257,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className={user ? "block" : "hidden"}>
-                <a onClick={closeDropdown}>Settings</a>
+                <Link to="/profile?tab=setting" onClick={closeDropdown}>
+                  Settings
+                </Link>
               </li>
               <li className={isSuperAdmin ? "block" : "hidden"}>
                 <Link to="/admin-panel" onClick={closeDropdown}>

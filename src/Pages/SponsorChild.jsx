@@ -4,6 +4,24 @@ import { motion as Motion } from "framer-motion";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { useSiteContent } from "../data/useSiteContent";
 
+const INITIAL_RENDER_CONTENT = {
+  badge: "Sponsor A Child",
+  title: "Stand beside one child and help shape a safer future.",
+  description:
+    "Child sponsorship helps provide consistent education support, nutrition, healthcare referrals, and emotional care through trusted local partnerships.",
+  primaryButtonText: "Start Sponsoring",
+  primaryButtonLink: "/donation",
+  secondaryButtonText: "Talk To Our Team",
+  secondaryButtonLink: "/contact",
+  impactBadge: "Your Monthly Impact",
+  impactTitle: "Steady support creates real, long-term change.",
+  impactDescription:
+    "Your sponsorship contributes to school supplies, health checkups, and family support planning so each child can grow with dignity.",
+  sponsorCards: [],
+  processTitle: "How Sponsorship Works",
+  processSteps: [],
+};
+
 const SponsorChild = () => {
   const [showAllCards, setShowAllCards] = useState(false);
   const content = useSiteContent(
@@ -17,7 +35,7 @@ const SponsorChild = () => {
       primaryButtonText: "Start Sponsoring",
       primaryButtonLink: "/donation",
       secondaryButtonText: "Talk To Our Team",
-      secondaryButtonLink: "/#contact",
+      secondaryButtonLink: "/contact",
       impactBadge: "Your Monthly Impact",
       impactTitle: "Steady support creates real, long-term change.",
       impactDescription:
@@ -76,9 +94,12 @@ const SponsorChild = () => {
         "Receive updates and stories showing the progress your support enables.",
       ],
     },
+    { deferFallback: true },
   );
 
-  const sponsorCards = content.sponsorCards || [];
+  const pageContent = content || INITIAL_RENDER_CONTENT;
+  const isCardsLoading = !content;
+  const sponsorCards = pageContent.sponsorCards || [];
   const hasMoreCards = sponsorCards.length > 4;
   const visibleCards = showAllCards ? sponsorCards : sponsorCards.slice(0, 4);
 
@@ -98,27 +119,27 @@ const SponsorChild = () => {
 
           <div className="relative max-w-3xl">
             <p className="mb-3 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1 text-sm font-medium tracking-[0.2em] uppercase">
-              {content.badge}
+              {pageContent.badge}
             </p>
             <h1 className="text-3xl font-bold leading-tight sm:text-5xl">
-              {content.title}
+              {pageContent.title}
             </h1>
             <p className="mt-4 max-w-2xl text-sm text-white/80 sm:text-base">
-              {content.description}
+              {pageContent.description}
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
-                to={content.primaryButtonLink}
+                to={pageContent.primaryButtonLink}
                 className="inline-flex items-center justify-center rounded-full bg-[#E87461] px-6 py-3 font-medium text-white transition hover:bg-[#d66350]"
               >
-                {content.primaryButtonText}
+                {pageContent.primaryButtonText}
               </Link>
               <Link
-                to={content.secondaryButtonLink}
+                to={pageContent.secondaryButtonLink}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 font-medium text-white/95 transition hover:bg-white/10"
               >
-                {content.secondaryButtonText}
+                {pageContent.secondaryButtonText}
                 <IoIosArrowRoundForward className="text-2xl" />
               </Link>
             </div>
@@ -127,66 +148,74 @@ const SponsorChild = () => {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
-            {visibleCards.map((item, index) => (
-              <Motion.article
-                key={`${item.childName}-${index}`}
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: index * 0.1 }}
-                className="overflow-hidden rounded-[1.75rem] border border-[#E7DED3] bg-white shadow-sm"
-              >
-                <div className="flex flex-col gap-5 p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-[#F4D7CD] bg-[#F7EFE7] shadow-sm sm:h-28 sm:w-28">
-                      <img
-                        src={item.photo || "/user.png"}
-                        alt={item.childName || "Child photo"}
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                    <h2 className="text-xl font-bold text-[#4A3F35]">
-                      {item.childName || "Unnamed Child"}
-                    </h2>
-                  </div>
+            {isCardsLoading ? (
+              <div className="rounded-[1.75rem] border border-[#E7DED3] bg-white p-8 text-center text-sm text-[#6E625A] shadow-sm">
+                Loading sponsor profiles...
+              </div>
+            ) : null}
 
-                  <dl className="grid gap-3 text-sm text-[#6E625A]">
-                    <div className="flex items-start gap-2 border-b border-[#F0E7DD] pb-2">
-                      <dt className="min-w-24 font-semibold text-[#4A3F35]">
-                        Age
-                      </dt>
-                      <dd>{item.age || "-"}</dd>
-                    </div>
-                    <div className="flex items-start gap-2 border-b border-[#F0E7DD] pb-2">
-                      <dt className="min-w-24 font-semibold text-[#4A3F35]">
-                        Religion
-                      </dt>
-                      <dd>{item.religion || "-"}</dd>
-                    </div>
-                    <div className="flex items-start gap-2 border-b border-[#F0E7DD] pb-2">
-                      <dt className="min-w-24 font-semibold text-[#4A3F35]">
-                        Address
-                      </dt>
-                      <dd>{item.address || "-"}</dd>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <dt className="min-w-24 font-semibold text-[#4A3F35]">
-                        School
-                      </dt>
-                      <dd>{item.schoolName || "-"}</dd>
-                    </div>
-                  </dl>
-
-                  <Link
-                    to={item.sponsorLink || "/donation"}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-[#E87461] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d66350]"
+            {!isCardsLoading
+              ? visibleCards.map((item, index) => (
+                  <Motion.article
+                    key={`${item.childName}-${index}`}
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.55, delay: index * 0.1 }}
+                    className="overflow-hidden rounded-[1.75rem] border border-[#E7DED3] bg-white shadow-sm"
                   >
-                    Sponsor Now
-                  </Link>
-                </div>
-              </Motion.article>
-            ))}
+                    <div className="flex flex-col gap-5 p-6">
+                      <div className="flex items-center gap-4">
+                        <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-[#F4D7CD] bg-[#F7EFE7] shadow-sm sm:h-28 sm:w-28">
+                          <img
+                            src={item.photo || "/user.png"}
+                            alt={item.childName || "Child photo"}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        </div>
+                        <h2 className="text-xl font-bold text-[#4A3F35]">
+                          {item.childName || "Unnamed Child"}
+                        </h2>
+                      </div>
 
-            {hasMoreCards ? (
+                      <dl className="grid gap-3 text-sm text-[#6E625A]">
+                        <div className="flex items-start gap-2 border-b border-[#F0E7DD] pb-2">
+                          <dt className="min-w-24 font-semibold text-[#4A3F35]">
+                            Age
+                          </dt>
+                          <dd>{item.age || "-"}</dd>
+                        </div>
+                        <div className="flex items-start gap-2 border-b border-[#F0E7DD] pb-2">
+                          <dt className="min-w-24 font-semibold text-[#4A3F35]">
+                            Religion
+                          </dt>
+                          <dd>{item.religion || "-"}</dd>
+                        </div>
+                        <div className="flex items-start gap-2 border-b border-[#F0E7DD] pb-2">
+                          <dt className="min-w-24 font-semibold text-[#4A3F35]">
+                            Address
+                          </dt>
+                          <dd>{item.address || "-"}</dd>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <dt className="min-w-24 font-semibold text-[#4A3F35]">
+                            School
+                          </dt>
+                          <dd>{item.schoolName || "-"}</dd>
+                        </div>
+                      </dl>
+
+                      <Link
+                        to={item.sponsorLink || "/donation"}
+                        className="inline-flex w-full items-center justify-center rounded-full bg-[#E87461] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d66350]"
+                      >
+                        Sponsor Now
+                      </Link>
+                    </div>
+                  </Motion.article>
+                ))
+              : null}
+
+            {!isCardsLoading && hasMoreCards ? (
               <button
                 type="button"
                 onClick={() => setShowAllCards((prev) => !prev)}
@@ -204,17 +233,17 @@ const SponsorChild = () => {
             className="self-start h-fit rounded-[1.75rem] border border-[#E7DED3] bg-white p-6 shadow-sm"
           >
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#E87461]">
-              {content.impactBadge}
+              {pageContent.impactBadge}
             </p>
-            <h3 className="mt-3 text-2xl font-bold">{content.impactTitle}</h3>
-            <p className="mt-4 text-[#6E625A]">{content.impactDescription}</p>
+            <h3 className="mt-3 text-2xl font-bold">{pageContent.impactTitle}</h3>
+            <p className="mt-4 text-[#6E625A]">{pageContent.impactDescription}</p>
 
             <div className="mt-8 rounded-3xl bg-[#F7EFE7] p-5">
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#A54F3C]">
-                {content.processTitle}
+                {pageContent.processTitle}
               </p>
               <ul className="mt-3 grid gap-3 text-[#4A3F35]">
-                {content.processSteps?.map((step) => (
+                {pageContent.processSteps?.map((step) => (
                   <li
                     key={step}
                     className="rounded-2xl bg-white px-4 py-3 text-sm"
@@ -227,10 +256,10 @@ const SponsorChild = () => {
 
             <div className="mt-8">
               <Link
-                to={content.primaryButtonLink}
+                to={pageContent.primaryButtonLink}
                 className="inline-flex items-center gap-2 rounded-full border border-[#E87461] px-5 py-3 font-medium text-[#E87461] transition hover:bg-[#E87461] hover:text-white"
               >
-                {content.primaryButtonText}
+                {pageContent.primaryButtonText}
                 <IoIosArrowRoundForward className="text-2xl" />
               </Link>
             </div>

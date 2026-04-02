@@ -59,3 +59,22 @@ canvas {
   background-color: #e87461;
   color: white;
 }
+
+/* Ensure all interactive elements consistently show pointer cursor */
+a[href],
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+}

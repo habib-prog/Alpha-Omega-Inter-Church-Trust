@@ -86,6 +86,8 @@ const toAscii = (value = "") =>
     .replace(/[^\x20-\x7E]/g, "?")
     .replace(/\r?\n/g, " ");
 
+const normalizeEmailLocal = (value = "") => String(value).trim().toLowerCase();
+
 const escapePdfText = (value = "") =>
   toAscii(value).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 
@@ -642,7 +644,6 @@ const AdminPortal = () => {
     isSuperAdmin,
     authLoading,
     addSuperAdmin,
-    listSuperAdmins,
     removeSuperAdmin,
   } = useAuthStore();
   const [email, setEmail] = useState("");
@@ -660,14 +661,20 @@ const AdminPortal = () => {
   const [loginLogs, setLoginLogs] = useState([]);
   const [logsLoading, setLogsLoading] = useState(true);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
   const activeContentSection = CONTENT_SECTIONS.find(
     (section) => section.key === activeSection,
   );
-
-  const loadAdmins = async () => {
-    const nextAdmins = await listSuperAdmins();
-    setAdmins(nextAdmins);
-  };
+  const dashboardUserName =
+    String(
+      user?.displayName ||
+        user?.name ||
+        user?.email?.split("@")?.[0] ||
+        "User",
+    ).trim() || "User";
 
   const logAdminActivity = async (action, details = {}) => {
     if (!user?.email) {
@@ -725,8 +732,26 @@ const AdminPortal = () => {
   };
 
   useEffect(() => {
-    loadAdmins();
-    loadSectionContent(activeSection);
+    const superAdminsRef = ref(rtdb, "super_admins");
+
+    const unsubscribe = onValue(
+      superAdminsRef,
+      (snapshot) => {
+        const dynamicAdmins =
+          snapshot.exists() && snapshot.val()
+            ? Object.values(snapshot.val())
+                .map((item) => normalizeEmailLocal(item?.email))
+                .filter(Boolean)
+            : [];
+
+        setAdmins(Array.from(new Set([DEFAULT_SUPER_ADMIN, ...dynamicAdmins])));
+      },
+      () => {
+        setAdmins([DEFAULT_SUPER_ADMIN]);
+      },
+    );
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -866,7 +891,6 @@ const AdminPortal = () => {
 
       toast.success("Super admin added successfully.");
       setEmail("");
-      await loadAdmins();
       await logAdminActivity("add_super_admin", {
         targetEmail: String(email || "").toLowerCase(),
       });
@@ -889,7 +913,6 @@ const AdminPortal = () => {
       }
 
       toast.success("Super admin removed successfully.");
-      await loadAdmins();
       await logAdminActivity("remove_super_admin", {
         targetEmail: String(adminEmail || "").toLowerCase(),
       });
@@ -1257,7 +1280,7 @@ const AdminPortal = () => {
               <div className="border-b border-white/20 pb-4">
                 <h2 className="text-lg font-bold">Content Navigation</h2>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/70">
-                  Custom CMS Dashboard
+                  {dashboardUserName} Your Dashboard
                 </p>
               </div>
               <nav className="mt-6 pb-6 space-y-2 lg:max-h-[calc(100vh-13rem)] lg:overflow-y-auto lg:pr-1">
