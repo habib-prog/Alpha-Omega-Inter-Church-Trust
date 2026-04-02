@@ -21,6 +21,31 @@
   ],
   "challengeTitle": "Understanding the Challenges in Bangladesh",
   "challengeDescription": "Bangladesh faces complex challenges in education, nutrition, and women’s empowerment, affecting millions of children and families. The charts below provide a clear snapshot of these challenges.",
+  "coreValuesBadge": "Christ-Centered Service",
+  "coreValuesTitle": "Our Core Values",
+  "coreValuesDescription": "We serve as a Christian charity by following Biblical principles of love, integrity, and faithful stewardship in every community we support.",
+  "coreValues": [
+    {
+      "icon": "compassion",
+      "title": "Christ-Centered Compassion",
+      "description": "We follow Jesus by caring for children and families with dignity, mercy, and practical love."
+    },
+    {
+      "icon": "stewardship",
+      "title": "Faithful Stewardship",
+      "description": "We treat every donation as a sacred trust and use resources transparently for meaningful impact."
+    },
+    {
+      "icon": "service",
+      "title": "Servant Leadership",
+      "description": "We lead by serving others first, listening to community needs, and acting with humility."
+    },
+    {
+      "icon": "unity",
+      "title": "Unity in the Body of Christ",
+      "description": "We partner with churches, volunteers, and families to reflect God's love together."
+    }
+  ],
   "engageBadge": "Non-profit Organization",
   "engageTitle": "Become a Volunteer",
   "engageDescription": "Your time is the most valuable gift you can give. Join our dedicated team and help us bring sustainable change to communities that need it most. Every hour you contribute creates a ripple effect of hope.",

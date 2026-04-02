@@ -1,13 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import { BsTransparency } from "react-icons/bs";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { LuHeartHandshake } from "react-icons/lu";
 import TestimonialCard from "../Components/TestimonialCard";
-import { Link } from "react-router";
 import { useSiteContent } from "../data/useSiteContent";
 
 const CoreValues = () => {
   const aboutContent = useSiteContent("about-page", "/content/about-page.json", {
+    coreValuesBadge: "Christ-Centered Service",
+    coreValuesTitle: "Our Core Values",
+    coreValuesDescription:
+      "We serve as a Christian charity by following Biblical principles of love, integrity, and faithful stewardship in every community we support.",
+    coreValues: [
+      {
+        icon: "compassion",
+        title: "Christ-Centered Compassion",
+        description:
+          "We follow Jesus by caring for children and families with dignity, mercy, and practical love.",
+      },
+      {
+        icon: "stewardship",
+        title: "Faithful Stewardship",
+        description:
+          "We treat every donation as a sacred trust and use resources transparently for meaningful impact.",
+      },
+      {
+        icon: "service",
+        title: "Servant Leadership",
+        description:
+          "We lead by serving others first, listening to community needs, and acting with humility.",
+      },
+      {
+        icon: "unity",
+        title: "Unity in the Body of Christ",
+        description:
+          "We partner with churches, volunteers, and families to reflect God's love together.",
+      },
+    ],
     engageBadge: "Non-profit Organization",
     engageTitle: "Become a Volunteer",
     engageDescription:
@@ -29,6 +58,24 @@ const CoreValues = () => {
     window.open(gmailUrl, "_blank");
   };
 
+  const coreValues =
+    Array.isArray(aboutContent.coreValues) && aboutContent.coreValues.length
+      ? aboutContent.coreValues
+      : [];
+
+  const firstDescription =
+    coreValues[0]?.description ||
+    "We follow Jesus by caring for children and families with dignity, mercy, and practical love.";
+  const secondDescription =
+    coreValues[1]?.description ||
+    "We treat every donation as a sacred trust and use resources transparently for meaningful impact.";
+  const thirdDescription =
+    coreValues[2]?.description ||
+    "We lead by serving others first, listening to community needs, and acting with humility.";
+  const fourthDescription =
+    coreValues[3]?.description ||
+    "We partner with churches, volunteers, and families to reflect God's love together.";
+
   return (
     <>
       <section>
@@ -46,9 +93,7 @@ const CoreValues = () => {
                 Compassion
               </h4>
               <p className='text-unique font-normal text-sm'>
-                We believe every person deserves dignity, care, and opportunity.
-                Our mission begins with empathy and a deep commitment to helping
-                those in need.
+                {firstDescription}
               </p>
             </div>
             <div className='p-6 flex flex-col bg-gray-50 justify-center items-center rounded-2xl shadow-xl'>
@@ -57,38 +102,31 @@ const CoreValues = () => {
                 Transparency
               </h4>
               <p className='text-unique font-normal text-sm'>
-                We are fully transparent about how funds are used. Every
-                donation is tracked, and every impact is shared with our
-                community.
+                {secondDescription}
               </p>
             </div>
             <div className='p-6 flex flex-col bg-gray-50 justify-center items-center rounded-2xl shadow-xl'>
               <FaPeopleRoof className=' w-10 max-w-10 h-10 max-h-10 text-brand' />
               <h4 className='text-lg font-bold text-slate-900 my-2'>
-                Compassion
+                Service
               </h4>
               <p className='text-unique font-normal text-sm'>
-                Real change happens together. We work closely with donors,
-                volunteers, and local communities to create lasting
-                impact.Building hope as one.
+                {thirdDescription}
               </p>
             </div>
             <div className='p-6 flex flex-col bg-gray-50 justify-center items-center rounded-2xl shadow-xl'>
               <LuHeartHandshake className=' w-10 max-w-10 h-10 max-h-10 text-brand' />
               <h4 className='text-lg font-bold text-slate-900 my-2'>
-                Compassion
+                Unity
               </h4>
               <p className='text-unique font-normal text-sm'>
-                We focus on sustainable solutions that create real, measurable
-                change — not just short-term relief.We turn donations into
-                lasting transformation.
+                {fourthDescription}
               </p>
             </div>
           </div>
         </div>
       </section>
       <section>
-        {/* Voices of Hope (Testimonials) */}
         <div className='container'>
           <div className='py-24'>
             <div className='text-center m-auto'>
@@ -119,10 +157,6 @@ const CoreValues = () => {
                   img: "/admin.jfif",
                 },
               ].map((member, index) => (
-                /* CRITICAL CHANGE: 
-                 We pass the 'index' prop so TestimonialCard knows 
-                 whether to slide from the Left or Right -James(author changed the cod).
-              */
                 <TestimonialCard
                   key={index}
                   index={index}
@@ -135,10 +169,10 @@ const CoreValues = () => {
             </div>
           </div>
         </div>
-        <section className='bg-brand  py-20'>
+        <section className='bg-brand py-20'>
           <div className='container'>
             <div className='flex flex-col justify-center items-center'>
-              <p className=' m-auto inline-block py-1 px-3 rounded-full bg-white/20 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/30  '>
+              <p className='m-auto inline-block py-1 px-3 rounded-full bg-white/20 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/30'>
                 {aboutContent.engageBadge}
               </p>
               <h3 className='text-3xl sm:text-5xl font-black pb-5 text-white'>
@@ -155,7 +189,7 @@ const CoreValues = () => {
               />
               <button
                 onClick={handleClick}
-                className=' px-6 py-3 text-xl font-bold text-brand rounded-2xl bg-white inline-block cursor-pointer'
+                className='px-6 py-3 text-xl font-bold text-brand rounded-2xl bg-white inline-block cursor-pointer'
               >
                 {aboutContent.engageButtonText}
               </button>
@@ -168,5 +202,3 @@ const CoreValues = () => {
 };
 
 export default CoreValues;
-
-// add volunteer section

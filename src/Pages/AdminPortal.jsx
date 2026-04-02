@@ -321,6 +321,24 @@ const CONTENT_SECTIONS = [
         label: "Challenge Description",
         type: "textarea",
       },
+      { name: "coreValuesBadge", label: "Core Values Badge", type: "text" },
+      { name: "coreValuesTitle", label: "Core Values Title", type: "text" },
+      {
+        name: "coreValuesDescription",
+        label: "Core Values Description",
+        type: "textarea",
+      },
+      {
+        name: "coreValues",
+        label: "Core Values",
+        type: "list",
+        itemLabel: "Core Value",
+        itemFields: [
+          { name: "icon", label: "Icon Key", type: "text" },
+          { name: "title", label: "Title", type: "text" },
+          { name: "description", label: "Description", type: "textarea" },
+        ],
+      },
     ],
   },
   {
