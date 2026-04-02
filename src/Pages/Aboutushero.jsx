@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router";
 import { useSiteContent } from "../data/useSiteContent";
 
 const Aboutushero = () => {
@@ -11,9 +10,8 @@ const Aboutushero = () => {
       "Our mission is to ensure that every child, regardless of their background, has access to the resources, love, and opportunities they need to reach their full potential.",
     heroImage: "/aboutus_hero.jpg",
     heroButtons: [
-      { label: "Our Mission & Our Vision", link: "/mission" },
       { label: "Our Journey", link: "/mission" },
-      { label: "Meet the Team", link: "/mission" },
+      { label: "Our Vision", link: "/mission" },
     ],
   });
 
@@ -38,20 +36,7 @@ const Aboutushero = () => {
               <p className=" text-xl sm:text-2xl font-light text-white/90 mb-5  sm:mb-10 max-w-2xl mx-auto text-center font-raleway">
                 {aboutContent.heroDescription}
               </p>
-              <div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  {aboutContent.heroButtons?.map((button) => (
-                    <div
-                      key={`${button.label}-${button.link}`}
-                      className="text-white  hover:bg-br text-[14px] px-6 py-3.5 border-2 duration-300 bg-[#F4A261] hover:scale-102  rounded-full cursor-pointer"
-                    >
-                      <Link to={button.link} className="flex">
-                        {button.label}
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* Hero buttons removed as requested */}
             </div>
           </div>
         </div>

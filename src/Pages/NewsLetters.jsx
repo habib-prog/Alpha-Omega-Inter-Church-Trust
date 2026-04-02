@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { useSiteContent } from "../data/useSiteContent";
 
 const NewsLetters = () => {
+  const [showAllItems, setShowAllItems] = useState(false);
   const newsletterContent = useSiteContent(
     "newsletters-page",
     "/content/newsletters-page.json",
@@ -31,6 +32,10 @@ const NewsLetters = () => {
       items: [],
     }
   );
+
+  const newsletterItems = newsletterContent.items || [];
+  const hasMoreItems = newsletterItems.length > 4;
+  const visibleItems = showAllItems ? newsletterItems : newsletterItems.slice(0, 4);
 
   return (
     <section
@@ -79,7 +84,7 @@ const NewsLetters = () => {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="grid gap-6">
-            {newsletterContent.items?.map((item, index) => (
+            {visibleItems.map((item, index) => (
               <Motion.article
                 key={item.title}
                 initial={{ opacity: 0, y: 24 }}
@@ -106,13 +111,24 @@ const NewsLetters = () => {
                 </div>
               </Motion.article>
             ))}
+            {hasMoreItems ? (
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setShowAllItems((prev) => !prev)}
+                  className="rounded-full border border-[#E87461] px-5 py-2.5 text-sm font-semibold text-[#E87461] transition hover:bg-[#E87461] hover:text-white"
+                >
+                  {showAllItems ? "View Less" : "Show More"}
+                </button>
+              </div>
+            ) : null}
           </div>
 
           <Motion.aside
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-            className="rounded-[1.75rem] border border-[#E7DED3] bg-white p-6 shadow-sm"
+            className="self-start h-fit rounded-[1.75rem] border border-[#E7DED3] bg-white p-6 shadow-sm"
           >
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#E87461]">
               {newsletterContent.asideBadge}

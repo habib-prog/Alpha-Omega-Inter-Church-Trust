@@ -4,23 +4,17 @@ import { HiBarsArrowDown } from "react-icons/hi2";
 import { NavHashLink } from "react-router-hash-link";
 import useAuthStore from "../../Zustand/authStore";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../../Database/firebase.config";
 import { getUserAvatarUrl } from "../../utils/userProfile";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useAuthStore();
+  const { user, signout } = useAuthStore();
   const Signout = async (event) => {
     event.preventDefault();
-    setUser(null);
     setIsOpen(false);
     closeDropdown();
-    try {
-      await signOut(auth);
-    } finally {
-      navigate("/login", { replace: true });
-    }
+    await signout();
+    navigate("/login", { replace: true });
   };
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -137,21 +131,6 @@ const Navbar = () => {
                   </NavHashLink>
                 </li>
                 <li>
-                  <NavHashLink smooth to="/goal" onClick={closeDropdown}>
-                    Goal Amount
-                  </NavHashLink>
-                </li>
-                <li>
-                  <NavHashLink smooth to="/raised" onClick={closeDropdown}>
-                    Raised Amount
-                  </NavHashLink>
-                </li>
-                <li>
-                  <NavHashLink smooth to="/progress" onClick={closeDropdown}>
-                    Progress Bar
-                  </NavHashLink>
-                </li>
-                <li>
                   <NavHashLink
                     smooth
                     to="/past-campaigns"
@@ -202,9 +181,9 @@ const Navbar = () => {
                 className="dropdown-content z-130 menu p-2 shadow-xl bg-white border border-gray-100 rounded-lg w-44 mt-0 text-gray-800"
               >
                 <li>
-                  <NavHashLink smooth to="/#gallery" onClick={closeDropdown}>
+                  <Link to="/gallery" onClick={closeDropdown}>
                     Gallery
-                  </NavHashLink>
+                  </Link>
                 </li>
                 <li>
                   <NavHashLink smooth to="/contact" onClick={closeDropdown}>
@@ -368,12 +347,6 @@ const Navbar = () => {
                 Past Campaigns
               </NavHashLink>
             </li>
-            {/* Added other mobile links for consistency */}
-            <li className="pl-2 mt-2">
-              <NavHashLink onClick={() => setIsOpen(false)} to="/goal">
-                Goal Amount
-              </NavHashLink>
-            </li>
           </div>
 
           <li>
@@ -389,9 +362,9 @@ const Navbar = () => {
 
           <div className="border-t border-gray-200 pt-2 flex flex-col gap-3">
             <li>
-              <NavHashLink onClick={() => setIsOpen(false)} to="/#gallery">
+              <Link to="/gallery" onClick={() => setIsOpen(false)}>
                 Gallery
-              </NavHashLink>
+              </Link>
             </li>
             <li>
               <NavHashLink onClick={() => setIsOpen(false)} to="/legal">

@@ -24,7 +24,7 @@ const SponsorChild = () => {
         "Your sponsorship contributes to school supplies, health checkups, and family support planning so each child can grow with dignity.",
       sponsorCards: [
         {
-          photo: "/user.png",
+          photo: "/uploads/479726358_1119903549674241_704109988213019538_n.jpg",
           childName: "Rahim Uddin",
           age: "9",
           religion: "Islam",
@@ -48,6 +48,24 @@ const SponsorChild = () => {
           religion: "Christian",
           address: "Tongi, Gazipur",
           schoolName: "Tongi Mission School",
+          sponsorLink: "/donation",
+        },
+        {
+          photo: "/user.jpeg",
+          childName: "Nusrat Jahan",
+          age: "8",
+          religion: "Islam",
+          address: "Mymensingh Sadar, Mymensingh",
+          schoolName: "Shishu Kalyan Primary School",
+          sponsorLink: "/donation",
+        },
+        {
+          photo: "/user.png",
+          childName: "Rimon Sarkar",
+          age: "12",
+          religion: "Hindu",
+          address: "Baniachang, Habiganj",
+          schoolName: "Baniachang Government High School",
           sponsorLink: "/donation",
         },
       ],

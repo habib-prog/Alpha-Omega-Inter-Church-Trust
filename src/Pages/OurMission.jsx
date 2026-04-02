@@ -12,18 +12,18 @@ const OurMission = () => {
               <FaBullseye className="text-3xl  " />
             </div>
             <h2 className="font-inter font-bold text-3xl mt-6 mb-13">
-              Our Mission
+              Our Journey
             </h2>
             <p className="text-[15px] text-[#475569] mb-6 font-inter leading-6 sm:leading-8 w-full sm:max-w-109.5">
-              To empower organizations with intuitive, scalable, and robust
-              digital solutions that drive growth and efficiency. We believe in
-              stripping away complexity to reveal the true potential of
-              technology, making it accessible and impactful for everyone.
+              Our journey began with a simple promise: stand beside children
+              and families who need support the most. Over the years, every
+              campaign, volunteer effort, and donor contribution has helped us
+              build stronger communities with dignity and care.
             </p>
             <ul className="list-disc space-y-1 sm:space-y-3 text-[#334155] marker:text-amber-500 pl-4">
-              <li>Child-focused initiatives</li>
-              <li>Promoting literacy and numeracy</li>
-              <li>Psychosocial support for students</li>
+              <li>Started with grassroots child support programs</li>
+              <li>Expanded into education, health, and relief activities</li>
+              <li>Continuing with community-led, sustainable impact</li>
             </ul>
           </div>
           <div className="group">

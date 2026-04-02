@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { IoPlayCircleOutline } from "react-icons/io5";
 
@@ -7,10 +7,13 @@ import Card from "../Components/Card";
 import { useSiteContent } from "../data/useSiteContent";
 
 const CampaignHeader = () => {
+  const [showAllCampaigns, setShowAllCampaigns] = useState(false);
   const campaignContent = useSiteContent("campaigns", "/content/campaigns.json", {
     items: [],
   });
   const campaigns = campaignContent.items || [];
+  const hasMoreCampaigns = campaigns.length > 4;
+  const visibleCampaigns = showAllCampaigns ? campaigns : campaigns.slice(0, 4);
 
   return (
     <div>
@@ -81,16 +84,29 @@ const CampaignHeader = () => {
       <section className="py-20">
         <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-            {campaigns.map((campaign) => (
+            {visibleCampaigns.map((campaign) => (
               <Card
                 key={`${campaign.title}-${campaign.campaignName ?? ""}`}
                 title={campaign.title}
                 description={campaign.description}
                 campaign={campaign.campaignName || campaign.category || "Campaign"}
                 image={campaign.image || "/cardphoto.avif"}
+                goal={Number(campaign.goal) || 0}
+                raised={Number(campaign.raised) || 0}
               />
             ))}
           </div>
+          {hasMoreCampaigns ? (
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowAllCampaigns((prev) => !prev)}
+                className="rounded-full border border-[#E87461] px-5 py-2.5 text-sm font-semibold text-[#E87461] transition hover:bg-[#E87461] hover:text-white"
+              >
+                {showAllCampaigns ? "View Less" : "Show More"}
+              </button>
+            </div>
+          ) : null}
         </div>
       </section>
     </div>

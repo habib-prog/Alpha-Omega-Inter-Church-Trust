@@ -5,9 +5,8 @@
   "heroDescription": "Our mission is to ensure that every child, regardless of their background, has access to the resources, love, and opportunities they need to reach their full potential.",
   "heroImage": "/aboutus_hero.jpg",
   "heroButtons": [
-    { "label": "Our Mission & Our Vision", "link": "/mission" },
     { "label": "Our Journey", "link": "/mission" },
-    { "label": "Meet the Team", "link": "/mission" }
+    { "label": "Our Vision", "link": "/mission" }
   ],
   "sectionTitle": "We believe in the power of community to change lives.",
   "sectionDescriptionOne": "Founded on the belief that everyone deserves a chance at a better life, KindredHearts has been working tirelessly to bridge the gap between those who want to help and those in need.",
@@ -21,5 +20,12 @@
     { "count": "50k+", "label": "Expert Volunteers", "icon": "sparkles", "color": "text-[#4B443D]" }
   ],
   "challengeTitle": "Understanding the Challenges in Bangladesh",
-  "challengeDescription": "Bangladesh faces complex challenges in education, nutrition, and women’s empowerment, affecting millions of children and families. The charts below provide a clear snapshot of these challenges."
+  "challengeDescription": "Bangladesh faces complex challenges in education, nutrition, and women’s empowerment, affecting millions of children and families. The charts below provide a clear snapshot of these challenges.",
+  "engageBadge": "Non-profit Organization",
+  "engageTitle": "Become a Volunteer",
+  "engageDescription": "Your time is the most valuable gift you can give. Join our dedicated team and help us bring sustainable change to communities that need it most. Every hour you contribute creates a ripple effect of hope.",
+  "engageEmail": "xavierjames701@gmail.com",
+  "engageButtonText": "Engage With Us",
+  "engageMailSubject": "Engage with us",
+  "engageMailBody": "Hi, I would like to connect with you."
 }

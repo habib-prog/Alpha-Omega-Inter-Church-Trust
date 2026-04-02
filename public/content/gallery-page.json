@@ -1,0 +1,32 @@
+{
+  "badge": "Event Gallery",
+  "title": "Moments from our recent community events",
+  "description": "Explore snapshots from outreach programs, school activities, relief distribution, and volunteer-led support events.",
+  "items": [
+    {
+      "image": "/slum.jpg",
+      "eventName": "Winter Relief Distribution",
+      "shortDescription": "Families received warm clothing, blankets, and dry food packs before winter."
+    },
+    {
+      "image": "/cleanwater.jpg",
+      "eventName": "School Supplies Drive",
+      "shortDescription": "Children received notebooks, bags, and learning kits for the new school term."
+    },
+    {
+      "image": "/donate.jpg",
+      "eventName": "Community Health Camp",
+      "shortDescription": "Volunteer doctors provided health screenings and basic medicines for local families."
+    },
+    {
+      "image": "/river.png",
+      "eventName": "Community Food Support",
+      "shortDescription": "Essential nutrition packs were distributed to low-income families."
+    },
+    {
+      "image": "/aboutus_hero.jpg",
+      "eventName": "Volunteer Field Visit",
+      "shortDescription": "Volunteers visited households to map urgent support and follow-up needs."
+    }
+  ]
+}

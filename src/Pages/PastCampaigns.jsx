@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router";
 import { FaArrowRight } from "react-icons/fa";
 import { useSiteContent } from "../data/useSiteContent";
@@ -11,12 +11,17 @@ const formatCurrency = (amount) =>
   }).format(amount);
 
 const PastCampaigns = () => {
+  const [showAllCampaigns, setShowAllCampaigns] = useState(false);
   const pastCampaignContent = useSiteContent(
     "past-campaigns",
     "/content/past-campaigns.json",
     { items: [] }
   );
   const pastCampaigns = pastCampaignContent.items || [];
+  const hasMoreCampaigns = pastCampaigns.length > 2;
+  const visiblePastCampaigns = showAllCampaigns
+    ? pastCampaigns
+    : pastCampaigns.slice(0, 2);
 
   return (
     <div className="bg-[#FFF8ED]">
@@ -61,8 +66,8 @@ const PastCampaigns = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {pastCampaigns.map((campaign) => {
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {visiblePastCampaigns.map((campaign) => {
               const progress = Math.min(
                 Math.round((campaign.raised / campaign.goal) * 100),
                 100
@@ -76,16 +81,16 @@ const PastCampaigns = () => {
                   <img
                     src={campaign.image}
                     alt={campaign.title}
-                    className="h-64 w-full object-cover"
+                    className="h-52 w-full object-cover"
                   />
 
-                  <div className="space-y-6 p-6 sm:p-8">
+                  <div className="space-y-5 p-5 sm:p-6">
                     <div className="flex items-center justify-between gap-4">
                       <div>
                         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8FA888]">
                           {campaign.category || campaign.campaignName || "Past Campaign"}
                         </p>
-                        <h3 className="mt-2 text-2xl font-bold text-[#4A3F35]">
+                        <h3 className="mt-2 text-xl font-bold text-[#4A3F35]">
                           {campaign.title}
                         </h3>
                       </div>
@@ -139,6 +144,17 @@ const PastCampaigns = () => {
               );
             })}
           </div>
+          {hasMoreCampaigns ? (
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowAllCampaigns((prev) => !prev)}
+                className="rounded-full border border-[#E87461] px-5 py-2.5 text-sm font-semibold text-[#E87461] transition hover:bg-[#E87461] hover:text-white"
+              >
+                {showAllCampaigns ? "View Less" : "Show More"}
+              </button>
+            </div>
+          ) : null}
         </div>
       </section>
     </div>

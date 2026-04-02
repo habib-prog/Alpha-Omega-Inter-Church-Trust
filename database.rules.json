@@ -22,6 +22,14 @@
     "super_admins": {
       ".read": "auth != null",
       ".write": "auth != null"
+    },
+    "admin_activity_logs": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "user_login_logs": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

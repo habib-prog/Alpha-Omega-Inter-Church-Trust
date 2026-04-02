@@ -7,6 +7,7 @@ import { rtdb } from "../Database/firebase.config";
 import {
   get,
   onValue,
+  push,
   ref,
   remove,
   set,
@@ -15,6 +16,7 @@ import {
 const DEFAULT_SUPER_ADMIN = "xavierjames701@gmail.com";
 const MAX_RTDB_CONTENT_BYTES = 900000;
 const MAX_UPLOAD_FILE_BYTES = 4 * 1024 * 1024;
+const LOG_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
 
 const sanitizeForRtdb = (value) => {
   if (Array.isArray(value)) {
@@ -37,6 +39,53 @@ const sanitizeForRtdb = (value) => {
   }
 
   return value;
+};
+
+const detectBrowserFromUa = (userAgent = "") => {
+  const ua = String(userAgent).toLowerCase();
+  if (!ua) return "Unknown";
+  if (ua.includes("edg/") || ua.includes("edgios/")) return "Edge";
+  if (ua.includes("samsungbrowser/")) return "Samsung Internet";
+  if (ua.includes("opr/") || ua.includes("opera/")) return "Opera";
+  if (ua.includes("chrome/") || ua.includes("crios/")) return "Chrome";
+  if (ua.includes("firefox/") || ua.includes("fxios/")) return "Firefox";
+  if (ua.includes("safari/") && !ua.includes("chrome/")) return "Safari";
+  return "Unknown";
+};
+
+const detectDeviceFromUa = (userAgent = "") => {
+  const ua = String(userAgent).toLowerCase();
+  if (!ua) return "Unknown";
+  if (/android|iphone|ipad|ipod|mobile/i.test(ua)) return "Mobile";
+  if (ua.includes("tablet")) return "Tablet";
+  return "Desktop";
+};
+
+const detectOsFromUa = (userAgent = "") => {
+  const ua = String(userAgent).toLowerCase();
+  if (!ua) return "Unknown";
+  if (ua.includes("windows")) return "Windows";
+  if (ua.includes("android")) return "Android";
+  if (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod"))
+    return "iOS";
+  if (ua.includes("mac os") || ua.includes("macintosh")) return "macOS";
+  if (ua.includes("linux")) return "Linux";
+  return "Unknown";
+};
+
+const detectDeviceNameFromUa = (userAgent = "", deviceType = "Unknown") => {
+  const ua = String(userAgent).toLowerCase();
+  if (!ua) return "Unknown";
+  if (ua.includes("iphone")) return "iPhone";
+  if (ua.includes("ipad")) return "iPad";
+  if (ua.includes("ipod")) return "iPod";
+  if (ua.includes("macintosh") || ua.includes("mac os")) return "Mac";
+  if (ua.includes("windows")) return "Windows PC";
+  if (ua.includes("android")) return "Android Phone";
+  if (deviceType === "Desktop") return "Desktop";
+  if (deviceType === "Mobile") return "Mobile Phone";
+  if (deviceType === "Tablet") return "Tablet";
+  return "Unknown";
 };
 
 const compressImageFile = (file) =>
@@ -185,6 +234,29 @@ const CONTENT_SECTIONS = [
       {
         name: "challengeDescription",
         label: "Challenge Description",
+        type: "textarea",
+      },
+      { name: "engageBadge", label: "Engage Badge", type: "text" },
+      { name: "engageTitle", label: "Engage Title", type: "text" },
+      {
+        name: "engageDescription",
+        label: "Engage Description",
+        type: "textarea",
+      },
+      { name: "engageEmail", label: "Engage Email", type: "text" },
+      {
+        name: "engageButtonText",
+        label: "Engage Button Text",
+        type: "text",
+      },
+      {
+        name: "engageMailSubject",
+        label: "Engage Mail Subject",
+        type: "text",
+      },
+      {
+        name: "engageMailBody",
+        label: "Engage Mail Body",
         type: "textarea",
       },
     ],
@@ -380,6 +452,34 @@ const CONTENT_SECTIONS = [
     ],
   },
   {
+    key: "gallery-page",
+    label: "Gallery",
+    title: "Gallery page",
+    fallbackPath: "/content/gallery-page.json",
+    description:
+      "Manage gallery header content and event cards (image, event name, short description).",
+    fields: [
+      { name: "badge", label: "Badge", type: "text" },
+      { name: "title", label: "Title", type: "text" },
+      { name: "description", label: "Description", type: "textarea" },
+      {
+        name: "items",
+        label: "Gallery Items",
+        type: "list",
+        itemLabel: "Event",
+        itemFields: [
+          { name: "image", label: "Image", type: "image" },
+          { name: "eventName", label: "Event Name", type: "text" },
+          {
+            name: "shortDescription",
+            label: "Short Description",
+            type: "textarea",
+          },
+        ],
+      },
+    ],
+  },
+  {
     key: "legal-page",
     label: "Legal",
     title: "Legal page",
@@ -496,6 +596,9 @@ const AdminPortal = () => {
   const [publicComments, setPublicComments] = useState([]);
   const [commentsLoading, setCommentsLoading] = useState(true);
   const [removingCommentId, setRemovingCommentId] = useState("");
+  const [adminActivityLogs, setAdminActivityLogs] = useState([]);
+  const [loginLogs, setLoginLogs] = useState([]);
+  const [logsLoading, setLogsLoading] = useState(true);
 
   const activeContentSection = CONTENT_SECTIONS.find(
     (section) => section.key === activeSection,
@@ -504,6 +607,52 @@ const AdminPortal = () => {
   const loadAdmins = async () => {
     const nextAdmins = await listSuperAdmins();
     setAdmins(nextAdmins);
+  };
+
+  const cleanupOldLogs = async (path) => {
+    try {
+      const snap = await get(ref(rtdb, path));
+      if (!snap.exists()) {
+        return;
+      }
+
+      const now = Date.now();
+      const raw = snap.val() || {};
+      const staleKeys = Object.entries(raw)
+        .filter(([, item]) => {
+          const createdAt = Number(item?.createdAt || 0);
+          return createdAt > 0 && now - createdAt > LOG_RETENTION_MS;
+        })
+        .map(([key]) => key);
+
+      if (!staleKeys.length) {
+        return;
+      }
+
+      await Promise.all(
+        staleKeys.map((key) => remove(ref(rtdb, `${path}/${key}`))),
+      );
+    } catch (error) {
+      // Non-blocking cleanup.
+    }
+  };
+
+  const logAdminActivity = async (action, details = {}) => {
+    if (!user?.email) {
+      return;
+    }
+
+    try {
+      const entryRef = push(ref(rtdb, "admin_activity_logs"));
+      await set(entryRef, {
+        action,
+        actorEmail: String(user.email || "").toLowerCase(),
+        ...details,
+        createdAt: Date.now(),
+      });
+    } catch (error) {
+      // Non-blocking logging.
+    }
   };
 
   const loadSectionContent = async (sectionKey) => {
@@ -602,6 +751,76 @@ const AdminPortal = () => {
   }, []);
 
   useEffect(() => {
+    const adminLogsRef = ref(rtdb, "admin_activity_logs");
+    const loginLogsRef = ref(rtdb, "user_login_logs");
+
+    cleanupOldLogs("admin_activity_logs");
+    cleanupOldLogs("user_login_logs");
+
+    const unsubscribeAdminLogs = onValue(adminLogsRef, (snapshot) => {
+      const rawLogs = snapshot.val() || {};
+      const nextLogs = Object.entries(rawLogs).map(([id, item]) => ({
+        id,
+        action: item?.action || "unknown_action",
+        actorEmail: item?.actorEmail || "",
+        targetEmail: item?.targetEmail || "",
+        sectionKey: item?.sectionKey || "",
+        commentId: item?.commentId || "",
+        createdAt: typeof item?.createdAt === "number" ? item.createdAt : 0,
+      }));
+
+      nextLogs.sort((a, b) => b.createdAt - a.createdAt);
+      setAdminActivityLogs(nextLogs);
+      setLogsLoading(false);
+    });
+
+    const unsubscribeLoginLogs = onValue(loginLogsRef, (snapshot) => {
+      const rawLogs = snapshot.val() || {};
+      const nextLogs = Object.entries(rawLogs).map(([id, item]) => {
+        const ua = item?.userAgent || "";
+        const browser =
+          item?.browser && item.browser !== "Unknown"
+            ? item.browser
+            : detectBrowserFromUa(ua);
+        const device =
+          item?.device && item.device !== "Unknown"
+            ? item.device
+            : detectDeviceFromUa(ua);
+
+        return {
+          id,
+          uid: item?.uid || "",
+          email: item?.email || "",
+          name: item?.name || "",
+          provider: item?.provider || "",
+          event: item?.event || "login",
+          ip: item?.ip || "Unavailable",
+          browser,
+          device,
+          os:
+            item?.os && item.os !== "Unknown"
+              ? item.os
+              : detectOsFromUa(ua),
+          deviceName:
+            item?.deviceName && item.deviceName !== "Unknown"
+              ? item.deviceName
+              : detectDeviceNameFromUa(ua, device),
+          userAgent: ua,
+          createdAt: typeof item?.createdAt === "number" ? item.createdAt : 0,
+        };
+      });
+
+      nextLogs.sort((a, b) => b.createdAt - a.createdAt);
+      setLoginLogs(nextLogs);
+    });
+
+    return () => {
+      unsubscribeAdminLogs();
+      unsubscribeLoginLogs();
+    };
+  }, []);
+
+  useEffect(() => {
     loadSectionContent(activeSection);
   }, [activeSection]);
 
@@ -632,6 +851,9 @@ const AdminPortal = () => {
       toast.success("Super admin added successfully.");
       setEmail("");
       await loadAdmins();
+      await logAdminActivity("add_super_admin", {
+        targetEmail: String(email || "").toLowerCase(),
+      });
     } catch (error) {
       toast.error("Could not add super admin.");
     } finally {
@@ -652,6 +874,9 @@ const AdminPortal = () => {
 
       toast.success("Super admin removed successfully.");
       await loadAdmins();
+      await logAdminActivity("remove_super_admin", {
+        targetEmail: String(adminEmail || "").toLowerCase(),
+      });
     } catch (error) {
       toast.error("Could not remove super admin.");
     } finally {
@@ -667,6 +892,9 @@ const AdminPortal = () => {
     try {
       await remove(ref(rtdb, commentPath));
       toast.success("Comment deleted.");
+      await logAdminActivity("delete_public_comment", {
+        commentId,
+      });
     } catch (error) {
       toast.error("Could not delete comment.");
     } finally {
@@ -938,6 +1166,9 @@ const AdminPortal = () => {
         updatedBy: user.email,
         updatedAt: Date.now(),
       });
+      await logAdminActivity("update_site_content", {
+        sectionKey: activeSection,
+      });
       toast.success("Content saved successfully.");
     } catch (error) {
       toast.error(error.message || "Save failed.");
@@ -1162,6 +1393,103 @@ const AdminPortal = () => {
                   ) : (
                     <p className="text-[#6E625A]">No public comments found.</p>
                   )}
+                </div>
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="rounded-[2rem] bg-white p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold text-[#4A3F35]">
+                    Super Admin Activity Log
+                  </h2>
+                  <p className="mt-3 text-[#6E625A]">
+                    Track what each super admin added or changed.
+                  </p>
+
+                  <div className="mt-6 space-y-3 max-h-96 overflow-y-auto pr-1">
+                    {logsLoading ? (
+                      <p className="text-[#6E625A]">Loading logs...</p>
+                    ) : adminActivityLogs.length ? (
+                      adminActivityLogs.map((logItem) => (
+                        <div
+                          key={logItem.id}
+                          className="rounded-2xl border border-[#E7DED3] bg-[#FFFCF8] p-4"
+                        >
+                          <p className="text-sm font-semibold text-[#4A3F35]">
+                            {logItem.action.replaceAll("_", " ")}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            By: {logItem.actorEmail || "Unknown admin"}
+                          </p>
+                          {logItem.targetEmail ? (
+                            <p className="mt-1 text-xs text-[#6E625A]">
+                              Target: {logItem.targetEmail}
+                            </p>
+                          ) : null}
+                          {logItem.sectionKey ? (
+                            <p className="mt-1 text-xs text-[#6E625A]">
+                              Section: {logItem.sectionKey}
+                            </p>
+                          ) : null}
+                          <p className="mt-2 text-xs text-[#A54F3C]">
+                            {logItem.createdAt
+                              ? new Date(logItem.createdAt).toLocaleString()
+                              : "Unknown time"}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-[#6E625A]">No admin activity yet.</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="rounded-[2rem] bg-white p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold text-[#4A3F35]">
+                    User Login Log
+                  </h2>
+                  <p className="mt-3 text-[#6E625A]">
+                    See when users enter (login) and from which provider.
+                  </p>
+
+                  <div className="mt-6 space-y-3 max-h-96 overflow-y-auto pr-1">
+                    {logsLoading ? (
+                      <p className="text-[#6E625A]">Loading logs...</p>
+                    ) : loginLogs.length ? (
+                      loginLogs.map((logItem) => (
+                        <div
+                          key={logItem.id}
+                          className="rounded-2xl border border-[#E7DED3] bg-[#FFFCF8] p-4"
+                        >
+                          <p className="text-sm font-semibold text-[#4A3F35]">
+                            {logItem.name || "User"}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            {logItem.email || "No email"}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            Event: {logItem.event} | Provider:{" "}
+                            {logItem.provider || "unknown"}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            Browser: {logItem.browser} | Device: {logItem.device}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            OS: {logItem.os} | Device Name: {logItem.deviceName}
+                          </p>
+                          <p className="mt-1 text-xs text-[#6E625A]">
+                            IP: {logItem.ip}
+                          </p>
+                          <p className="mt-2 text-xs text-[#A54F3C]">
+                            {logItem.createdAt
+                              ? new Date(logItem.createdAt).toLocaleString()
+                              : "Unknown time"}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-[#6E625A]">No user login logs yet.</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

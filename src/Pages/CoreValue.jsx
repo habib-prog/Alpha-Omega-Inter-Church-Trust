@@ -4,12 +4,25 @@ import { FaPeopleRoof } from "react-icons/fa6";
 import { LuHeartHandshake } from "react-icons/lu";
 import TestimonialCard from "../Components/TestimonialCard";
 import { Link } from "react-router";
+import { useSiteContent } from "../data/useSiteContent";
 
 const CoreValues = () => {
+  const aboutContent = useSiteContent("about-page", "/content/about-page.json", {
+    engageBadge: "Non-profit Organization",
+    engageTitle: "Become a Volunteer",
+    engageDescription:
+      "Your time is the most valuable gift you can give. Join our dedicated team and help us bring sustainable change to communities that need it most. Every hour you contribute creates a ripple effect of hope.",
+    engageEmail: "xavierjames701@gmail.com",
+    engageButtonText: "Engage With Us",
+    engageMailSubject: "Engage with us",
+    engageMailBody: "Hi, I would like to connect with you.",
+  });
+
   const handleClick = () => {
-    const to = "xavierjames701@gmail.com";
-    const subject = "Engage with us";
-    const body = "Hi, I would like to connect with you.";
+    const to = aboutContent.engageEmail || "xavierjames701@gmail.com";
+    const subject = aboutContent.engageMailSubject || "Engage with us";
+    const body =
+      aboutContent.engageMailBody || "Hi, I would like to connect with you.";
 
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
@@ -126,26 +139,25 @@ const CoreValues = () => {
           <div className='container'>
             <div className='flex flex-col justify-center items-center'>
               <p className=' m-auto inline-block py-1 px-3 rounded-full bg-white/20 text-white backdrop-blur-md text-sm font-medium mb-6 border border-white/30  '>
-                Non-profit Organization
+                {aboutContent.engageBadge}
               </p>
               <h3 className='text-3xl sm:text-5xl font-black pb-5 text-white'>
-                Become a Volunteer
+                {aboutContent.engageTitle}
               </h3>
               <p className='max-w-2xl text-center text-white'>
-                Your time is the most valuable gift you can give. Join our
-                dedicated team and help us bring sustainable change to
-                communities that need it most. Every hour you contribute creates
-                a ripple effect of hope.
+                {aboutContent.engageDescription}
               </p>
               <input
-                type='text'
-                className='bg-white px-2 py-5 text-center m-3 block w-70 sm:w-96 max-w-96 h-8 max-w-8 rounded-xl outline-none'
+                type='email'
+                value={aboutContent.engageEmail || ""}
+                readOnly
+                className='bg-white px-3 py-5 text-center m-3 block w-70 sm:w-96 rounded-xl outline-none'
               />
               <button
                 onClick={handleClick}
                 className=' px-6 py-3 text-xl font-bold text-brand rounded-2xl bg-white inline-block cursor-pointer'
               >
-                Engage With Us
+                {aboutContent.engageButtonText}
               </button>
             </div>
           </div>

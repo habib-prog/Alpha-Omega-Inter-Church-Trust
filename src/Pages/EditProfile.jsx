@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"; // Route change korar jonno
 import { toast, ToastContainer } from "react-toastify";
 import useAuthStore from "../Zustand/authStore";
 import { auth, rtdb, storage } from "../Database/firebase.config";
-import { updateProfile } from "firebase/auth";
+import { reload, updateProfile } from "firebase/auth";
 import { get, ref as dbRef, update } from "firebase/database";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { getUserAvatarUrl, getUserDisplayName } from "../utils/userProfile";
@@ -108,6 +108,7 @@ const EditProfile = () => {
         photoURL: nextPhotoURL,
       });
 
+      await reload(auth.currentUser);
       await setUser(auth.currentUser);
       toast.success("Profile updated successfully.");
     } catch (error) {
