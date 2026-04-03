@@ -842,6 +842,7 @@ const AdminPortal = () => {
         targetEmail: item.targetEmail || "",
         sectionKey: item.sectionKey || "",
         commentId: item.commentId || "",
+        messageId: item.messageId || "",
         createdAt: normalizeCreatedAt(item.createdAt),
       }));
       items.sort((a, b) => b.createdAt - a.createdAt);
@@ -1242,6 +1243,7 @@ const AdminPortal = () => {
       item.targetEmail ? `Target: ${item.targetEmail}` : "",
       item.sectionKey ? `Section: ${item.sectionKey}` : "",
       item.commentId ? `Comment ID: ${item.commentId}` : "",
+      item.messageId ? `Message ID: ${item.messageId}` : "",
       `Time: ${
         item.createdAt ? new Date(item.createdAt).toLocaleString() : "Unknown time"
       }`,
@@ -1540,6 +1542,11 @@ const AdminPortal = () => {
                           {item.sectionKey ? (
                             <p className="mt-1 text-xs text-[#6E625A]">
                               Section: {item.sectionKey}
+                            </p>
+                          ) : null}
+                          {item.messageId ? (
+                            <p className="mt-1 text-xs text-[#6E625A]">
+                              Message ID: {item.messageId}
                             </p>
                           ) : null}
                           <p className="mt-2 text-xs text-[#A54F3C]">

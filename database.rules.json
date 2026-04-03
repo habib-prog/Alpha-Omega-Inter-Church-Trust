@@ -23,6 +23,15 @@
       ".read": "auth != null",
       ".write": "auth != null"
     },
+    "super_admin_messages": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$uid": {
+        "$messageId": {
+          ".validate": "newData.hasChildren(['uid','senderEmail','senderName','subject','message','isRead','createdAt'])"
+        }
+      }
+    },
     "admin_activity_logs": {
       ".read": "auth != null",
       ".write": "auth != null"

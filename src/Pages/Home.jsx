@@ -4,6 +4,7 @@ import { motion as Motion, useScroll, useSpring } from "framer-motion";
 import Hero from "./Hero";
 import About from "./About";
 import Ourimpacts from "./Ourimpacts";
+import FloatingAdminInbox from "../Components/UI/FloatingAdminInbox";
 
 const Home = () => {
   // Scroll Progress Bar logic (Maakher moto smooth hobe)
@@ -52,6 +53,7 @@ const Home = () => {
       <Hero />
       <About />
       <Ourimpacts />
+      <FloatingAdminInbox />
     </section>
   );
 };

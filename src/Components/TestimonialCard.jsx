@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { RiDoubleQuotesR } from "react-icons/ri";
 
 const TestimonialCard = ({
@@ -12,8 +12,14 @@ const TestimonialCard = ({
   fixedHeight = false,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState(image || "/user.png");
   const safeQuote = quote || "";
   const showToggle = enableReadMore && safeQuote.length > previewChars;
+
+  useEffect(() => {
+    setAvatarSrc(image || "/user.png");
+  }, [image]);
+
   const displayQuote = useMemo(() => {
     if (!showToggle || expanded) {
       return safeQuote;
@@ -31,8 +37,9 @@ const TestimonialCard = ({
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <img
-            src={image}
+            src={avatarSrc}
             alt={name}
+            onError={() => setAvatarSrc("/user.png")}
             className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
           />
 

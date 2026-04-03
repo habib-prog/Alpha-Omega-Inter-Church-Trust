@@ -708,6 +708,7 @@ const useAuthStore = create((set, get) => ({
       await Promise.all([
         remove(ref(rtdb, `users/${uid}`)),
         remove(ref(rtdb, `public_comments/${uid}`)),
+        remove(ref(rtdb, `super_admin_messages/${uid}`)),
       ]);
 
       await deleteUser(currentUser);
