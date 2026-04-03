@@ -6,7 +6,7 @@ import { TfiTwitter } from "react-icons/tfi";
 import { SlSocialLinkedin } from "react-icons/sl";
 import { SiInstagram } from "react-icons/si";
 import { BsFillSendFill } from "react-icons/bs";
-import { onValue, push, ref, remove, set } from "firebase/database";
+import { onValue, push, ref, set, update } from "firebase/database";
 import { toast, ToastContainer } from "react-toastify";
 import useAuthStore from "../Zustand/authStore";
 import { rtdb } from "../Database/firebase.config";
@@ -79,6 +79,10 @@ const ContactUs = () => {
       const rawMessages = snapshot.val() || {};
       const nextMessages = Object.entries(rawMessages).map(
         ([messageId, messageValue]) => {
+          if (messageValue?.hiddenForUser) {
+            return null;
+          }
+
           const rawReplies = messageValue?.replies || {};
           const replies = Object.values(rawReplies)
             .filter((item) => item && typeof item === "object")
@@ -110,7 +114,7 @@ const ContactUs = () => {
             lastAdminReplyAt,
           };
         },
-      );
+      ).filter(Boolean);
 
       nextMessages.sort((a, b) => b.createdAt - a.createdAt);
       setMyMessages(nextMessages);
@@ -264,8 +268,11 @@ const ContactUs = () => {
 
     setDeletingThreadId(messageId);
     try {
-      await remove(ref(rtdb, `super_admin_messages/${user.uid}/${messageId}`));
-      toast.success("Conversation deleted.");
+      await update(ref(rtdb, `super_admin_messages/${user.uid}/${messageId}`), {
+        hiddenForUser: true,
+        hiddenForUserAt: Date.now(),
+      });
+      toast.success("Conversation removed from your inbox.");
       setReplyDrafts((current) => {
         const next = { ...current };
         delete next[messageId];
@@ -553,7 +560,11 @@ const ContactUs = () => {
             <p className="mt-5 text-sm text-slate-500">Loading your messages...</p>
           ) : myMessages.length ? (
             <div className="mt-5 grid gap-4 lg:grid-cols-[260px_1fr]">
-              <div className="max-h-[520px] space-y-2 overflow-y-auto rounded-xl border border-amber-200 bg-amber-50/40 p-2">
+              <div
+                data-lenis-prevent
+                data-lenis-prevent-wheel
+                className="max-h-[520px] space-y-2 overflow-y-auto rounded-xl border border-amber-200 bg-amber-50/40 p-2"
+              >
                 {myMessages.map((item) => (
                   <div
                     key={item.id}
@@ -604,7 +615,11 @@ const ContactUs = () => {
                 ))}
               </div>
 
-              <div className="flex h-[520px] flex-col overflow-hidden rounded-xl border border-amber-200 bg-white">
+              <div
+                data-lenis-prevent
+                data-lenis-prevent-wheel
+                className="flex h-[520px] flex-col overflow-hidden rounded-xl border border-amber-200 bg-white"
+              >
                 <div className="border-b border-amber-200 bg-amber-50 px-4 py-3">
                   <div className="flex items-center justify-between gap-2">
                     <div>
@@ -626,7 +641,11 @@ const ContactUs = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 space-y-3 overflow-y-auto bg-[#FFF9F4] px-3 py-4">
+                <div
+                  data-lenis-prevent
+                  data-lenis-prevent-wheel
+                  className="flex-1 space-y-3 overflow-y-auto bg-[#FFF9F4] px-3 py-4"
+                >
                   {activeThreadTimeline.map((reply) => {
                     const isUserReply = reply.repliedRole === "user";
                     return (
@@ -642,7 +661,7 @@ const ContactUs = () => {
                           }`}
                         >
                           <p className="text-[11px] font-semibold opacity-80">
-                            {isUserReply ? "You" : reply.repliedBy || "Super Admin"}
+                            {isUserReply ? "You" : "Admin"}
                           </p>
                           <p className="mt-1 whitespace-pre-wrap">{reply.message}</p>
                           <p className="mt-1 text-[10px] opacity-70">

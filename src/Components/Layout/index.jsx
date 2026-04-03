@@ -32,23 +32,31 @@ const Index = () => {
 
   useEffect(() => {
     // 2. Initialize Lenis for smooth "liquid" scrolling
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return undefined;
+    }
+
     const lenis = new Lenis({
-      duration: 1.4, // Speed of the scroll
+      duration: 1.05, // Lower duration reduces perceived lag on low-end devices
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth easing function
       smooth: true,
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
     });
     lenisRef.current = lenis;
+    let rafId = 0;
 
     // Recursively call the animation frame for smooth updates
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     // Cleanup Lenis when the component unmounts
     return () => {
+      cancelAnimationFrame(rafId);
       lenisRef.current = null;
       lenis.destroy();
     };

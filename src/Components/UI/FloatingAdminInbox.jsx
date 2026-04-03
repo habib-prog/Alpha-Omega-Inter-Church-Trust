@@ -247,7 +247,11 @@ const FloatingAdminInbox = () => {
       </button>
 
       {isInboxOpen ? (
-        <div className="fixed bottom-22 right-6 z-[10001] flex h-[75vh] w-[96vw] max-w-5xl flex-col overflow-hidden rounded-2xl border border-[#E7DED3] bg-white shadow-2xl">
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          className="fixed bottom-20 top-24 left-1/2 z-[10001] flex w-[98vw] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-[#E7DED3] bg-white shadow-2xl md:bottom-16 md:top-22 md:left-auto md:right-6 md:w-[97vw] md:max-w-6xl md:translate-x-0"
+        >
           <div className="border-b border-[#EFE5DB] bg-[#FFFCF8] px-4 py-3">
             <p className="text-sm font-bold text-[#4A3F35]">Super Admin Inbox</p>
             <p className="text-xs text-[#6E625A]">New user activity: {unseenCount}</p>
@@ -264,7 +268,11 @@ const FloatingAdminInbox = () => {
                       Conversations
                     </p>
                   </div>
-                  <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-2">
+                  <div
+                    data-lenis-prevent
+                    data-lenis-prevent-wheel
+                    className="min-h-0 flex-1 space-y-2 overflow-y-auto p-2"
+                  >
                     {privateMessages.map((item) => {
                       const latestReply = item.replies[item.replies.length - 1];
                       const preview = String(
@@ -325,7 +333,11 @@ const FloatingAdminInbox = () => {
                     </p>
                   </div>
 
-                  <div className="min-h-0 flex-1 space-y-2 overflow-y-auto px-3 py-3">
+                  <div
+                    data-lenis-prevent
+                    data-lenis-prevent-wheel
+                    className="min-h-0 flex-1 space-y-2 overflow-y-auto px-3 py-3"
+                  >
                     {activeThreadTimeline.map((reply) => {
                       const isUserReply = reply.repliedRole === "user";
                       return (
@@ -341,7 +353,9 @@ const FloatingAdminInbox = () => {
                             }`}
                           >
                             <p className="font-semibold opacity-85">
-                              {isUserReply ? `User: ${reply.repliedBy}` : "You"}
+                              {isUserReply
+                                ? `User: ${reply.repliedBy || "User"}`
+                                : reply.repliedBy || "Admin"}
                             </p>
                             <p className="mt-1 whitespace-pre-wrap">{reply.message}</p>
                             <p className="mt-1 text-[10px] opacity-70">
