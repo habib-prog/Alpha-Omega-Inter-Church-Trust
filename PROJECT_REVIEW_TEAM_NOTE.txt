@@ -1,0 +1,335 @@
+Alpha Omega Inter Church Trust - Technical Review Note
+Prepared from codebase scan (React + Firebase + Decap CMS)
+
+============================================================
+1) High-Level Architecture
+============================================================
+Frontend:
+- React 19 + Vite + React Router
+- Zustand for auth/session state
+- Tailwind + daisyUI for UI
+
+Backend Services (Firebase):
+- Firebase Authentication (email/password + Google login)
+- Firebase Realtime Database (main dynamic data)
+- Firebase Storage (profile image uploads)
+
+Content Management:
+- Decap CMS (admin UI at /admin/index.html)
+- Content also stored in JSON/YAML/Markdown files under public/content and content/
+
+
+============================================================
+2) Database Connection (How Connected)
+============================================================
+File: src/Database/firebase.config.js
+- Firebase app initialized with project config
+- Exported services:
+  - auth = getAuth(app)
+  - rtdb = getDatabase(app)
+  - storage = getStorage(app)
+  - googleProvider = new GoogleAuthProvider()
+
+Main realtime DB URL used:
+- https://alpha-omega-trust-default-rtdb.firebaseio.com
+
+How app reads/writes:
+- Uses Firebase SDK methods: ref/get/onValue/push/set/update/remove
+- Collections/paths are directly used from frontend (client-side app)
+
+
+============================================================
+3) Realtime Database Structure (Current)
+============================================================
+Root paths observed:
+
+1. users/{uid}
+- uid
+- name
+- email
+- createdAt
+- photoURL
+- provider
+- phone
+- address
+- gender
+- birthYear
+
+Used for profile data and auth-linked user meta.
+
+2. super_admins/{normalized_email_key}
+- email
+- addedBy
+- createdAt
+
+Used for super admin access control (plus one hardcoded default super admin).
+
+3. site_content/{sectionKey}
+- content: {section specific object}
+- updatedBy
+- updatedAt
+
+sectionKey examples:
+- home-hero
+- about-page
+- campaigns
+- past-campaigns
+- newsletters-page
+- sponsor-child-page
+- voices-of-hope
+- gallery-page
+- legal-page
+- privacy-page
+- terms-page
+
+4. public_comments/{uid}/{commentId}
+(or legacy flat shape support also exists)
+- text
+- name
+- role
+- image
+- uid
+- createdAt
+
+Used in Our Impact -> Public Comments.
+
+5. super_admin_messages/{uid}/{messageId}
+- uid
+- senderEmail
+- senderName
+- subject
+- message
+- isRead
+- createdAt
+- hiddenForUser (optional)
+- hiddenForUserAt (optional)
+- replies/{replyId}:
+  - message
+  - repliedBy
+  - repliedRole ("admin" বা "user")
+  - createdAt
+
+Used as private user <-> super admin inbox.
+
+6. admin_activity_logs/{logId}
+- action
+- actorEmail
+- targetEmail (optional)
+- sectionKey (optional)
+- commentId (optional)
+- messageId (optional)
+- createdAt
+
+7. user_login_logs/{logId}
+- uid
+- email
+- name
+- provider
+- event (login/logout/account_delete_requested)
+- ip
+- browser
+- device
+- os
+- deviceName
+- country
+- region
+- city
+- latitude/longitude (if available)
+- timezone
+- userAgent
+- createdAt
+
+
+============================================================
+4) Firebase Storage Structure
+============================================================
+Path used:
+- profile_images/{uid}/{timestamp}-{filename}
+
+Used from Edit Profile page.
+
+
+============================================================
+5) Security That Already Exists
+============================================================
+Authentication & Access:
+- Email/password signup + Google login
+- Email verification required before normal login access
+- Protected routes block unauthenticated users
+- Client checks super admin status from super_admins list
+
+Realtime DB Rules (database.rules.json):
+- public_comments:
+  - read: true
+  - write: auth != null
+  - validation requires text/name/role/image/uid/createdAt
+- users/{uid}:
+  - read/write only own uid
+- site_content:
+  - read true, write auth != null
+- super_admins:
+  - read/write auth != null
+- super_admin_messages:
+  - read/write auth != null
+  - required field validation
+- admin_activity_logs and user_login_logs:
+  - read/write auth != null
+
+Additional safeguards in app:
+- Admin content payload size guard (~900KB) before save
+- Image upload guard in admin panel (<4MB) + in-browser compression
+- Comment delete permission in UI (own comment or super admin)
+- Delete account blocked for super admin accounts
+- Firebase recent-login requirement handled for account delete
+- Logs retention cleanup logic: old logs (>30 days) cleaned when log operations run
+
+
+============================================================
+6) Security Gaps / Risk Notes (Important for Review Team)
+============================================================
+1. High risk: write scope too broad for authenticated users
+- Current rules allow ANY logged-in user to write:
+  - site_content
+  - super_admins
+  - admin_activity_logs
+  - user_login_logs
+  - super_admin_messages
+- This means privilege escalation and content tampering is possible unless rules are tightened.
+
+2. Super admin check is mostly client-side logic
+- UI hides admin features, but DB rules currently do not strictly enforce super-admin-only writes.
+
+3. Sensitive operational logs readable by any authenticated user
+- user_login_logs includes IP/device/location info.
+
+4. public_comments can accept client-provided role/name/image
+- User can spoof display role text (eg. pretend admin) unless server-side/rules validation is tighter.
+
+5. Firebase config is public in client bundle (normal for Firebase)
+- Must rely on strict rules + authorized domains + App Check for real protection.
+
+
+============================================================
+7) Features Implemented
+============================================================
+Core user features:
+- Signup, login, Google login
+- Email verification flow
+- Profile view + edit
+- Profile photo upload to Firebase Storage
+- Account deletion (with safety checks)
+
+Community features:
+- Public comments feed with live updates
+- Comment post/delete
+- Local cache fallback when comment read is blocked
+
+Communication features:
+- Contact form creates private message thread to super admin
+- User can reply in thread
+- Super admin can reply and delete threads (Floating Admin Inbox)
+
+Admin features:
+- Super admin add/remove
+- Dynamic content editor for multi-page site sections
+- Public comment moderation
+- Admin activity log viewer
+- User login/logout log viewer
+- Export logs as PDF
+
+Content features:
+- Runtime content loading from site_content/{section}/content
+- Fallback to static JSON in public/content
+- Decap CMS support for JSON/Markdown/YAML content editing
+
+UI/Navigation features:
+- Public pages: home, about, campaigns, past campaigns, donation, sponsor child,
+  newsletters, gallery, privacy, legal, terms, contact
+- Protected pages: profile, edit profile, admin-panel
+
+
+============================================================
+8) Admin Ki Ki Data Save Kore
+============================================================
+Through custom Admin Panel (Firebase RTDB):
+- Super admin emails (add/remove)
+- Page content sections (home/about/campaigns/etc.)
+- Public comment delete actions
+- Admin activity logs
+
+Through super admin inbox actions:
+- Replies to user messages
+- Message deletions
+
+Through Decap CMS (file-based content):
+- public/content/*.json data
+- content/newsletters/*.md
+- content/settings/organization.yml
+- uploaded media under public/uploads
+
+
+============================================================
+9) Data Ki Ki Amra Rakhtesi (Stored Data Inventory)
+============================================================
+A) Identity & profile data
+- uid, name, email, avatar, phone, address, gender, birthYear
+
+B) Role & authorization data
+- super admin email list + who added + createdAt
+
+C) Public interaction data
+- comments (text + profile snapshot fields + timestamp)
+
+D) Private communication data
+- user -> admin messages and reply threads
+
+E) Site configuration/content data
+- full content objects per page section
+
+F) Security/operations telemetry
+- login/logout/account-delete events
+- IP, browser, OS, device, rough geo info
+- admin activity logs
+
+G) Asset data
+- profile photos in Firebase Storage
+- CMS uploaded images in public/uploads
+
+
+============================================================
+10) Codebase Structure (Review Team Friendly)
+============================================================
+Top-level:
+- src/
+  - Database/firebase.config.js          -> Firebase init
+  - Zustand/authStore.js                -> auth logic + role logic + logs
+  - data/useSiteContent.js              -> dynamic content loader (RTDB + fallback)
+  - Pages/                              -> route-level pages
+  - Components/                         -> reusable UI/auth/layout/charts/inbox
+- public/
+  - content/*.json                      -> static fallback content
+  - uploads/                            -> CMS media assets
+  - admin/config.yml                    -> Decap CMS schema/config
+- content/
+  - newsletters/*.md                    -> newsletter source files
+  - settings/organization.yml           -> org metadata
+  - campaigns/*.yml/json                -> campaign content sources
+- database.rules.json                   -> Realtime DB security rules
+- docs/decap-cms.md                     -> CMS local workflow notes
+
+Flow summary:
+- User actions -> Firebase Auth + RTDB/Storage
+- Page content -> RTDB site_content first, fallback JSON second
+- Admin updates -> RTDB (custom panel) and/or file-based CMS
+
+
+============================================================
+11) Quick Recommendation Before External Review
+============================================================
+Must do first:
+1) Tighten RTDB rules so only super admins can write super_admins/site_content/logs/messages-admin scope
+2) Restrict read access for user_login_logs/admin_activity_logs
+3) Add stronger validation on message/comment fields (length/type constraints)
+4) Consider Firebase App Check + authorized domains hardening
+
+This note reflects current implementation behavior from code scan.
