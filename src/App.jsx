@@ -111,6 +111,7 @@ const Terms = lazy(() => import("./Pages/Terms"));
 const AdminPortal = lazy(() => import("./Pages/AdminPortal"));
 const SponsorChild = lazy(() => import("./Pages/SponsorChild"));
 const Gallery = lazy(() => import("./Pages/Gallery"));
+const ComingSoon = lazy(() => import("./Pages/ComingSoon"));
 
 import { onAuthStateChanged } from "firebase/auth";
 import useAuthStore from "./Zustand/authStore";
@@ -149,6 +150,7 @@ function App() {
                 <Route path="donation" element={<DonationForm />} />
                 <Route path="sponsor-child" element={<SponsorChild />} />
                 <Route path="gallery" element={<Gallery />} />
+                <Route path="story" element={<ComingSoon />} />
                 <Route path="privacy" element={<Privacy />} />
                 <Route path="legal" element={<Legal />} />
 

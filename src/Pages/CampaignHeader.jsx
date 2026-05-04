@@ -46,7 +46,7 @@ const CampaignHeader = () => {
                   Donate Now <FaArrowRight />{" "}
                 </Link>
                 <Link
-                  to="/"
+                  to="/story"
                   className="inline-flex items-center justify-center rounded-full font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#E87461] border-2 border-white text-white hover:bg-[#D66350] hover:border-[#D66350] px-8 py-4 text-lg group gap-2"
                 >
                   {" "}

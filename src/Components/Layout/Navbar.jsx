@@ -70,7 +70,6 @@ const Navbar = () => {
             <p className="font-bold text-sm uppercase">
               <span className="text-orange-400">A</span>lpha
               <span className="ml-1 text-orange-400">O</span>mega
-              <span className="ml-1 text-orange-400">C</span>harity
             </p>
           </span>
         </div>
@@ -210,9 +209,9 @@ const Navbar = () => {
                   </NavHashLink>
                 </li>
                 <li className={user?.emailVerified ? "block" : "hidden"}>
-                  <NavHashLink smooth to="/#history" onClick={closeDropdown}>
+                  <Link to="/profile?tab=history" onClick={closeDropdown}>
                     Donation History
-                  </NavHashLink>
+                  </Link>
                 </li>
               </ul>
             </li>

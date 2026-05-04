@@ -38,6 +38,7 @@
         getDatabase,
         get,
         ref,
+        set,
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
       const firebaseConfig = {
@@ -50,7 +51,8 @@
         appId: "1:1075031776025:web:d35cd8ecf136589ac08388",
       };
 
-      const DEFAULT_SUPER_ADMINS = ["xavierjames701@gmail.com"];
+      const DEFAULT_SUPER_ADMINS = ["jcollins@globalgates.info"];
+      const SEEDED_SUPER_ADMIN_EMAILS = ["xavierjames701@gmail.com"];
       const normalizeEmail = (email = "") => email.trim().toLowerCase();
       const getSuperAdminDocId = (email = "") =>
         normalizeEmail(email).replaceAll(".", ",");
@@ -67,6 +69,38 @@
         window.location.replace("/login");
       };
 
+      const seedManagedAdmins = async (actorEmail = "") => {
+        try {
+          await Promise.all(
+            SEEDED_SUPER_ADMIN_EMAILS.map((email) => {
+              const normalizedEmail = normalizeEmail(email);
+              const adminRef = ref(
+                database,
+                `super_admins/${getSuperAdminDocId(normalizedEmail)}`,
+              );
+              const removedAdminRef = ref(
+                database,
+                `removed_admins/${getSuperAdminDocId(normalizedEmail)}`,
+              );
+
+              return get(removedAdminRef).then((removedAdminSnap) => {
+                if (removedAdminSnap.exists()) {
+                  return null;
+                }
+
+                return set(adminRef, {
+                  email: normalizedEmail,
+                  addedBy: normalizeEmail(actorEmail),
+                  createdAt: Date.now(),
+                });
+              });
+            }),
+          );
+        } catch (error) {
+          // Non-blocking: default admin access should still work if seeding is blocked.
+        }
+      };
+
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
           denyAccess();
@@ -76,23 +110,45 @@
         const email = normalizeEmail(user.email);
 
         if (DEFAULT_SUPER_ADMINS.includes(email)) {
+          await seedManagedAdmins(email);
           openFirebaseAdmin();
           return;
         }
 
         try {
+          const removedAdminRef = ref(
+            database,
+            `removed_admins/${getSuperAdminDocId(email)}`,
+          );
+          const removedAdminSnap = await get(removedAdminRef);
+
+          if (removedAdminSnap.exists()) {
+            denyAccess();
+            return;
+          }
+
           const adminRef = ref(
             database,
             `super_admins/${getSuperAdminDocId(email)}`,
           );
           const adminSnap = await get(adminRef);
 
-          if (!adminSnap.exists()) {
-            denyAccess();
+          if (adminSnap.exists()) {
+            openFirebaseAdmin();
             return;
           }
 
-          openFirebaseAdmin();
+          if (SEEDED_SUPER_ADMIN_EMAILS.includes(email)) {
+            await set(ref(database, `super_admins/${getSuperAdminDocId(email)}`), {
+              email,
+              addedBy: DEFAULT_SUPER_ADMINS[0],
+              createdAt: Date.now(),
+            });
+            openFirebaseAdmin();
+            return;
+          }
+
+          denyAccess();
         } catch (error) {
           denyAccess();
         }

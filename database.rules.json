@@ -23,6 +23,10 @@
       ".read": "auth != null",
       ".write": "auth != null"
     },
+    "removed_admins": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
     "super_admin_messages": {
       ".read": "auth != null",
       ".write": "auth != null",

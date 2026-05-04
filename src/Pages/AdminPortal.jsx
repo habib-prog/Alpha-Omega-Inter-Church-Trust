@@ -7,7 +7,8 @@ import useAuthStore from "../Zustand/authStore";
 import { rtdb } from "../Database/firebase.config";
 import { get, onValue, push, ref, remove, set } from "firebase/database";
 
-const DEFAULT_SUPER_ADMIN = "xavierjames701@gmail.com";
+const DEFAULT_SUPER_ADMIN = "jcollins@globalgates.info";
+const INITIAL_SUPER_ADMINS = ["xavierjames701@gmail.com"];
 const MAX_RTDB_CONTENT_BYTES = 900000;
 const MAX_UPLOAD_FILE_BYTES = 4 * 1024 * 1024;
 
@@ -754,18 +755,40 @@ const AdminPortal = () => {
 
     const unsubscribe = onValue(
       superAdminsRef,
-      (snapshot) => {
+      async (snapshot) => {
         const dynamicAdmins =
           snapshot.exists() && snapshot.val()
             ? Object.values(snapshot.val())
                 .map((item) => normalizeEmailLocal(item?.email))
                 .filter(Boolean)
             : [];
+        const removedAdminSnapshot = await get(ref(rtdb, "removed_admins"));
+        const removedAdminSet = new Set(
+          removedAdminSnapshot.exists() && removedAdminSnapshot.val()
+            ? Object.values(removedAdminSnapshot.val())
+                .map((item) => normalizeEmailLocal(item?.email))
+                .filter(Boolean)
+            : [],
+        );
+        const initialSuperAdmins = INITIAL_SUPER_ADMINS.filter(
+          (item) => !removedAdminSet.has(normalizeEmailLocal(item)),
+        );
+        const activeDynamicAdmins = dynamicAdmins.filter(
+          (item) => !removedAdminSet.has(normalizeEmailLocal(item)),
+        );
 
-        setAdmins(Array.from(new Set([DEFAULT_SUPER_ADMIN, ...dynamicAdmins])));
+        setAdmins(
+          Array.from(
+            new Set([
+              DEFAULT_SUPER_ADMIN,
+              ...initialSuperAdmins,
+              ...activeDynamicAdmins,
+            ]),
+          ),
+        );
       },
       () => {
-        setAdmins([DEFAULT_SUPER_ADMIN]);
+        setAdmins([DEFAULT_SUPER_ADMIN, ...INITIAL_SUPER_ADMINS]);
       },
     );
 
@@ -1396,8 +1419,8 @@ const AdminPortal = () => {
                     Super admin control
                   </h2>
                   <p className="mt-4 max-w-2xl text-[#6E625A]">
-                    Only approved Firebase users can access this dashboard. Add
-                    more super admins by email below.
+                    Add another super admin before removing your own super
+                    admin access.
                   </p>
 
                   <form onSubmit={handleSubmit} className="mt-8 space-y-4">

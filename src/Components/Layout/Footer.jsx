@@ -12,7 +12,7 @@ const Footer = () => {
         <nav>
           <Link className="text-[#FAF8F3 ] flex items-center gap-1">
             <img src="/NewLogo.png" alt="alphaomega" className="  max-w-8" />
-            <span className="font-bold text-xl">Inter Church</span>Trust
+            <span className="font-bold text-xl">Alpha Omega</span>
           </Link>
           <p className="text-[#FAF8F3]/60 max-w-75 mt-2">
             Building a world where compassion knows no borders. Join us in

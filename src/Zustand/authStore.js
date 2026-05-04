@@ -19,14 +19,20 @@ import {
   update,
 } from "firebase/database";
 
-const DEFAULT_SUPER_ADMINS = ["xavierjames701@gmail.com"];
+const DEFAULT_SUPER_ADMINS = ["jcollins@globalgates.info"];
+const SEEDED_SUPER_ADMIN_EMAILS = ["xavierjames701@gmail.com"];
 
 const normalizeEmail = (email = "") => email.trim().toLowerCase();
 
 const isDefaultSuperAdmin = (email = "") =>
   DEFAULT_SUPER_ADMINS.includes(normalizeEmail(email));
 
+const isSeededSuperAdmin = (email = "") =>
+  SEEDED_SUPER_ADMIN_EMAILS.includes(normalizeEmail(email));
+
 const getSuperAdminDocId = (email = "") => normalizeEmail(email).replaceAll(".", ",");
+
+const getRemovedAdminDocId = getSuperAdminDocId;
 
 const LOG_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -445,10 +451,25 @@ const checkSuperAdminAccess = async (email = "") => {
   }
 
   if (isDefaultSuperAdmin(normalizedEmail)) {
+    await seedManagedAdmins(normalizedEmail);
     return true;
   }
 
   try {
+    const removedAdminRef = ref(
+      rtdb,
+      `removed_admins/${getRemovedAdminDocId(normalizedEmail)}`,
+    );
+    const removedAdminSnap = await get(removedAdminRef);
+    if (hasSnapshotData(removedAdminSnap)) {
+      return false;
+    }
+
+    if (isSeededSuperAdmin(normalizedEmail)) {
+      await seedManagedAdmins(DEFAULT_SUPER_ADMINS[0]);
+      return true;
+    }
+
     const adminRef = ref(
       rtdb,
       `super_admins/${getSuperAdminDocId(normalizedEmail)}`,
@@ -458,6 +479,66 @@ const checkSuperAdminAccess = async (email = "") => {
   } catch (error) {
     return false;
   }
+};
+
+const seedManagedAdmins = async (actorEmail = "") => {
+  try {
+    await Promise.all(
+      SEEDED_SUPER_ADMIN_EMAILS.map((email) => {
+        const normalizedEmail = normalizeEmail(email);
+        const adminRef = ref(
+          rtdb,
+          `super_admins/${getSuperAdminDocId(normalizedEmail)}`,
+        );
+        const removedAdminRef = ref(
+          rtdb,
+          `removed_admins/${getRemovedAdminDocId(normalizedEmail)}`,
+        );
+
+        return get(removedAdminRef).then((removedAdminSnap) => {
+          if (hasSnapshotData(removedAdminSnap)) {
+            return null;
+          }
+
+          return setDb(adminRef, {
+            email: normalizedEmail,
+            addedBy: normalizeEmail(actorEmail),
+            createdAt: Date.now(),
+          });
+        });
+      }),
+    );
+  } catch (error) {
+    // Non-blocking: default admin access should still work if seeding is blocked.
+  }
+};
+
+const getManagedSuperAdmins = async () => {
+  const [superAdminSnapshot, removedAdminSnapshot] = await Promise.all([
+    get(child(ref(rtdb), "super_admins")),
+    get(child(ref(rtdb), "removed_admins")),
+  ]);
+  const removedAdminSet = new Set(
+    hasSnapshotData(removedAdminSnapshot)
+      ? Object.values(getSnapshotValue(removedAdminSnapshot) || {})
+          .map((item) => normalizeEmail(item?.email || ""))
+          .filter(Boolean)
+      : [],
+  );
+  const seededSuperAdmins = SEEDED_SUPER_ADMIN_EMAILS.filter(
+    (email) => !removedAdminSet.has(normalizeEmail(email)),
+  );
+  const dynamicAdmins = hasSnapshotData(superAdminSnapshot)
+    ? Object.values(getSnapshotValue(superAdminSnapshot) || {})
+        .map((item) => item?.email)
+        .filter(Boolean)
+        .map((email) => normalizeEmail(email))
+        .filter((email) => !removedAdminSet.has(email))
+    : [];
+
+  return Array.from(
+    new Set([...DEFAULT_SUPER_ADMINS, ...seededSuperAdmins, ...dynamicAdmins]),
+  );
 };
 
 const writeLogEntry = async (path, payload) => {
@@ -630,6 +711,7 @@ const useAuthStore = create((set, get) => ({
     }
 
     const docRef = ref(rtdb, `super_admins/${getSuperAdminDocId(normalizedEmail)}`);
+    await remove(ref(rtdb, `removed_admins/${getRemovedAdminDocId(normalizedEmail)}`));
     await setDb(docRef, {
       email: normalizedEmail,
       addedBy: normalizeEmail(addedBy),
@@ -646,15 +728,7 @@ const useAuthStore = create((set, get) => ({
   },
 
   listSuperAdmins: async () => {
-    const snapshot = await get(child(ref(rtdb), "super_admins"));
-    const dynamicAdmins = hasSnapshotData(snapshot)
-      ? Object.values(getSnapshotValue(snapshot) || {})
-          .map((item) => item?.email)
-          .filter(Boolean)
-          .map((email) => normalizeEmail(email))
-      : [];
-
-    return Array.from(new Set([...DEFAULT_SUPER_ADMINS, ...dynamicAdmins]));
+    return getManagedSuperAdmins();
   },
 
   removeSuperAdmin: async (email) => {
@@ -667,6 +741,19 @@ const useAuthStore = create((set, get) => ({
       };
     }
 
+    const superAdmins = await getManagedSuperAdmins();
+    if (superAdmins.length <= 1) {
+      return {
+        success: false,
+        message: "Add another super admin before removing this one.",
+      };
+    }
+
+    await setDb(ref(rtdb, `removed_admins/${getRemovedAdminDocId(normalizedEmail)}`), {
+      email: normalizedEmail,
+      removedFrom: "super_admin",
+      removedAt: Date.now(),
+    });
     await remove(ref(rtdb, `super_admins/${getSuperAdminDocId(normalizedEmail)}`));
     const currentUser = auth.currentUser;
     await writeLogEntry("admin_activity_logs", {
