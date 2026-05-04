@@ -1,10 +1,42 @@
 import { useEffect, useRef, useState } from "react";
-import { get, ref } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import { rtdb } from "../Database/firebase.config";
+
+export const getSiteContentCacheKey = (docId) => `site_content_cache_${docId}`;
+
+const readCachedSiteContent = (docId) => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const cached = window.localStorage.getItem(getSiteContentCacheKey(docId));
+    return cached ? JSON.parse(cached) : null;
+  } catch {
+    return null;
+  }
+};
+
+export const writeCachedSiteContent = (docId, content) => {
+  if (typeof window === "undefined" || !content) {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(
+      getSiteContentCacheKey(docId),
+      JSON.stringify(content),
+    );
+  } catch {
+    // Ignore storage failures; Firebase remains the source of truth.
+  }
+};
 
 export const useSiteContent = (docId, fallbackPath, fallbackData, options = {}) => {
   const { deferFallback = false } = options;
-  const [data, setData] = useState(deferFallback ? null : fallbackData);
+  const [data, setData] = useState(() =>
+    deferFallback ? null : readCachedSiteContent(docId) || fallbackData,
+  );
   const fallbackRef = useRef(fallbackData);
 
   useEffect(() => {
@@ -12,17 +44,19 @@ export const useSiteContent = (docId, fallbackPath, fallbackData, options = {}) 
 
     if (deferFallback) {
       setData(null);
+    } else {
+      setData(readCachedSiteContent(docId) || fallbackRef.current);
     }
 
-    const loadData = async () => {
-      try {
-        const contentRef = ref(rtdb, `site_content/${docId}/content`);
-        const contentSnap = await get(contentRef);
+    const contentRef = ref(rtdb, `site_content/${docId}/content`);
 
+    const unsubscribe = onValue(contentRef, async (contentSnap) => {
+      try {
         if (contentSnap.exists()) {
           const nextData = contentSnap.val();
 
           if (!ignore && nextData) {
+            writeCachedSiteContent(docId, nextData);
             setData(nextData);
             return;
           }
@@ -43,24 +77,14 @@ export const useSiteContent = (docId, fallbackPath, fallbackData, options = {}) 
         }
       } catch {
         if (!ignore) {
-          setData(fallbackRef.current);
+          setData(readCachedSiteContent(docId) || fallbackRef.current);
         }
       }
-    };
-
-    loadData();
-
-    const intervalId = window.setInterval(loadData, 3000);
-    const handleFocus = () => loadData();
-
-    window.addEventListener("focus", handleFocus);
-    document.addEventListener("visibilitychange", handleFocus);
+    });
 
     return () => {
       ignore = true;
-      window.clearInterval(intervalId);
-      window.removeEventListener("focus", handleFocus);
-      document.removeEventListener("visibilitychange", handleFocus);
+      unsubscribe();
     };
   }, [docId, fallbackPath, deferFallback]);
 

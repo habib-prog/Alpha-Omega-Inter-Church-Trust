@@ -6,6 +6,7 @@ import { motion as Motion, AnimatePresence } from "framer-motion";
 import useAuthStore from "../Zustand/authStore";
 import { rtdb } from "../Database/firebase.config";
 import { get, onValue, push, ref, remove, set } from "firebase/database";
+import { writeCachedSiteContent } from "../data/useSiteContent";
 
 const DEFAULT_SUPER_ADMIN = "jcollins@globalgates.info";
 const INITIAL_SUPER_ADMINS = ["xavierjames701@gmail.com"];
@@ -1247,6 +1248,7 @@ const AdminPortal = () => {
         updatedBy: user.email,
         updatedAt: Date.now(),
       });
+      writeCachedSiteContent(activeSection, sanitizedContent);
       await logAdminActivity("update_site_content", {
         sectionKey: activeSection,
       });
