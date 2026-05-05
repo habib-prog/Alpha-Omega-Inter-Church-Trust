@@ -41,14 +41,19 @@ const CoreValues = () => {
     engageTitle: "Become a Volunteer",
     engageDescription:
       "Your time is the most valuable gift you can give. Join our dedicated team and help us bring sustainable change to communities that need it most. Every hour you contribute creates a ripple effect of hope.",
-    engageEmail: "xavierjames701@gmail.com",
+    engageEmail: "jcollins@globalgates.info",
     engageButtonText: "Engage With Us",
     engageMailSubject: "Engage with us",
     engageMailBody: "Hi, I would like to connect with you.",
   });
+  const engageEmail =
+    aboutContent?.engageEmail?.trim().toLowerCase() ===
+    "xavierjames701@gmail.com"
+      ? "jcollins@globalgates.info"
+      : aboutContent?.engageEmail || "jcollins@globalgates.info";
 
   const handleClick = () => {
-    const to = aboutContent.engageEmail || "xavierjames701@gmail.com";
+    const to = engageEmail;
     const subject = aboutContent.engageMailSubject || "Engage with us";
     const body =
       aboutContent.engageMailBody || "Hi, I would like to connect with you.";
@@ -183,7 +188,7 @@ const CoreValues = () => {
               </p>
               <input
                 type='email'
-                value={aboutContent.engageEmail || ""}
+                value={engageEmail}
                 readOnly
                 className='bg-white px-3 py-5 text-center m-3 block w-70 sm:w-96 rounded-xl outline-none'
               />

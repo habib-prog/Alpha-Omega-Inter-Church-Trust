@@ -26,7 +26,7 @@ const OurMission = () => {
               <li>Continuing with community-led, sustainable impact</li>
             </ul>
           </div>
-          <div className="group">
+          <div id="vision" className="group scroll-mt-24">
             <div className="inline-block p-2  rounded-xl bg-slate-100 text-slate-700 group-hover:bg-slate-200 transition-colors duration-500 relative after:absolute after:h-1 after:w-18 after:bg-slate-400 after:top-32 after:-right-7 after:rounded-2xl">
               <IoEyeOutline className="text-3xl  " />
             </div>

@@ -47,7 +47,7 @@
 
 import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { motion as Motion } from "framer-motion"; // ← Aliased as Motion
 import { useSiteContent } from "../data/useSiteContent";
 
@@ -66,8 +66,12 @@ const Hero = () => {
     primaryButtonText: "Donate Now",
     primaryButtonLink: "/donation",
     secondaryButtonText: "Our Mission",
-    secondaryButtonLink: "/mission",
+    secondaryButtonLink: "/about",
   });
+  const secondaryButtonLink =
+    heroContent?.secondaryButtonText?.trim().toLowerCase() === "our mission"
+      ? "/about"
+      : heroContent?.secondaryButtonLink || "/about";
   // Parent container – only for staggering children
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -151,25 +155,23 @@ const Hero = () => {
                 {heroContent.primaryButtonText}
               </Motion.button>
 
-              <Motion.div
+              <Motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
+                onClick={() => navigate(secondaryButtonLink)}
+                type="button"
+                className="
+                  inline-flex items-center gap-2
+                  text-white text-lg sm:text-xl font-medium
+                  border-2 border-white/60 hover:border-white
+                  px-8 sm:px-10 py-3.5 sm:py-4 
+                  rounded-full
+                  transition-all duration-300 backdrop-blur-sm
+                "
               >
-                <Link
-                  to={heroContent.secondaryButtonLink}
-                  className="
-                    inline-flex items-center gap-2
-                    text-white text-lg sm:text-xl font-medium
-                    border-2 border-white/60 hover:border-white
-                    px-8 sm:px-10 py-3.5 sm:py-4 
-                    rounded-full
-                    transition-all duration-300 backdrop-blur-sm
-                  "
-                >
-                  {heroContent.secondaryButtonText}
-                  <IoIosArrowRoundForward className="text-3xl" />
-                </Link>
-              </Motion.div>
+                {heroContent.secondaryButtonText}
+                <IoIosArrowRoundForward className="text-3xl" />
+              </Motion.button>
             </div>
           </Motion.div>
         </Motion.div>
